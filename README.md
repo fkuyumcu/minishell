@@ -1,6 +1,3 @@
-# minishell
-A mini version of shell in Linux.  
-
 # Minishell
 
 ## Overview
