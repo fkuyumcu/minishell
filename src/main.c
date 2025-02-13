@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/13 17:06:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/13 19:32:03 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ printf(RED"\n"
     
 }
 
+void parser(char *buf)
+{
+
+    
+}
 
 
 char *ft_readline(void)
@@ -57,10 +62,9 @@ int main(int argc, char **argv)
     while(1)
     {
         line = ft_readline();
-        printf("%s\n", line);
         add_history(line);
-    
-    //REPL
+        parser(line);
+        
     }
     
 

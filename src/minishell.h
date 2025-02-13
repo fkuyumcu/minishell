@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/13 16:22:34 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:57:48 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@
 #define MAGENTA "\x1b[35m"
 #define CYAN    "\x1b[36m"
 #define WHITE   "\x1b[37m"
+
+
+typedef enum {
+    TOKEN_WORD,       // Komut veya argüman
+    TOKEN_PIPE,       // "|"
+    TOKEN_REDIRECT_IN,  // "<"
+    TOKEN_REDIRECT_OUT, // ">"
+    TOKEN_AMPERSAND,  // "&"
+    TOKEN_END         // NULL göstergesi
+} TokenType;
+
+typedef struct {
+    TokenType type;
+    char value[100];
+} Token;
 
 
 void    ft_getcwd(char *buf, size_t size);

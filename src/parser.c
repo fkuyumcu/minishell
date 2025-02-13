@@ -1,19 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wrappers.c                                         :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 14:22:20 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/13 19:39:03 by fkuyumcu         ###   ########.fr       */
+/*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
+/*   Updated: 2025/02/13 19:38:19 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_getcwd(char *buf, size_t size)
+int lex_analize(char *input, Token tokens[])
 {
-    if(getcwd(buf, size) == NULL)
-        perror(RED"getcwd failed\n"RST);
+    int count;
+
+    count = 0;
+    while (*input != '\0')
+    {
+        while (*input == ' ')
+            input++;
+        if (*input == '\0')
+            break;
+           
+    }
+    
+    
+
+    
+
 }
