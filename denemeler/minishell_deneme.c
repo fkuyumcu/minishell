@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
+#include <readline/readline.h>
 
 #define MAX_TOKENS 100
 #define MAX_TOKEN_LEN 100
@@ -84,11 +86,24 @@ void print_tokens(Token tokens[]) {
     }
 }
 
+// ctrl-c işlemini yapan fonksiyon
+void sigint_handler(int signum)
+{
+	rl_on_new_line();         
+    rl_replace_line("", 0);   
+    rl_redisplay();           
+    printf("\nminishell> "); 
+}
+
 // Ana fonksiyon
 int main() {
     char input[256];
+    /* char *input;    readline ı eşitleyeceğimiz için pointer kullanılıyor array değil*/
 
     while (1) {
+       /* input = readline("minishell> ");
+        if (!input)
+			exit(1); */
         printf("minishell> ");
         if (!fgets(input, sizeof(input), stdin)) break;
 
