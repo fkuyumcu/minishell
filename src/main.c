@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/13 19:32:03 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:29:01 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,35 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdlib.h>
 
-void print_banner(void)
+char *format_cwd(const char *cwd)
 {
-printf(RED"\n"
-"███▄ ▄███▓ ██▓ ███▄    █  ██▓  ██████  ██░ ██ ▓█████  ██▓     ██▓\n"  
-"▓██▒▀█▀ ██▒▓██▒ ██ ▀█   █ ▓██▒▒██    ▒ ▓██░ ██▒▓█   ▀ ▓██▒    ▓██▒\n"   
-"▓██    ▓██░▒██▒▓██  ▀█ ██▒▒██▒░ ▓██▄   ▒██▀▀██░▒███   ▒██░    ▒██░\n"    
-"▒██    ▒██ ░██░▓██▒  ▐▌██▒░██░  ▒   ██▒░▓█ ░██ ▒▓█  ▄ ▒██░    ▒██░\n"    
-"▒██▒   ░██▒░██░▒██░   ▓██░░██░▒██████▒▒░▓█▒░██▓░▒████▒░██████▒░██████▒\n"
-"░ ▒░   ░  ░░▓  ░ ▒░   ▒ ▒ ░▓  ▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░░ ▒░ ░░ ▒░▓  ░░ ▒░▓  ░\n"
-"░  ░      ░ ▒ ░░ ░░   ░ ▒░ ▒ ░░ ░▒  ░ ░ ▒ ░▒░ ░ ░ ░  ░░ ░ ▒  ░░ ░ ▒  ░\n"
-"░      ░    ▒ ░   ░   ░ ░  ▒ ░░  ░  ░   ░  ░░ ░   ░     ░ ░     ░ ░  \n" 
-"       ░    ░           ░  ░        ░   ░  ░  ░   ░  ░    ░  ░    ░  ░\n"
-                                                                      
-""RST);
+    char *formatted_cwd = malloc(ft_strlen(cwd) + ft_strlen(GREEN) + ft_strlen(RST) + 4);//strlen
+
+    if (!formatted_cwd)
+        return NULL;
+
+    int i = 0;
+    const char *green_ptr = GREEN;
+    const char *rst_ptr = RST;
     
+    while (*green_ptr)
+        formatted_cwd[i++] = *green_ptr++;
+    while (*cwd)
+        formatted_cwd[i++] = *cwd++;
+    formatted_cwd[i++] = '$';
+    formatted_cwd[i++] = '>';
+    formatted_cwd[i++] = ' ';
+
+    
+    while (*rst_ptr)
+        formatted_cwd[i++] = *rst_ptr++;
+    formatted_cwd[i] = '\0';
+
+    return formatted_cwd;
 }
 
-void parser(char *buf)
-{
-
-    
-}
 
 
 char *ft_readline(void)
@@ -44,11 +50,14 @@ char *ft_readline(void)
     char *buf;
     size_t bufsize;
     char cwd[BUFSIZ];
+    char *new;
     
     buf = NULL;
+    
     ft_getcwd(cwd, sizeof(cwd));
-    printf(GREEN"%s>$"RST, cwd);
-    buf = readline("");
+    new = format_cwd(cwd);
+    
+    buf = readline(new);
     if(buf)
         return (buf);
     return (NULL);
@@ -64,7 +73,7 @@ int main(int argc, char **argv)
         line = ft_readline();
         add_history(line);
         parser(line);
-        
+
     }
     
 
