@@ -20,6 +20,14 @@
 #define MAX_TOKENS 100
 #define MAX_TOKEN_LEN 100
 
+// minishell ana struct
+typedef struct minishell 
+{
+	int	single_quote_flag;
+	int double_quote_flag;
+}
+minikshell;
+
 // Token türleri
 typedef enum {
     TOKEN_WORD,       // Komut veya argüman
@@ -86,6 +94,30 @@ void print_tokens(Token tokens[]) {
     }
 }
 
+// tırnakları flagleme işlemi
+void quote_checker(minikshell *a, char *str)
+{
+    int i = 0;
+    a->double_quote_flag = 0;
+    a->single_quote_flag = 0;
+    while (str[i])
+    {
+        if (str[i] == '"' || str[i] == '\'')
+        {
+            if (str[i] == '"' && a->single_quote_flag % 2 == 0)
+            {
+                a->double_quote_flag++;
+            }
+            else if (str[i] == '\'' && a->double_quote_flag % 2 == 0)
+            {
+                a->single_quote_flag++;
+            }
+        }
+        i++;
+    }
+    if (a->double_quote_flag % 2 != 0 || a->single_quote_flag % 2 != 0)
+        write(1, "error\n", 6);
+}
 // ctrl-c işlemini yapan fonksiyon
 void sigint_handler(int signum)
 {
@@ -104,6 +136,7 @@ int main() {
        /* input = readline("minishell> ");
         if (!input)
 			exit(1); */
+	quote_checker(&a,input);
         printf("minishell> ");
         if (!fgets(input, sizeof(input), stdin)) break;
 
