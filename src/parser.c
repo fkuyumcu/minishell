@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/15 13:39:32 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/15 16:55:14 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,13 @@ void process_word(char **input, token_t tokens[], int *count)
 
 void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
+   
     if (**input == '|')
         tokens[(*count)++] = (token_t){TOKEN_PIPE, '|'};
     else if (**input == '<' && *(*input + 1) == '<')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_IN, '<<'};
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_IN, 'x'}; 
     else if (**input == '>' && *(*input + 1) == '>')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_OUT, '>>'};
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_OUT, 'y'};
     else if (**input == '<')
         tokens[(*count)++] = (token_t){TOKEN_REDIRECT_IN, '<'};
     else if (**input == '>')
@@ -114,9 +115,13 @@ void lex_analize(char *input, token_t tokens[], minishell_t *minishell)
     {
         while (*input == ' ')
             input++;
+        
         if (*input == '\0')
             break;
         process_token(&input, tokens, &count, minishell);
+        if (tokens[count - 1].value[0] == 'x' || tokens[count - 1].value[0] == 'y')
+            input++;
+        input++;
     }
     tokens[count] =  (token_t){TOKEN_END, ""};
 }
@@ -125,9 +130,9 @@ void parser(char *buf)
 {
     minishell_t *minishell;
 
-    if(!(minishell = malloc(sizeof(minishell_t))))
-        perror("Error");
+    minishell = malloc(sizeof(minishell_t));
     
     token_t tokens[MAX_TOKEN_LEN];
     lex_analize(buf, tokens, minishell);
+    printf("%d", tokens[1].t_type);
 }
