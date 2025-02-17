@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/15 16:55:14 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/17 09:03:03 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,6 @@ void quote_checker(minishell_t *a, char *str)
         write(1, "error\n", 6);
 }
 
-void redirect_append_out(char **input, token_t tokens[], int *count)
-{
-    //TODO
-}
-
-
-void redirect_append_in(char **input, token_t tokens[], int *count)
-{
-    //TODO    
-}
 
 void proc_env(char **input, token_t tokens[], int *count)
 {
@@ -56,6 +46,7 @@ void proc_env(char **input, token_t tokens[], int *count)
 void double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     quote_checker(minishell, *input);
+    //TODO
 }
 
 
@@ -95,8 +86,6 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         tokens[(*count)++] = (token_t){TOKEN_REDIRECT_IN, '<'};
     else if (**input == '>')
         tokens[(*count)++] = (token_t){TOKEN_REDIRECT_OUT, '>'};
-    else if (**input == '&')
-        tokens[(*count)++] = (token_t){TOKEN_AMPERSAND, '&'};
     else if (**input == '\"')
         double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
