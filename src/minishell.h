@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 13:49:15 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:27:26 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ typedef enum
     TOKEN_END
 } token_type;
 
+
+typedef struct s_env {
+    char *key;
+    char *value;
+    struct s_env *next;
+} env_t;
+
+
 typedef struct token_s
 {
     token_type t_type;
@@ -57,6 +65,7 @@ typedef struct minishell_s
 {
 	int	single_quote_flag;
 	int double_quote_flag;
+    env_t *env_list;
 }
 minishell_t;
 
