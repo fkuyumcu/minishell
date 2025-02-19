@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/15 16:46:45 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/19 14:04:31 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
+#include <signal.h>
 
 char *format_cwd(const char *cwd)
 {
-    char *formatted_cwd = malloc(ft_strlen(cwd) + ft_strlen(GREEN) + ft_strlen(RST) + 4);//strlen
+    char *formatted_cwd = malloc(ft_strlen(cwd) + ft_strlen(GREEN) + ft_strlen(RST) + 4);//malloc
 
     if (!formatted_cwd)
         return NULL;
@@ -48,7 +49,6 @@ char *format_cwd(const char *cwd)
 char *ft_readline(void)
 {
     char *buf;
-    size_t bufsize;
     char cwd[BUFSIZ];
     char *new;
     
@@ -60,20 +60,35 @@ char *ft_readline(void)
     buf = readline(new);
     if(buf)
         return (buf);
+    free(new);
     return (NULL);
 }
 
-int main(int argc, char **argv)
+void sigint_handler(int sign)
+{
+    char cwd[BUFSIZ];
+    printf("\n");
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
+
+
+int main(void)
 {
     //print_banner();
     char *line;
     while(1)
     {
+        
         line = ft_readline();
+        signal(SIGINT, sigint_handler);
+        if(line == NULL)
+            exit(1);
         add_history(line);
         parser(line);
     }
-    
+    //wall wextra
 
     
 }

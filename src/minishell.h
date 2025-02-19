@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/15 16:47:15 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/19 13:49:15 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,19 @@ typedef struct minishell_s
 minishell_t;
 
 void    ft_getcwd(char *buf, size_t size);
-char    *ft_readline(void);
+
 void    lex_analize(char *input, token_t tokens[], minishell_t *minishell);
 void	print_banner(void);
 void	parser(char *buf);
+char    *format_cwd(const char *cwd);
+char    *ft_readline(void);
 char	*ft_strncpy(char *dest, const char *src, size_t n);
 size_t	ft_strlen(const char *s);
-char    *format_cwd(const char *cwd);
-
+size_t	ft_strlen(const char *s);
+int     ft_strncmp(const char *s1, const char *s2, size_t n);
+int     is_delimiter(char c);
+char    *ft_strndup(const char *src, size_t n);
+void    double_quote(char **input, token_t tokens[], int *count);
+void    single_quote(char **input, token_t tokens[], int *count);
 
 #endif

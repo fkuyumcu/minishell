@@ -1,5 +1,5 @@
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void print_banner(void)
 {
@@ -30,5 +30,4 @@ void print_banner(void)
     printf("                                                                        @@@@@@@@@@@@@@@@@@                                               \n");
     printf("                                                                           @@@@@@@@@@@@                                                  \n");
     printf("                                                                               @@@@@                                                     \n"RST);
-    
 }
