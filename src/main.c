@@ -65,15 +65,26 @@ char *ft_readline(void)
     return (NULL);
 }
 
-/* void sigint_handler(int sign)
+void sigint_handler(int sig)
 {
     char cwd[BUFSIZ];
     printf("\n");
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();
-} */
+}
 
+void    sig_handler(int c)
+{
+    signal(SIGINT, &sigint_handler);
+    signal(SIGQUIT, SIG_IGN);
+}
+
+void ft_exit()
+{
+    write(1, "exit", 4);
+    exit(1);
+}
 
 int main(void)
 {
@@ -81,11 +92,10 @@ int main(void)
     char *line;
     while(1)
     {
-        
+        sig_handler(1);
         line = ft_readline();
-        //signal(SIGINT, sigint_handler);
         if(line == NULL)
-            exit(1);
+            ft_exit();
         add_history(line);
         parser(line);
     }
