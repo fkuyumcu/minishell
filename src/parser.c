@@ -34,7 +34,7 @@ void quote_checker(minishell_t *a, char *str)
         i++;
     }
     if (a->double_quote_flag % 2 != 0 || a->single_quote_flag % 2 != 0)
-        write(1, "error\n", 6);
+        write(1, "error\n", 6);//erroru düzelt
 }
 
 
@@ -43,33 +43,77 @@ void proc_env(char **input, token_t tokens[], int *count)
     //TODO
 }
 
+char *ft_strndup(const char *src, size_t n) {
+    char *dest = (char *)malloc(n + 1);
+    if (!dest) return NULL;
+    strncpy(dest, src, n);//strncpy
+    dest[n] = '\0';
+    return dest;
+}
+
 void double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     quote_checker(minishell, *input);
-    //TODO
+    (*input)++;
+
+    char *start = *input;
+
+    while (**input && **input != '\"')
+        (*input)++;
+
+    if(**input == '\"')
+    {
+        int len;
+
+        len = *input - start;
+
+        tokens[*count].t_type = TOKEN_WORD;
+        tokens[*count].value = strndup(start, len);
+        (*count)++;
+        (*input)++;
+    }
 }
 
+int is_delimiter(char c) {
+    return c == '\0' || isspace(c) || c == '|' || c == '<' || c == '>' || c == '$';
+}
 
 void single_quote(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     quote_checker(minishell, *input);
-    
-}
+    (*input)++;
 
-void process_word(char **input, token_t tokens[], int *count)
-{
     char *start = *input;
-    while (**input != '\0' && !isspace(**input) && **input != '|' &&
-           **input != '<' && **input != '>' && **input != '&' && **input != '\'' && **input != '"')
+
+    while (**input && **input != '\"')
         (*input)++;
 
-    int length = *input - start;
-    if (length >= MAX_TOKEN_LEN) 
-        length = MAX_TOKEN_LEN - 1;
+    if(**input == '\"')
+    {
+        int len;
 
-    ft_strncpy(tokens[*count].value, start, length);
-    tokens[*count].value[length] = '\0';
+        len = *input - start;
+
+        tokens[*count].t_type = TOKEN_WORD;
+        tokens[*count].value = strndup(start, len);
+        (*count)++;
+        (*input)++;
+    }
+}
+
+void process_word(char **input, token_t tokens[], int *count) {
+    char *start = *input;
+    
+    while (!is_delimiter(**input)) {
+        (*input)++;
+    }
+
+    int length = *input - start;
+    if (length == 0)
+        return;
+
     tokens[*count].t_type = TOKEN_WORD;
+    tokens[*count].value = strndup(start, length);//strndup
     (*count)++;
 }
 
@@ -77,15 +121,15 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
 {
    
     if (**input == '|')
-        tokens[(*count)++] = (token_t){TOKEN_PIPE, '|'};
+        tokens[(*count)++] = (token_t){TOKEN_PIPE, strdup("|")};
     else if (**input == '<' && *(*input + 1) == '<')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_IN, 'x'}; 
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_IN, strdup("<<")}; 
     else if (**input == '>' && *(*input + 1) == '>')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_OUT, 'y'};
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_OUT, strdup(">>")};
     else if (**input == '<')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_IN, '<'};
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_IN,  "<"};
     else if (**input == '>')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_OUT, '>'};
+        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_OUT, ">"};
     else if (**input == '\"')
         double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
@@ -96,7 +140,7 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         process_word(input, tokens, count);
 }
 
-void lex_analize(char *input, token_t tokens[], minishell_t *minishell)
+void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
 {
     int count = 0;
 
@@ -108,7 +152,8 @@ void lex_analize(char *input, token_t tokens[], minishell_t *minishell)
         if (*input == '\0')
             break;
         process_token(&input, tokens, &count, minishell);
-        if (tokens[count - 1].value[0] == 'x' || tokens[count - 1].value[0] == 'y')
+        ;
+        if (strcmp(tokens[count - 1].value, "<<") == 0 || strcmp(tokens[count - 1].value, ">>") == 0)//strcmp->ft_strcmp
             input++;
         input++;
     }
@@ -121,7 +166,14 @@ void parser(char *buf)
 
     minishell = malloc(sizeof(minishell_t));
     
-    token_t tokens[MAX_TOKEN_LEN];
+    token_t *tokens = malloc(sizeof(token_t) * MAX_TOKEN_LEN);//memory efficient değil
     lex_analize(buf, tokens, minishell);
-    printf("%d", tokens[1].t_type);
+     printf("%s\n", tokens[0].value);
+     /*
+    printf("%s\n", tokens[1].value);
+    printf("%s\n", tokens[2].value);
+    printf("%s\n", tokens[3].value);
+    printf("%s\n", tokens[4].value);
+    printf("%s\n", tokens[5].value);
+    printf("%s\n", tokens[6].value);  */
 }

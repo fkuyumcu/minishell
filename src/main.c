@@ -67,13 +67,11 @@ int main(int argc, char **argv)
 {
     //print_banner();
     char *line;
-
     while(1)
     {
         line = ft_readline();
         add_history(line);
         parser(line);
-
     }
     
 

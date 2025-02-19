@@ -50,7 +50,7 @@ typedef enum
 typedef struct token_s
 {
     token_type t_type;
-    char value[100];
+    char *value;
 } token_t;
 
 typedef struct minishell_s
