@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:04:31 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:01:57 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,21 @@ char *ft_readline(void)
     new = format_cwd(cwd);
     
     buf = readline(new);
+    //free(new);
     if(buf)
         return (buf);
-    free(new);
+    
     return (NULL);
 }
 
-void sigint_handler(int sign)
+/* void sigint_handler(int sign)
 {
     char cwd[BUFSIZ];
     printf("\n");
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();
-}
+} */
 
 
 int main(void)
@@ -82,7 +83,7 @@ int main(void)
     {
         
         line = ft_readline();
-        signal(SIGINT, sigint_handler);
+        //signal(SIGINT, sigint_handler);
         if(line == NULL)
             exit(1);
         add_history(line);

@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:03:33 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:09:03 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,12 @@
 
 
 
-
-
-
-
-
 void parser(char *buf)
 {
     minishell_t minishell;
 
-    token_t tokens;
-    lex_analize(buf, &tokens, &minishell);
+    token_t tokens[MAX_TOKEN_LEN];//bak
+    lex_analize(buf, tokens, &minishell);
 
  
 }
