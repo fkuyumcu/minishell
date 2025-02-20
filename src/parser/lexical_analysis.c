@@ -6,46 +6,19 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 18:29:17 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:01:53 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+
+
+
+
 void proc_env(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
-    
-
-    char *start;
-    char *var;
-    int     len;
-    char *var_value;
-
-    (*input)++;
-    start = *input;
-
-    while (**input && (isalnum(**input) || **input == '_'))
-        (*input)++;
-    len = *input - start;
-    var = ft_strndup(start, len);
-    
-    // Önce geçici değişkenlerde ara
-    char *var_value = get_variable_value(var, *minishell->env_list);
-    if (!var_value)
-        var_value = get_env_variable_value(var);
-
-    // Eğer değeri bulduysak, token'a ekle
-    if (var_value) {
-        tokens[*count].t_type = TOKEN_WORD;
-        tokens[*count].value = strdup(var_value);
-    } else {
-        // Eğer bulamazsa boş bir string ekle
-        tokens[*count].t_type = TOKEN_WORD;
-        tokens[*count].value = strdup("");
-    }
-
-    (*count)++;
-    free(var); // Bellek sızıntısını engellemek için
+    //TODO
 }
 
 void process_word(char **input, token_t tokens[], int *count)

@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 15:01:57 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:50:53 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int main(void)
     while(1)
     {
         sig_handler(1);
-        line = ft_readline();
+        line = readline("$>");
         if(line == NULL)
             ft_exit();
         add_history(line);

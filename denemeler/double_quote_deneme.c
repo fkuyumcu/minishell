@@ -1,31 +1,101 @@
-void double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell)
-{
-    (*input)++;  // İlk çift tırnağı atla
-    char buffer[1024];  // Geçici bir buffer (maksimum uzunluk ayarla)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char *clean_quotes(const char *input) {
+    char buffer[1024];
+    int buf_index = 0;
     int i = 0;
+    int len = strlen(input);
+    char last_quote = '\0'; // Önceki quote türünü saklar
 
-    while (**input && **input != '"') {
-        if (**input == '\\' && (*(*input + 1) == '"' || *(*input + 1) == '\\')) {
-            (*input)++;  // Kaçış karakteri varsa onu atla, sonraki karakteri doğrudan al
-        }
-        buffer[i++] = **input;
-        (*input)++;
+    while (i < len) {
+        if (input[i] == '\'' || input[i] == '\"') {
+            char quote = input[i];
+            i++; // Açılış tırnağını atla
+            int start = i;
 
-        if (i >= 1023) { // Buffer overflow kontrolü
-            fprintf(stderr, "String too long!\n");
-            return;
+            // Kapanış tırnağını bulana kadar ilerle
+            while (i < len && input[i] != quote) {
+                i++;
+            }
+            if (i >= len) {
+                fprintf(stderr, "Error: Unclosed quote\n");
+                return NULL;
+            }
+
+            // İçeriği kopyala
+            for (int j = start; j < i; j++) {
+                buffer[buf_index++] = input[j];
+            }
+            i++; // Kapanış tırnağını atla
+
+            // Eğer aynı tipten bitişik tırnak varsa devam et
+            while (i < len && (input[i] == '\'' || input[i] == '\"') && input[i] == quote) {
+                i++; // Açılış tırnağını atla
+                start = i;
+                while (i < len && input[i] != quote) {
+                    i++;
+                }
+                if (i >= len) {
+                    fprintf(stderr, "Error: Unclosed quote\n");
+                    return NULL;
+                }
+                for (int j = start; j < i; j++) {
+                    buffer[buf_index++] = input[j];
+                }
+                i++; // Kapanış tırnağını atla
+            }
+
+        } else {
+            // Normal karakterse direkt kopyala
+            buffer[buf_index++] = input[i++];
         }
     }
 
-    if (**input == '"') {
-        (*input)++;  // Kapanış çift tırnağını atla
-    } else {
-        fprintf(stderr, "Syntax Error: Unclosed double quote\n");
-        return;
+    buffer[buf_index] = '\0';
+    return strdup(buffer);
+}
+
+//#ifdef TEST_CLEAN_QUOTES
+int main() {
+    const char *test1 = "\"ls\"\"-l\"";         // Beklenen: ls-l
+    const char *test2 = "\"file\"'.txt'";       // Beklenen: file.txt
+    const char *test3 = "\"echo\" 'abc'";       // Beklenen: echo ve abc (ayrı token olmalı)
+    const char *test4 = "\"hello";              // Hata: kapanmayan tırnak
+    const char *test5 = "\"this\"\"is\"\"fine\""; // Beklenen: thisisfine
+
+    char *res;
+
+    res = clean_quotes(test1);
+    if (res) {
+        printf("Test1: %s\n", res);
+        free(res);
     }
 
-    buffer[i] = '\0';  // String null-terminate et
-    tokens[*count].type = TOKEN_STRING;
-    tokens[*count].value = strdup(buffer); // Hafıza tahsisi yap
-    (*count)++;
+    res = clean_quotes(test2);
+    if (res) {
+        printf("Test2: %s\n", res);
+        free(res);
+    }
+
+    res = clean_quotes(test3);
+    if (res) {
+        printf("Test3: %s\n", res);
+        free(res);
+    }
+
+    res = clean_quotes(test4);
+    if (res) {
+        printf("Test4: %s\n", res);
+        free(res);
+    }
+
+    res = clean_quotes(test5);
+    if (res) {
+        printf("Test5: %s\n", res);
+        free(res);
+    }
+
+    return 0;
 }
