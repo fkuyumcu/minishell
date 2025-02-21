@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-
-
 void double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     char buffer[minishell->allocation];
@@ -29,14 +27,14 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     if (**input == '"') {
         (*input)++; // Skip the closing single quote
     } else {
-        fprintf(stderr, "Error: Unclosed single quote\n");
+        fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
     }
 
     buffer[buf_index] = '\0';
 
     tokens[*count].t_type = TOKEN_WORD;
-    tokens[*count].value = strdup(buffer);
+    tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
 }
 
@@ -56,13 +54,13 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     if (**input == '\'') {
         (*input)++; // Skip the closing single quote
     } else {
-        fprintf(stderr, "Error: Unclosed single quote\n");
+        fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
     }
 
     buffer[buf_index] = '\0';
 
     tokens[*count].t_type = TOKEN_WORD;
-    tokens[*count].value = strdup(buffer);
+    tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
 }

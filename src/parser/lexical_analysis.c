@@ -21,9 +21,9 @@ void proc_env(char **input, token_t tokens[], int *count, minishell_t *minishell
     //TODO
 }
 
-void process_word(char **input, token_t tokens[], int *count)
+void process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
-    char buffer[1024]; // Buffer size should be adjusted according to your needs
+    char buffer[1024];
     int buf_index = 0;
 
     while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'') {
@@ -33,9 +33,13 @@ void process_word(char **input, token_t tokens[], int *count)
 
     buffer[buf_index] = '\0';
 
-    tokens[*count].t_type = TOKEN_WORD;
-    tokens[*count].value = strdup(buffer);
-    (*count)++;
+    if (buf_index > 0) {
+        tokens[*count].t_type = TOKEN_WORD;
+        tokens[*count].value = strdup(buffer);//strdup
+        (*count)++;
+    }
+    if (**input == '|' || **input == '<' || **input == '>' || **input == '"' || **input == '\'')
+        process_token(input, tokens, count, minishell);
 }
 
 void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell)
@@ -55,10 +59,8 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
         single_quote(input, tokens, count, minishell);
-    else if (**input == '$')
-        proc_env(input, tokens, count, minishell);
     else 
-        process_word(input, tokens, count);
+        process_word(input, tokens, count, minishell);
     //token'ları freeleme fonksiyonu yap
 }
 
