@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 13:01:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:34:29 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
     else if (**input == '>')
         tokens[(*count)++] = (token_t){TOKEN_REDIRECT_OUT, ft_strndup(">", 1)};
     else if (**input == '\"')
-        double_quote(input, tokens, count);
+        double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
-        single_quote(input, tokens, count);
+        single_quote(input, tokens, count, minishell);
     else if (**input == '$')
         proc_env(input, tokens, count, minishell);
     else 

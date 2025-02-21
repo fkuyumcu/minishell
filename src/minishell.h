@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 18:27:26 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:26:55 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,19 @@ typedef struct token_s
 {
     token_type t_type;
     char *value;
+    int is_dbl_quote;
 } token_t;
 
 typedef struct minishell_s
 {
-	int	single_quote_flag;
-	int double_quote_flag;
     env_t *env_list;
+    int allocation;
+    int flag;
 }
 minishell_t;
 
 void    ft_getcwd(char *buf, size_t size);
-
+void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell);
 void    lex_analize(char *input, token_t tokens[], minishell_t *minishell);
 void	print_banner(void);
 void	parser(char *buf);
@@ -82,7 +83,7 @@ size_t	ft_strlen(const char *s);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
 int     is_delimiter(char c);
 char    *ft_strndup(const char *src, size_t n);
-void    double_quote(char **input, token_t tokens[], int *count);
-void    single_quote(char **input, token_t tokens[], int *count);
+void    double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell);
+void    single_quote(char **input, token_t tokens[], int *count, minishell_t *minishell);
 
 #endif

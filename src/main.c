@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 13:50:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:38:11 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,11 @@ int main(void)
     while(1)
     {
         sig_handler(1);
-        line = readline("$>");
+        line = ft_readline();
         if(line == NULL)
             ft_exit();
         add_history(line);
+        //space durumunda seg
         parser(line);
     }
     //wall wextra
