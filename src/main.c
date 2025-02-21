@@ -82,6 +82,7 @@ void    sig_handler(int c)
 
 void ft_exit()
 {
+    free (line);
     write(1, "exit", 4);
     exit(1);
 }
@@ -99,6 +100,7 @@ int main(void)
         add_history(line);
         //space durumunda seg
         parser(line);
+        free(line);
     }
     //wall wextra
 
