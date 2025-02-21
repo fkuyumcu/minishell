@@ -23,22 +23,18 @@ void proc_env(char **input, token_t tokens[], int *count, minishell_t *minishell
 
 void process_word(char **input, token_t tokens[], int *count)
 {
-    int len;
-    
-    char *start;
+    char buffer[1024]; // Buffer size should be adjusted according to your needs
+    int buf_index = 0;
 
-    
-    start = *input;
-    
-    while (!is_delimiter(**input))
+    while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'') {
+        buffer[buf_index++] = **input;
         (*input)++;
+    }
 
-    len = *input - start;
-    if (len == 0)
-        return;
+    buffer[buf_index] = '\0';
 
     tokens[*count].t_type = TOKEN_WORD;
-    tokens[*count].value = ft_strndup(start, len);
+    tokens[*count].value = strdup(buffer);
     (*count)++;
 }
 

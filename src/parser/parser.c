@@ -73,5 +73,13 @@ void parser(char *buf)
     lex_analize(buf, tokens, &minishell);
     printf("%s", tokens[0].value);
     printf("%s", tokens[1].value);
+    printf("%s", tokens[2].value);
+    printf("%s", tokens[3].value);
+    printf("%s", tokens[4].value);
+    printf("%s", tokens[5].value);
+    printf("%s", tokens[6].value);
+    printf("%s", tokens[7].value);
+    printf("%s", tokens[8].value);
+
 
 }

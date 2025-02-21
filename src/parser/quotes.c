@@ -19,39 +19,25 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
-    while (**input == '"') {  
-        (*input)++;
+    (*input)++; // Skip the opening single quote
 
-        while (**input && **input != '"') {
-            buffer[buf_index++] = **input;
-            (*input)++;
-        }
-
-        if (**input == '"') {
-            (*input)++;
-        } else {
-            fprintf(stderr, "Error: Unclosed double quote\n");
-            return;
-        }
-    }
-
-    while (**input && **input != ' ' && **input != '"' && **input != '\'') {
+    while (**input && **input != '"') {
         buffer[buf_index++] = **input;
         (*input)++;
+    }
+
+    if (**input == '"') {
+        (*input)++; // Skip the closing single quote
+    } else {
+        fprintf(stderr, "Error: Unclosed single quote\n");
+        return;
     }
 
     buffer[buf_index] = '\0';
 
     tokens[*count].t_type = TOKEN_WORD;
     tokens[*count].value = strdup(buffer);
-    tokens[*count].is_dbl_quote = 1;
     (*count)++;
-
-    if (**input == '\'') {
-        single_quote(input, tokens, count, minishell);
-    } else {
-        process_token(input, tokens, count, minishell);
-    }
 }
 
 
@@ -60,37 +46,23 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
-    while (**input == '\'') {  
-        (*input)++;
+    (*input)++; // Skip the opening single quote
 
-        while (**input && **input != '\'') {
-            buffer[buf_index++] = **input;
-            (*input)++;
-        }
-
-        if (**input == '\'') {
-            (*input)++;
-        } else {
-            fprintf(stderr, "Error: Unclosed double quote\n");
-            return;
-        }
-    }
-
-    while (**input && **input != ' ' && **input != '"' && **input != '\'') {
+    while (**input && **input != '\'') {
         buffer[buf_index++] = **input;
         (*input)++;
+    }
+
+    if (**input == '\'') {
+        (*input)++; // Skip the closing single quote
+    } else {
+        fprintf(stderr, "Error: Unclosed single quote\n");
+        return;
     }
 
     buffer[buf_index] = '\0';
 
     tokens[*count].t_type = TOKEN_WORD;
     tokens[*count].value = strdup(buffer);
-    tokens[*count].is_dbl_quote = 1;
     (*count)++;
-
-    if (**input == '"') {
-        double_quote(input, tokens, count, minishell);
-    } else {
-        process_token(input, tokens, count, minishell);
-    }
 }
