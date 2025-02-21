@@ -12,28 +12,41 @@
 
 #include "../minishell.h"
 
-
-
-
-
-void proc_env(char **input, token_t tokens[], int *count, minishell_t *minishell)
+static void proc_env(token_t tokens[], minishell_t *minishell)
 {
-    //TODO
+
+
+}
+
+
+
+void check_env(token_t tokens[], minishell_t *minishell)
+{
+    int i;
+
+    i = -1;
+    while(++i < minishell->count)
+    {
+        if(tokens[i].value[0] == '$')
+            proc_env(tokens, minishell);
+    }
 }
 
 void process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
-    char buffer[1024];
+    char buffer[minishell->allocation];
     int buf_index = 0;
 
-    while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'') {
+    while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'')
+    {
         buffer[buf_index++] = **input;
         (*input)++;
     }
 
     buffer[buf_index] = '\0';
 
-    if (buf_index > 0) {
+    if (buf_index > 0) 
+    {
         tokens[*count].t_type = TOKEN_WORD;
         tokens[*count].value = strdup(buffer);//strdup
         (*count)++;
@@ -81,6 +94,5 @@ void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
         input++;
     }
     tokens[count] =  (token_t){TOKEN_END, ""};
+    minishell->count = count;
 }
-
-

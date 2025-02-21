@@ -71,17 +71,8 @@ void parser(char *buf)
     minishell.env_list = env_list;
     token_t tokens[allocation];
     lex_analize(buf, tokens, &minishell);
-    //printf("%s", tokens[0].value);
+    check_env(tokens, &minishell);
     printf("%s", tokens[1].value);
-    //printf("%s", tokens[2].value);
- /*    printf("%s", tokens[1].value);
-    printf("%s", tokens[2].value);
-    printf("%s", tokens[3].value);
-    printf("%s", tokens[4].value);
-    printf("%s", tokens[5].value);
-    printf("%s", tokens[6].value);
-    printf("%s", tokens[7].value);
-    printf("%s", tokens[8].value); */
 
 
 }

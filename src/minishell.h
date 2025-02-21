@@ -67,6 +67,7 @@ typedef struct minishell_s
     env_t *env_list;
     int allocation;
     int flag;
+    size_t count;
 }
 minishell_t;
 
@@ -85,5 +86,6 @@ int     is_delimiter(char c);
 char    *ft_strndup(const char *src, size_t n);
 void    double_quote(char **input, token_t tokens[], int *count, minishell_t *minishell);
 void    single_quote(char **input, token_t tokens[], int *count, minishell_t *minishell);
+void    check_env(token_t tokens[], minishell_t *minishell);
 
 #endif
