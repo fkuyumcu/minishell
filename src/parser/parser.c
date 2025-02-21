@@ -12,6 +12,14 @@
 
 #include "../minishell.h"
 
+void    free_tokens(token_t tokens[], minishell_t ms)
+{
+    int i;
+    i = 0;
+  while (i < ms.allocation)
+    free(tokens[i++].value);
+
+}
 
 static void do_something2(char *str, char q, int **in_q)
 {
@@ -66,13 +74,13 @@ void parser(char *buf)
     in_word = 0;
     in_quotes = 0;
 
-    allocation = sizeof(token_t)* count_word(buf, &c, &in_word, &in_quotes);
+    allocation = count_word(buf, &c, &in_word, &in_quotes);
     minishell.allocation = allocation;
     minishell.env_list = env_list;
     token_t tokens[allocation];
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
     printf("%s", tokens[1].value);
-
+    free_tokens(tokens, minishell);
 
 }
