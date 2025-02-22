@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 09:20:35 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:32:12 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,9 @@ void    free_tokens(token_t tokens[], minishell_t ms)
 {
     int i;
     i = 0;
-  while (i < ms.allocation)
+  while (i < ms.count_token)
     free(tokens[i++].value);
-
 }
-
-static void do_something2(char *str, char q, int **in_q)
-{
-    if (*str == q)
-        **in_q = 0;
-}
-
-static void do_something(int **a, int **b)
-{
-    (**a)++;
-    **b = 1;
-}
-
-int count_word(char *str, int *count, int *in_word, int *in_quotes)
-{
-    char quote_char;
-
-    quote_char = '\0';
-    while (*str)
-    {
-        if (*in_quotes)
-            do_something2(str, quote_char, &in_quotes);
-        else
-        {
-            if (*str == '"' || *str == '\'')
-            {
-                *in_quotes = 1;
-                quote_char = *str;
-                if (!*in_word)
-                    do_something(&count, &in_word);
-            }
-            else if (*str == ' ' || *str == '\t' || *str == '\n')
-                *in_word = 0;
-            else if (!*in_word)
-                do_something(&count, &in_word);
-        }
-        str++;
-    }
-    return (*count);
-}
-
 
 void parser(char *buf)
 {
@@ -73,13 +31,18 @@ void parser(char *buf)
     c = 0;
     in_word = 0;
     in_quotes = 0;
-
-    allocation = count_word(buf, &c, &in_word, &in_quotes);
+    minishell.count_token = 0;
+    allocation = ft_strlen(buf);
     minishell.allocation = allocation;
     minishell.env_list = env_list;
-    token_t tokens[allocation];
+    token_t tokens[allocation * sizeof(token_t)];
     lex_analize(buf, tokens, &minishell);
-    
+    printf("%s\n", tokens[0].value);
+    printf("%s\n", tokens[1].value);
+    printf("%s\n", tokens[2].value);
+    printf("%s\n", tokens[3].value);
+    printf("%s\n", tokens[4].value);
     check_env(tokens, &minishell);
     free_tokens(tokens, minishell);
+  
 }

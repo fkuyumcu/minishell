@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 18:38:29 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:14:37 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
-    (*input)++; // Skip the opening single quote
+    (*input)++; 
 
     while (**input && **input != '"') {
         buffer[buf_index++] = **input;
@@ -25,7 +25,7 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     }
 
     if (**input == '"') {
-        (*input)++; // Skip the closing single quote
+        (*input)++;
     } else {
         fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
@@ -36,6 +36,7 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     tokens[*count].t_type = TOKEN_WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
+    process_token(input, tokens, count, minishell);
 }
 
 
@@ -44,7 +45,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
-    (*input)++; // Skip the opening single quote
+    (*input)++; 
 
     while (**input && **input != '\'') {
         buffer[buf_index++] = **input;
@@ -52,7 +53,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     }
 
     if (**input == '\'') {
-        (*input)++; // Skip the closing single quote
+        (*input)++;
     } else {
         fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
@@ -63,4 +64,5 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     tokens[*count].t_type = TOKEN_WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
+    process_token(input, tokens, count, minishell);
 }

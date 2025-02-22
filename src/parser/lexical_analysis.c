@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_analysis.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 09:29:21 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 14:29:11 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,7 @@ static void proc_env(token_t *token, minishell_t *minishell)
 
 void check_env(token_t tokens[], minishell_t *minishell)
 {
-    int i;
-
-    i = -1;
-    while(++i < minishell->count)
-    {
-        if(tokens[i].value[0] == '$')
-            proc_env(&tokens[i], minishell);
-    }
+    
 }
 
 void process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
@@ -74,11 +67,15 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         single_quote(input, tokens, count, minishell);
     else 
         process_word(input, tokens, count, minishell);
+    minishell->count_token++;
 }
 
 void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
 {
     int count = 0;
+    
+    if (input == NULL)
+        return ;
 
     while (*input != '\0')
     {
