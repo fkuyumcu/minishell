@@ -63,6 +63,7 @@ typedef struct token_s
     size_t is_dbl_quote;
     size_t is_env;
     size_t is_equal;
+    size_t space_flag;
 } token_t;
 
 typedef struct minishell_s
