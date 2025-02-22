@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 14:32:12 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/22 16:57:20 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ void parser(char *buf)
     minishell.env_list = env_list;
     token_t tokens[allocation * sizeof(token_t)];
     lex_analize(buf, tokens, &minishell);
+    check_env(tokens, &minishell);
     printf("%s\n", tokens[0].value);
     printf("%s\n", tokens[1].value);
     printf("%s\n", tokens[2].value);
-    printf("%s\n", tokens[3].value);
-    printf("%s\n", tokens[4].value);
-    check_env(tokens, &minishell);
     free_tokens(tokens, minishell);
   
 }

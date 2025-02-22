@@ -11,7 +11,7 @@ void	cpy_enviroment(char **env, minishell_t *minishell)
 	i = 0;
 	while (env[i])
 	{
-		minishell->env[i] = strdup(env[i]);
+		minishell->env[i] = ft_strdup(env[i]);
 		i++;
 	}
 	minishell->env[i] = NULL;
