@@ -17,22 +17,24 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
+    if (*(*input - 1) == ' ')
+       tokens[*count].space_flag = 1;
+    else
+        tokens[*count].space_flag = 0;
     (*input)++; 
-
-    while (**input && **input != '"') {
+    while (**input && **input != '"')
+    {
         buffer[buf_index++] = **input;
         (*input)++;
     }
-
-    if (**input == '"') {
+    if (**input == '"')
         (*input)++;
-    } else {
+    else 
+    {
         fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
     }
-
     buffer[buf_index] = '\0';
-
     tokens[*count].t_type = TOKEN_WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
@@ -45,13 +47,15 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     char buffer[minishell->allocation];
     int buf_index = 0;
 
+    if (*(*input - 1) == ' ')
+        tokens[*count].space_flag = 1;
+    else
+        tokens[*count].space_flag = 0;
     (*input)++; 
-
     while (**input && **input != '\'') {
         buffer[buf_index++] = **input;
         (*input)++;
     }
-
     if (**input == '\'') {
         (*input)++;
     } else {
