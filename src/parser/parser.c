@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 16:57:20 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 18:19:01 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 void    free_tokens(token_t tokens[], minishell_t ms)
 {
-    int i;
-    i = 0;
-  while (i < ms.count_token)
+  int i = 0;
+  while (tokens[i].t_type != TOKEN_END)
     free(tokens[i++].value);
 }
 

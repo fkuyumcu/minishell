@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 17:17:32 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 18:31:18 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef enum
     WORD,
     ENV_VAR,
     ENV_QUEST,
+    ENV_EQ,
     TOKEN_END
 } token_type;
 
@@ -59,6 +60,9 @@ typedef struct token_s
     size_t is_dbl_quote;
     size_t is_env;
     size_t is_equal;
+    size_t is_word;
+    int index_in_input;
+    int space_flag;
 } token_t;
 
 typedef struct minishell_s

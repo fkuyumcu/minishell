@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 15:21:19 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 18:10:50 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void process_word(char **input, token_t tokens[], int *count, minishell_t *minis
 
     if (buf_index > 0) 
     {
+        tokens[*count].is_word = 1;
+        tokens[*count].is_dbl_quote = 1;
         tokens[*count].t_type = WORD;
         tokens[*count].value = ft_strdup(buffer);
         (*count)++;
@@ -57,7 +59,7 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2)};
     else 
         process_word(input, tokens, count, minishell);
-    minishell->count_token++;
+    //minishell->count_token++;
 }
 
 void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
