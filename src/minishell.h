@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 18:26:55 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 09:28:29 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include <signal.h>
 
 # define RST   "\x1b[0m"
 # define BLACK   "\x1b[30m"
@@ -59,7 +60,9 @@ typedef struct token_s
 {
     token_type t_type;
     char *value;
-    int is_dbl_quote;
+    size_t is_dbl_quote;
+    size_t is_env;
+    size_t is_equal;
 } token_t;
 
 typedef struct minishell_s
@@ -72,7 +75,7 @@ typedef struct minishell_s
 minishell_t;
 
 void    ft_getcwd(char *buf, size_t size);
-void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell);
+void    process_token(char **input, token_t tokens[], int *count, minishell_t *minishell);
 void    lex_analize(char *input, token_t tokens[], minishell_t *minishell);
 void	print_banner(void);
 void	parser(char *buf);

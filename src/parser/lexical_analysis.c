@@ -6,15 +6,15 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 17:34:29 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 09:29:21 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void proc_env(token_t tokens[], minishell_t *minishell)
+static void proc_env(token_t *token, minishell_t *minishell)
 {
-
+    token->is_env = 1;
 
 }
 
@@ -28,7 +28,7 @@ void check_env(token_t tokens[], minishell_t *minishell)
     while(++i < minishell->count)
     {
         if(tokens[i].value[0] == '$')
-            proc_env(tokens, minishell);
+            proc_env(&tokens[i], minishell);
     }
 }
 
@@ -74,7 +74,6 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         single_quote(input, tokens, count, minishell);
     else 
         process_word(input, tokens, count, minishell);
-    //token'ları freeleme fonksiyonu yap
 }
 
 void lex_analize(char *input, token_t *tokens, minishell_t *minishell)

@@ -6,44 +6,11 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 09:12:42 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 09:18:30 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
-#include <signal.h>
-
-char *format_cwd(const char *cwd)
-{
-    char *formatted_cwd = malloc(ft_strlen(cwd) + ft_strlen(GREEN) + ft_strlen(RST) + 4);//malloc
-
-    if (!formatted_cwd)
-        return NULL;
-
-    int i = 0;
-    const char *green_ptr = GREEN;
-    const char *rst_ptr = RST;
-    
-    while (*green_ptr)
-        formatted_cwd[i++] = *green_ptr++;
-    while (*cwd)
-        formatted_cwd[i++] = *cwd++;
-    formatted_cwd[i++] = '$';
-    formatted_cwd[i++] = '>';
-    formatted_cwd[i++] = ' ';
-
-    
-    while (*rst_ptr)
-        formatted_cwd[i++] = *rst_ptr++;
-    formatted_cwd[i] = '\0';
-
-    return formatted_cwd;
-}
-
 
 
 char *ft_readline(void)
