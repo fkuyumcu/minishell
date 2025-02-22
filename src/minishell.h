@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 14:28:31 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/22 14:35:39 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct minishell_s
     int allocation;
     int flag;
     int count_token;
+    char **env;
+    env_t dollar_env;
     size_t count;
 }
 minishell_t;
