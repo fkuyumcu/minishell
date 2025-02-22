@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 18:18:03 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 09:13:44 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void parser(char *buf)
     token_t tokens[allocation];
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
-    printf("%s", tokens[1].value);
     free_tokens(tokens, minishell);
 
 }

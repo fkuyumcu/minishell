@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/20 18:38:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 09:12:42 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,10 @@ char *format_cwd(const char *cwd)
 char *ft_readline(void)
 {
     char *buf;
-    char cwd[BUFSIZ];
-    char *new;
     
     buf = NULL;
-    
-    ft_getcwd(cwd, sizeof(cwd));
-    new = format_cwd(cwd);
-    
-    buf = readline(new);
-    //free(new);
+     
+    buf = readline("pistonshell$>");
     if(buf)
         return (buf);
     
@@ -80,7 +74,7 @@ void    sig_handler(int c)
     signal(SIGQUIT, SIG_IGN);
 }
 
-void ft_exit()
+void ft_exit(char *line)
 {
     free (line);
     write(1, "exit", 4);
@@ -96,7 +90,7 @@ int main(void)
         sig_handler(1);
         line = ft_readline();
         if(line == NULL)
-            ft_exit();
+            ft_exit(line);
         add_history(line);
         //space durumunda seg
         parser(line);
