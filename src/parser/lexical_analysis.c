@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 18:10:50 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:09:13 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void process_token(char **input, token_t tokens[], int *count, minishell_t *mini
         tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2)};
     else 
         process_word(input, tokens, count, minishell);
-    //minishell->count_token++;
 }
 
 void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
@@ -76,6 +75,7 @@ void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
         
         if (*input == '\0')
             break;
+        
         process_token(&input, tokens, &count, minishell);
         if (ft_strncmp(tokens[count - 1].value, "<<", 3) == 0 
         || ft_strncmp(tokens[count - 1].value, ">>", 3) == 0 || ft_strncmp(tokens[count - 1].value, "$?", 3) == 0)

@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 18:19:01 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:09:43 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ void parser(char *buf)
     minishell.allocation = allocation;
     minishell.env_list = env_list;
     token_t tokens[allocation * sizeof(token_t)];
+    int i = 0;
+    /* while (tokens[i].t_type != TOKEN_END)
+      tokens[i++].space_flag = 1; *///BAŞLATMAYI UNUTMA
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
-    printf("%s\n", tokens[0].value);
-    printf("%s\n", tokens[1].value);
-    printf("%s\n", tokens[2].value);
+    printf("%zu\n", tokens[0].space_flag);
+    printf("%zu\n", tokens[1].space_flag);
+    printf("%zu\n", tokens[2].space_flag);
     free_tokens(tokens, minishell);
   
 }
