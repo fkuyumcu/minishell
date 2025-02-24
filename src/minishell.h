@@ -30,7 +30,6 @@
 # define CYAN    "\x1b[36m"
 # define WHITE   "\x1b[37m"
 
-# define MAX_TOKEN_LEN 20
 
 typedef enum
 {
@@ -45,6 +44,15 @@ typedef enum
     ENV_EQ,
     TOKEN_END
 } token_type;
+
+
+typedef struct ast_node_s {
+    char **args;     
+    struct ast_node_s *left;   
+    struct ast_node_s *right;  
+    token_type token;             
+} ast_node_t;
+
 
 
 typedef struct s_env {

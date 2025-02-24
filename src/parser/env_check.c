@@ -45,27 +45,40 @@ static void proc_env(token_t *token, minishell_t *minishell)
 {
     char *env_value;
     char *env_name;
+    char *start;
+    char *dolar_pos;
+    char *new_value;
+    int len;
     
-    token->t_type = ENV_VAR;
-    env_name = token->value + 1;
-    env_value = find_list(minishell, env_name);//potansiyel leak, env_list tarafından, freelemeyi unutma
-     
+    len = 0;
+    dolar_pos = strchr(token->value, '$');//strchr
+    if (!dolar_pos)
+        return; 
+    start = dolar_pos + 1;
+    while (start[len] && (isalnum(start[len]) || start[len] == '_'))//isalnum
+        len++;
+    if (len == 0)
+        return;
+    env_name = ft_strndup(start, len);
+    env_value = find_list(minishell, env_name);
     if (!env_value)
         env_value = getenv(env_name);
-    if (env_value)
-    {
-        free(token->value);
-        token->value = ft_strdup(env_value);
-    }
-    else
-    {
-        free(token->value);
-        token->value = ft_strdup("");
-    }
+    if (!env_value)
+        env_value = "";
+    new_value = (char *)malloc(ft_strlen(token->value) - len + ft_strlen(env_value) + 1);
+    if (!new_value)
+        return;
+    ft_strncpy(new_value, token->value, dolar_pos - token->value); 
+    new_value[dolar_pos - token->value] = '\0';
+    strcat(new_value, env_value); //strcat
+    strcat(new_value, dolar_pos + len + 1); // strcat
+
+    free(token->value);
+    token->value = new_value;
+
+    free(env_name);
 }
     
-    
-
 void check_env(token_t tokens[], minishell_t *minishell)
 {
     int i;
@@ -82,5 +95,3 @@ void check_env(token_t tokens[], minishell_t *minishell)
     }
     
 }
-
-
