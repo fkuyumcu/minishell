@@ -17,9 +17,17 @@ void manage_tokens2(token_t tokens[], int i)
 	while (tokens[i].t_type != TOKEN_END)
 	{
 		free(tokens[i].value);
-		tokens[i] = tokens[i+1];
+		tokens[i].value = ft_strdup(tokens[i+1].value);
+		tokens[i].t_type = tokens[i+1].t_type;
+		tokens[i].is_dbl_quote = tokens[i+1].is_dbl_quote;
+		tokens[i].is_env = tokens[i+1].is_env;
+		tokens[i].is_equal = tokens[i+1].is_equal;
+		tokens[i].is_word = tokens[i+1].is_word;
+		tokens[i].index_in_input = tokens[i+1].index_in_input;
+		tokens[i].space_flag = tokens[i+1].space_flag;
 		i++;
 	}
+	free(tokens[i].value);
 }
 
 void manage_tokens(token_t tokens[])
