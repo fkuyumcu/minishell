@@ -58,6 +58,8 @@ int main(void)
         line = ft_readline();
         if(line == NULL)
             ft_exit(line);
+        if(*line == '\0')
+            continue;
         add_history(line);
         //space durumunda seg
         parser(line);
