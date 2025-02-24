@@ -6,30 +6,21 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 14:29:11 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/24 15:16:14 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void proc_env(token_t *token, minishell_t *minishell)
-{
-    token->is_env = 1;
-
-}
-
-
-
-void check_env(token_t tokens[], minishell_t *minishell)
-{
-    
-}
 
 void process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     char buffer[minishell->allocation];
     int buf_index = 0;
-
+    if (*(*input - 1) == ' ')
+       tokens[*count].space_flag = 1;
+    else
+        tokens[*count].space_flag = 0;
     while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'')
     {
         buffer[buf_index++] = **input;
@@ -40,8 +31,10 @@ void process_word(char **input, token_t tokens[], int *count, minishell_t *minis
 
     if (buf_index > 0) 
     {
-        tokens[*count].t_type = TOKEN_WORD;
-        tokens[*count].value = strdup(buffer);//strdup
+        tokens[*count].is_word = 1;
+        tokens[*count].is_dbl_quote = 1;
+        tokens[*count].t_type = WORD;
+        tokens[*count].value = ft_strdup(buffer);
         (*count)++;
     }
     if (**input == '|' || **input == '<' || **input == '>' || **input == '"' || **input == '\'')
@@ -50,25 +43,25 @@ void process_word(char **input, token_t tokens[], int *count, minishell_t *minis
 
 void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
-   
     if (**input == '|')
-        tokens[(*count)++] = (token_t){TOKEN_PIPE, ft_strndup("|", 1)};
+        tokens[(*count)++] = (token_t){PIPE, ft_strndup("|", 1)};
     else if (**input == '<' && *(*input + 1) == '<')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_IN, ft_strndup("<<", 2)}; 
+        tokens[(*count)++] = (token_t){HEREDOC_IN, ft_strndup("<<", 2)}; 
     else if (**input == '>' && *(*input + 1) == '>')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_APPEND_OUT, ft_strndup(">>", 2)};
+        tokens[(*count)++] = (token_t){HEREDOC_OUT, ft_strndup(">>", 2)};
     else if (**input == '<')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_IN,  ft_strndup("<", 1)};
+        tokens[(*count)++] = (token_t){REDIRECT_IN,  ft_strndup("<", 1)};
     else if (**input == '>')
-        tokens[(*count)++] = (token_t){TOKEN_REDIRECT_OUT, ft_strndup(">", 1)};
+        tokens[(*count)++] = (token_t){REDIRECT_OUT, ft_strndup(">", 1)};
     else if (**input == '\"')
         double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
         single_quote(input, tokens, count, minishell);
-    else 
+    else if (**input == '$' && *(*input + 1) == '?')
+        tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2)};
+    else
         process_word(input, tokens, count, minishell);
-    minishell->count_token++;
-}
+}				
 
 void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
 {
@@ -84,8 +77,10 @@ void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
         
         if (*input == '\0')
             break;
+        
         process_token(&input, tokens, &count, minishell);
-        if (ft_strncmp(tokens[count - 1].value, "<<", 3) == 0 || ft_strncmp(tokens[count - 1].value, ">>", 3) == 0)
+        if (ft_strncmp(tokens[count - 1].value, "<<", 3) == 0 
+        || ft_strncmp(tokens[count - 1].value, ">>", 3) == 0 || ft_strncmp(tokens[count - 1].value, "$?", 3) == 0)
             input++;
         input++;
     }

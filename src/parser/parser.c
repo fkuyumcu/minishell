@@ -6,17 +6,41 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 14:32:12 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/24 16:19:11 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void manage_tokens2(token_t tokens[], int i)
+{
+	while (tokens[i].t_type != TOKEN_END)
+	{
+		free(tokens[i].value);
+		tokens[i] = tokens[i+1];
+		i++;
+	}
+}
+
+void manage_tokens(token_t tokens[])
+{
+	int	i = 0;
+	while (tokens[i].t_type != TOKEN_END)
+	{
+    	if (tokens[i].t_type == WORD && (tokens[i + 1].t_type == WORD && tokens[i+1].space_flag == 0))
+		{
+			tokens[i].value = ft_strjoin(tokens[i].value, tokens[i + 1].value);
+		}
+		manage_tokens2(tokens, i + 1);
+    	i++;
+	}
+}
+
+
 void    free_tokens(token_t tokens[], minishell_t ms)
 {
-    int i;
-    i = 0;
-  while (i < ms.count_token)
+  int i = 0;
+  while (tokens[i].t_type != TOKEN_END)
     free(tokens[i++].value);
 }
 
@@ -36,13 +60,15 @@ void parser(char *buf)
     minishell.allocation = allocation;
     minishell.env_list = env_list;
     token_t tokens[allocation * sizeof(token_t)];
+    int i = 0;
+    /* while (tokens[i].t_type != TOKEN_END)
+      tokens[i++].space_flag = 1; *///BAŞLATMAYI UNUTMA
     lex_analize(buf, tokens, &minishell);
+	manage_tokens(tokens);
+    check_env(tokens, &minishell);
     printf("%s\n", tokens[0].value);
     printf("%s\n", tokens[1].value);
     printf("%s\n", tokens[2].value);
-    printf("%s\n", tokens[3].value);
-    printf("%s\n", tokens[4].value);
-    check_env(tokens, &minishell);
     free_tokens(tokens, minishell);
   
 }

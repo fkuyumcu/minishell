@@ -3,18 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:22:20 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 13:41:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:20:10 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void ft_getcwd(char *buf, size_t size)
+char	*ft_strjoin(char *s1, char *s2)
 {
-    if(getcwd(buf, size) == NULL)
-        perror(RED"getcwd failed\n"RST);//error
-        
+	int		a;
+	int		b;
+	int		c;
+	char	*str;
+
+	a = ft_strlen(s1);
+	b = ft_strlen(s2);
+	c = 0;
+	str = malloc((a + b) * sizeof(char) + 1);
+	if (!str)
+		return (0);
+	while (c < a)
+	{
+		str[c] = s1[c];
+		c++;
+	}
+	c = 0;
+	while (c < b)
+	{
+		str[a + c] = s2[c];
+		c++;
+	}
+	str[a + c] = '\0';
+	free(s1);
+	return (str);
+}
+
+static void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char	*p;
+	unsigned char	*q;
+
+	if (!dest && !src)
+		return (NULL);
+	p = (unsigned char *) src;
+	q = (unsigned char *) dest;
+	while (n--)
+	{
+		q[n] = p[n];
+	}
+	return (dest);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*adress;
+
+	adress = malloc(ft_strlen(s1)+1);
+	if (adress == NULL)
+		return (NULL);
+	ft_memcpy(adress, s1, ft_strlen(s1) + 1);
+	return (adress);
 }

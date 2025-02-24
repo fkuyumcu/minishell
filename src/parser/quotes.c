@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/22 14:14:37 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/24 15:16:35 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
     }
     if (**input == '"')
         (*input)++;
-    else 
+    else
     {
         fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
     }
     buffer[buf_index] = '\0';
-    tokens[*count].t_type = TOKEN_WORD;
+    tokens[*count].t_type = WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
     process_token(input, tokens, count, minishell);
@@ -65,7 +65,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
 
     buffer[buf_index] = '\0';
 
-    tokens[*count].t_type = TOKEN_WORD;
+    tokens[*count].t_type = WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;
     process_token(input, tokens, count, minishell);
