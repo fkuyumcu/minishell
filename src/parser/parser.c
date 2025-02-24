@@ -12,12 +12,30 @@
 
 #include "../minishell.h"
 
+char *deneme(char *str)
+{
+	if (!str)
+		return (NULL);
+	char *ret = malloc (ft_strlen(str) + 1);
+	if (!ret)
+		return (NULL);
+	int i =  0;
+	while (str[i])
+	{
+		ret[i] = str[i];
+		i++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
 void manage_tokens2(token_t tokens[], int i)
 {
 	while (tokens[i].t_type != TOKEN_END)
 	{
 		free(tokens[i].value);
-		tokens[i].value = ft_strdup(tokens[i+1].value);
+		if (tokens[i + 1].t_type != TOKEN_END)
+			tokens[i].value = deneme(tokens[i+1].value);
 		tokens[i].t_type = tokens[i+1].t_type;
 		tokens[i].is_dbl_quote = tokens[i+1].is_dbl_quote;
 		tokens[i].is_env = tokens[i+1].is_env;
@@ -27,7 +45,6 @@ void manage_tokens2(token_t tokens[], int i)
 		tokens[i].space_flag = tokens[i+1].space_flag;
 		i++;
 	}
-	free(tokens[i].value);
 }
 
 void manage_tokens(token_t tokens[])
@@ -38,8 +55,8 @@ void manage_tokens(token_t tokens[])
     	if (tokens[i].t_type == WORD && (tokens[i + 1].t_type == WORD && tokens[i+1].space_flag == 0))
 		{
 			tokens[i].value = ft_strjoin(tokens[i].value, tokens[i + 1].value);
+			manage_tokens2(tokens, i + 1);
 		}
-		manage_tokens2(tokens, i + 1);
     	i++;
 	}
 }
@@ -77,6 +94,7 @@ void parser(char *buf)
     printf("%s\n", tokens[0].value);
     printf("%s\n", tokens[1].value);
     printf("%s\n", tokens[2].value);
+
     free_tokens(tokens, minishell);
   
 }
