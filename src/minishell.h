@@ -58,12 +58,13 @@ typedef struct token_s
 {
     token_type t_type;
     char *value;
+    size_t space_flag;
     size_t is_dbl_quote;
     size_t is_env;
     size_t is_equal;
     size_t is_word;
     int index_in_input;
-    size_t space_flag;
+    
     
 } token_t;
 
