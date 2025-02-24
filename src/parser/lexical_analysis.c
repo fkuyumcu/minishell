@@ -84,6 +84,6 @@ void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
             input++;
         input++;
     }
-    tokens[count] =  (token_t){TOKEN_END, ""};
+    tokens[count] =  (token_t){TOKEN_END, "", 1};
     minishell->count = count;
 }
