@@ -23,6 +23,20 @@ ast_node_t *create_node(token_type type, char **args)
     return node;
 }
 
+int get_precedence(token_t token)
+{
+    int type;
+    
+    type = token.t_type;
+    if(type == PIPE)
+        return (1);
+    else if(type == REDIRECT_IN || type == REDIRECT_OUT)
+        return (2);
+    else if(type == HEREDOC_IN || HEREDOC_OUT)
+        return (3);
+    return (0); 
+}
+
 char **edit_command_args(token_t *tokens, int *pos, int size)
 {
     int start;
@@ -49,19 +63,48 @@ char **edit_command_args(token_t *tokens, int *pos, int size)
     return (args);
 }
 
+/* ast_node_t *parse_expression(token_t tokens[], int *pos, int size, int min_prec)
+{
+    ast_node_t *left;
 
-Şimdi girdilerimi tokenize ettim ve bir tokens dizisinde tutuyorum. Örneğim girdim şu olsun
+    if (tokens[*pos].t_type == HEREDOC_IN || tokens[*pos].t_type == HEREDOC_OUT ||
+        tokens[*pos].t_type == REDIRECT_IN || tokens[*pos].t_type == REDIRECT_OUT) {
+        
+        token_type op_type = tokens[*pos].t_type;
+        (*pos)++;  // Operatörü geç
+        
+        // Hemen ardından bir dosya adı (WORD) gelmelidir
+        if (tokens[*pos].t_type != WORD) {
+            printf("Hata: Beklenmeyen token!\n");
+            return NULL;
+        }
 
-ls -l | wc -l | grep -l >> output.txt
-tokens dizim şu şekilde olur
-tokens[0].value = ls
-tokens[1].value = -l
-tokens[2].value = |
-tokens[3].value = wc
-tokens[4].value = -l
-tokens[5].value = |
-tokens[6].value = grep
-tokens[7].value = l
-tokens[8].value = >>
-tokens[9].value = output.txt
+        // Dosya adını içeren node'u oluştur
+        char **args = malloc(2 * sizeof(char *));
+        args[0] = strdup(tokens[*pos].value);
+        args[1] = NULL;
+        (*pos)++;
+
+        // Yönlendirme operatörünü içeren düğümü oluştur
+        left = create_ast_node(NULL, op_type);
+        left->right = create_ast_node(args, WORD);
+    }
+    // Eğer kelimeyle başlıyorsa, bunu bir komut olarak al
+    else if (tokens[*pos].t_type == WORD) {
+        char **args = malloc(2 * sizeof(char *));
+        args[0] = strdup(tokens[*pos].value);
+        args[1] = NULL;
+        left = create_ast_node(args, WORD);
+        (*pos)++;
+    } else {
+        return NULL;  // Geçersiz ifade
+    }
+
+
+} */
+
+
+
+
+
 
