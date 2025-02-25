@@ -104,6 +104,7 @@ void    single_quote(char **input, token_t tokens[], int *count, minishell_t *mi
 void    check_env(token_t tokens[], minishell_t *minishell);
 char	*ft_strdup(const char *s1);
 void    check_env(token_t tokens[], minishell_t *minishell);
+char	*ft_strchr(const char *s, int c);
 
 
 #endif

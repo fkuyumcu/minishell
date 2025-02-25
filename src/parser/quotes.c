@@ -66,7 +66,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
 
     buffer[buf_index] = '\0';
 
-    tokens[*count].is_dbl_quote = 1;
+    tokens[*count].is_dbl_quote = 0;
     tokens[*count].t_type = WORD;
     tokens[*count].value = strdup(buffer);//strdup
     (*count)++;

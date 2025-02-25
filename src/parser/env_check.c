@@ -21,7 +21,7 @@ void proc_eq(token_t *token, minishell_t *minishell)
 
     token->t_type = ENV_EQ;
     start = token->value;
-    eq = strchr(token->value,'=');//strchr
+    eq = ft_strchr(token->value,'=');
     
 }
 
@@ -51,7 +51,7 @@ static void proc_env(token_t *token, minishell_t *minishell)
     int len;
     
     len = 0;
-    dolar_pos = strchr(token->value, '$');//strchr
+    dolar_pos = ft_strchr(token->value, '$');
     if (!dolar_pos)
         return; 
     start = dolar_pos + 1;
@@ -82,15 +82,13 @@ static void proc_env(token_t *token, minishell_t *minishell)
 void check_env(token_t tokens[], minishell_t *minishell)
 {
     int i;
-    char *c;
     i = 0;
     while(i < minishell->count)
     {
-        c = strchr(tokens[i].value,'=');//strchr
-        if (strchr(tokens[i].value, '$') != 0 && tokens[i].value[1] != '?' && tokens[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
+        if (ft_strchr(tokens[i].value, '$') != 0 && tokens[i].value[1] != '?' && tokens[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
             proc_env(&tokens[i], minishell);
-        /* else if(c && tokens[i].is_word)
-            proc_eq(&tokens[i], minishell); */
+        else if(ft_strchr(tokens[i].value, '=') != 0 )
+            proc_eq(&tokens[i], minishell);
         i++;
     }
     

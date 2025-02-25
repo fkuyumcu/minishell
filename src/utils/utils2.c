@@ -66,3 +66,25 @@ char	*ft_strdup(const char *s1)
 	ft_memcpy(adress, s1, ft_strlen(s1) + 1);
 	return (adress);
 }
+
+
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	len;
+	size_t	i;
+	char	*x;
+
+	len = ft_strlen(s);
+	i = 0;
+	while (i <= len)
+	{
+		if (s[i] == (char)c)
+		{
+			x = (char *) &s[i];
+			return (x);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
