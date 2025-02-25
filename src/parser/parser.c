@@ -86,12 +86,10 @@ void parser(char *buf)
     minishell.allocation = allocation;
     minishell.env_list = env_list;
     token_t tokens[allocation * sizeof(token_t)];
-    int i = 0;
-    /* while (tokens[i].t_type != TOKEN_END)
-      tokens[i++].space_flag = 1; *///BAŞLATMAYI UNUTMA
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
 	manage_tokens(tokens);
+	
     printf("%s\n", tokens[0].value);
     printf("%s\n", tokens[1].value);
     printf("%s\n", tokens[2].value);

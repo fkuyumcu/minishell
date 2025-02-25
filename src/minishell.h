@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
+#ifndef MINISHELL_H
 
 # include <stdio.h>
 # include <readline/readline.h>

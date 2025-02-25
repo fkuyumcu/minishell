@@ -48,3 +48,20 @@ char **edit_command_args(token_t *tokens, int *pos, int size)
     args[count] = NULL;
     return (args);
 }
+
+
+Şimdi girdilerimi tokenize ettim ve bir tokens dizisinde tutuyorum. Örneğim girdim şu olsun
+
+ls -l | wc -l | grep -l >> output.txt
+tokens dizim şu şekilde olur
+tokens[0].value = ls
+tokens[1].value = -l
+tokens[2].value = |
+tokens[3].value = wc
+tokens[4].value = -l
+tokens[5].value = |
+tokens[6].value = grep
+tokens[7].value = l
+tokens[8].value = >>
+tokens[9].value = output.txt
+
