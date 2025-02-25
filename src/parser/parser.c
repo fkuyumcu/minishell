@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 18:51:41 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/25 18:40:15 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void manage_tokens2(token_t tokens[], int i)
 	while (tokens[i].t_type != TOKEN_END)
 	{
 		free(tokens[i].value);
+		tokens[i].value = NULL;
 		if (tokens[i + 1].t_type != TOKEN_END)
 			tokens[i].value = deneme(tokens[i+1].value);
 		tokens[i].t_type = tokens[i+1].t_type;
@@ -89,8 +90,8 @@ void parser(char *buf)
     /* while (tokens[i].t_type != TOKEN_END)
       tokens[i++].space_flag = 1; *///BAŞLATMAYI UNUTMA
     lex_analize(buf, tokens, &minishell);
-	manage_tokens(tokens);
     check_env(tokens, &minishell);
+	manage_tokens(tokens);
     printf("%s\n", tokens[0].value);
     printf("%s\n", tokens[1].value);
     printf("%s\n", tokens[2].value);
