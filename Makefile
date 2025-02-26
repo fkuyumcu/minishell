@@ -10,7 +10,7 @@ SRC = src/main.c \
       src/parser/quotes.c \
       src/parser/lexical_analysis.c \
       src/parser/env_check.c \
-
+      
 OBJ = $(SRC:.c=.o)
 
 %.o: %.c

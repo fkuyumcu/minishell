@@ -75,28 +75,19 @@ void    free_tokens(token_t tokens[], minishell_t ms)
 
 void parser(char *buf)
 {
-     minishell_t minishell;
-    int c;
-    int in_word;
-    int in_quotes;
+    minishell_t minishell;
     int allocation;
     env_t *env_list;
-    c = 0;
-    in_word = 0;
-    in_quotes = 0;
-    minishell.count_token = 0;
     allocation = ft_strlen(buf);
+
     minishell.allocation = allocation;
     minishell.env_list = env_list;
+
     token_t tokens[allocation * sizeof(token_t)];
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
 	manage_tokens(tokens);
 	
-    printf("%s\n", tokens[0].value);
-    printf("%s\n", tokens[1].value);
-    printf("%s\n", tokens[2].value);
-
     free_tokens(tokens, minishell);
   
 }
