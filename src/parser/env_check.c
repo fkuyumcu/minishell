@@ -85,7 +85,7 @@ void check_env(token_t tokens[], minishell_t *minishell)
     i = 0;
     while(i < minishell->count)
     {
-        if (ft_strchr(tokens[i].value, '$') != 0 && tokens[i].value[1] != '?' && tokens[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
+        if (ft_strchr(tokens[i].value, '$') != 0 && *(ft_strchr(tokens[i].value, '$') + 1) != '?' && tokens[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
             proc_env(&tokens[i], minishell);
         else if(ft_strchr(tokens[i].value, '=') != 0 )
             proc_eq(&tokens[i], minishell);
