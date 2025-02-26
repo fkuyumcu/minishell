@@ -53,7 +53,7 @@ void manage_tokens(token_t tokens[])
 	int	i = 0;
 	while (tokens[i].t_type != TOKEN_END)
 	{
-    	if (tokens[i].t_type == WORD && (tokens[i + 1].t_type == WORD && tokens[i+1].space_flag == 0))
+    	if (tokens[i].t_type == WORD && (tokens[i + 1].t_type == WORD || tokens[i + 1].t_type == ENV_VAR)  && tokens[i+1].space_flag == 0)
 		{
 			tokens[i].value = ft_strjoin(tokens[i].value, tokens[i + 1].value);
 			manage_tokens2(tokens, i + 1);
