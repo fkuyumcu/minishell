@@ -88,6 +88,12 @@ void parser(char *buf)
     check_env(tokens, &minishell);
 	manage_tokens(tokens);
 	
+	/* int pos = 0;
+	ast_node_t *ast = parse_expression(tokens, &pos, 6, 0);
+
+   //print_ast(ast, 0); 
+   printf("%s",ast->right->left->args[0]);
+ */
     free_tokens(tokens, minishell);
   
 }

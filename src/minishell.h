@@ -106,6 +106,15 @@ char	*ft_strdup(const char *s1);
 char	*ft_strchr(const char *s, int c);
 
 
+void print_ast(ast_node_t *node, int level);
+ast_node_t *create_ast_node(char **args, token_type type); 
+int get_precedence(token_type type);
+ast_node_t *parse_expression(token_t tokens[], int *pos, int size, int min_prec);
+ast_node_t *parse_primary(token_t tokens[], int *pos, int size);
+ast_node_t *parse_redirection(token_t tokens[], int *pos, int size, token_type redir_type);
+char **collect_args(token_t tokens[], int *pos, int size);
+
+
 
 
 
