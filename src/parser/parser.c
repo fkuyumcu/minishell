@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/25 18:40:15 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/28 14:31:38 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,22 @@ void parser(char *buf)
 
     token_t tokens[allocation * sizeof(token_t)];
     lex_analize(buf, tokens, &minishell);
+	
     check_env(tokens, &minishell);
+	
 	manage_tokens(tokens);
 	
-	/* int pos = 0;
+	/* printf("%s\n",tokens[0].value);
+	printf("%s\n",tokens[1].value);
+	printf("%s\n",tokens[2].value); */
+
+
+	 int pos = 0;
 	ast_node_t *ast = parse_expression(tokens, &pos, 6, 0);
 
    //print_ast(ast, 0); 
-   printf("%s",ast->right->left->args[0]);
- */
+   printf("%s",ast->left->left->args[1]);
+ 
     free_tokens(tokens, minishell);
   
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 15:24:03 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/28 14:11:56 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void proc_eq(token_t *token, minishell_t *minishell)
     token->t_type = ENV_EQ;
     start = token->value;
     eq = ft_strchr(token->value,'=');
-    
+    //arg=123
 }
 
 static char *find_list(minishell_t *minishell, char *env_name)

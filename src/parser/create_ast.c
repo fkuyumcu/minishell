@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexical_analysis.c                                 :+:      :+:    :+:   */
+/*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 15:16:14 by yalp             ###   ########.fr       */
+/*   Updated: 2025/02/28 14:40:37 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char **collect_args(token_t tokens[], int *pos, int size)
     }
 
     if (args) {
-        args = realloc(args, sizeof(char *) * (arg_count + 1));//realloc
+        args = realloc(args, sizeof(char *) * (arg_count + 1));//null kısmı eklemek için
         args[arg_count] = NULL; 
     }
 
