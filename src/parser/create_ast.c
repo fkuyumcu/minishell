@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/28 14:40:37 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/01 15:08:19 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ ast_node_t *parse_primary(token_t tokens[], int *pos, int size) {
         args = collect_args(tokens, pos, size);
         return (create_ast_node(args, WORD));
     }
-
+	
     return (NULL); 
 }
 
@@ -124,7 +124,7 @@ ast_node_t *create_ast_node(char **args, token_type type)
     node->args = args;
     node->left = NULL;
     node->right = NULL;
-
+	int i  = 0;
     return (node);
 }
 

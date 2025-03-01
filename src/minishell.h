@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 15:34:17 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/01 13:20:08 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,17 @@ typedef struct token_s
     size_t is_word;
     int index_in_input;
     
-    
 } token_t;
 
 typedef struct minishell_s
 {
-    env_t *env_list;
+	env_t *env_list;
     int allocation;
     int flag;
     int count_token;
     size_t count;
     char *input_start;
+	ast_node_t *ast;
 }
 minishell_t;
 

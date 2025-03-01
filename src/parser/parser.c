@@ -3,30 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/28 14:31:38 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/01 15:41:24 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *deneme(char *str)
+void free_tree(ast_node_t *ast)
 {
-	if (!str)
-		return (NULL);
-	char *ret = malloc (ft_strlen(str) + 1);
-	if (!ret)
-		return (NULL);
-	int i =  0;
-	while (str[i])
+	int i = 0;
+	if (!ast)
+		return ;
+	if (ast->args)
 	{
-		ret[i] = str[i];
-		i++;
+		while (ast->args[i])
+			free(ast->args[i++]);
+		free(ast->args);
 	}
-	ret[i] = '\0';
-	return (ret);
+	free_tree(ast->left);
+	free_tree(ast->right);
+	free(ast);
+}
+
+
+
+int	count_token(token_t tokens[])
+{
+	int i = 0;
+	while (tokens[i].t_type != TOKEN_END)
+		i++;
+	return (i);
 }
 
 void manage_tokens2(token_t tokens[], int i)
@@ -36,7 +45,7 @@ void manage_tokens2(token_t tokens[], int i)
 		free(tokens[i].value);
 		tokens[i].value = NULL;
 		if (tokens[i + 1].t_type != TOKEN_END)
-			tokens[i].value = deneme(tokens[i+1].value);
+			tokens[i].value = ft_strdup(tokens[i+1].value);
 		tokens[i].t_type = tokens[i+1].t_type;
 		tokens[i].is_dbl_quote = tokens[i+1].is_dbl_quote;
 		tokens[i].is_env = tokens[i+1].is_env;
@@ -96,10 +105,10 @@ void parser(char *buf)
 
 
 	 int pos = 0;
-	ast_node_t *ast = parse_expression(tokens, &pos, 6, 0);
+	minishell.ast = parse_expression(tokens, &pos, count_token(tokens), 0);
 
-   //print_ast(ast, 0); 
-   printf("%s",ast->left->left->args[1]);
+   	print_ast(minishell.ast, 0); 
+	free_tree(minishell.ast);
  
     free_tokens(tokens, minishell);
   
