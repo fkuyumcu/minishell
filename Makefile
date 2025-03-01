@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS =  -g #-Wall -Wextra -Werror
+CFLAGS =  -g  #-Wall -Wextra -Werror
 SRC = src/main.c \
       src/parser/parser.c \
       src/utils/print_banner.c \

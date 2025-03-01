@@ -6,11 +6,33 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/01 15:08:19 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/01 15:58:45 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char **ft_realloc(char **args, size_t n)
+{
+	int i = 0;
+	char **tmp;
+	if (!args)
+		return (char **)malloc((n + 1) * sizeof(char *));
+	tmp = malloc((n + 1) * sizeof(char *));
+	while(args[i] != NULL)
+	{
+	
+		tmp[i] = ft_strdup(args[i]);
+		i++;
+	}
+	tmp[i] = NULL;
+	i = 0;
+	while (args[i])
+		free(args[i++]);
+	free(args);
+	return (tmp);
+}
+
 
 char **collect_args(token_t tokens[], int *pos, int size)
 {
@@ -19,14 +41,14 @@ char **collect_args(token_t tokens[], int *pos, int size)
 
     while (*pos < size && tokens[*pos].t_type == WORD)
     {
-        args = realloc(args, sizeof(char *) * (arg_count + 1));//realloc
+        args = ft_realloc(args, 1);//realloc
         args[arg_count] = ft_strdup(tokens[*pos].value);
         (*pos)++;
         arg_count++;
     }
 
     if (args) {
-        args = realloc(args, sizeof(char *) * (arg_count + 1));//null kısmı eklemek için
+        args = ft_realloc(args, 1);//null kısmı eklemek için
         args[arg_count] = NULL; 
     }
 
@@ -47,6 +69,7 @@ ast_node_t *parse_redirection(token_t tokens[], int *pos, int size, token_type r
 
     return (redir_node);
 }
+
 
 ast_node_t *parse_primary(token_t tokens[], int *pos, int size) {
 

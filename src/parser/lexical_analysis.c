@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 15:16:14 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/01 16:22:20 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void process_word(char **input, token_t tokens[], int *count, minishell_t *minis
 {
     char buffer[minishell->allocation];
     int buf_index = 0;
-    if (*(*input - 1) == ' ')
+    if (0 && *(*input - 1) == ' ')
        tokens[*count].space_flag = 1;
     else
         tokens[*count].space_flag = 0;
