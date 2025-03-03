@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/01 15:41:24 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/03 13:57:08 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,8 @@ void    free_tokens(token_t tokens[], minishell_t ms)
     free(tokens[i++].value);
 }
 
-void parser(char *buf)
+void parser(minishell_t minishell, char *buf)
 {
-    minishell_t minishell;
     int allocation;
     env_t *env_list;
     allocation = ft_strlen(buf);
@@ -102,13 +101,13 @@ void parser(char *buf)
 	/* printf("%s\n",tokens[0].value);
 	printf("%s\n",tokens[1].value);
 	printf("%s\n",tokens[2].value); */
+	//printf("%s\n",tokens[0].value);
 
-
-	 int pos = 0;
+	int pos = 0;
 	minishell.ast = parse_expression(tokens, &pos, count_token(tokens), 0);
 
    	print_ast(minishell.ast, 0); 
-	free_tree(minishell.ast);
+	free_tree(minishell.ast); 
  
     free_tokens(tokens, minishell);
   

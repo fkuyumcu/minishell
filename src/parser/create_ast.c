@@ -3,35 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/01 15:58:45 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/03 13:56:27 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char **ft_realloc(char **args, size_t n)
+char **ft_realloc(char **args, size_t new_size)
 {
-	int i = 0;
-	char **tmp;
-	if (!args)
-		return (char **)malloc((n + 1) * sizeof(char *));
-	tmp = malloc((n + 1) * sizeof(char *));
-	while(args[i] != NULL)
-	{
-	
-		tmp[i] = ft_strdup(args[i]);
-		i++;
-	}
-	tmp[i] = NULL;
-	i = 0;
-	while (args[i])
-		free(args[i++]);
-	free(args);
-	return (tmp);
+    size_t i = 0;
+    size_t old_size = 0;
+    char **tmp;
+
+    if (args) {
+        while (args[old_size])
+            old_size++;
+    }
+
+    tmp = malloc((old_size + new_size + 1) * sizeof(char *));
+    if (!tmp)
+        return NULL;
+
+    for (i = 0; i < old_size; i++)
+        tmp[i] = ft_strdup(args[i]);
+
+    for (i = 0; i < old_size; i++)
+        free(args[i]);
+
+    free(args);
+
+    tmp[old_size + new_size] = NULL;
+
+    return tmp;
 }
+
 
 
 char **collect_args(token_t tokens[], int *pos, int size)
@@ -64,12 +72,14 @@ ast_node_t *parse_redirection(token_t tokens[], int *pos, int size, token_type r
         printf("Hata: Yönlendirme sonrası dosya adı bekleniyordu\n");
         return NULL;
     }
+
+    args = collect_args(tokens, pos, size); // args'yi oluştur
+
     redir_node = create_ast_node(NULL, redir_type);
     redir_node->right = create_ast_node(args, WORD);
 
-    return (redir_node);
+    return redir_node;
 }
-
 
 ast_node_t *parse_primary(token_t tokens[], int *pos, int size) {
 

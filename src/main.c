@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/01 16:09:51 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/03 13:54:16 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int main(void)
 {
     //print_banner();
     char *line;
+    minishell_t minishell;
     while(1)
     {
         sig_handler(1);
@@ -63,9 +64,9 @@ int main(void)
         if(*line == '\0')
             continue;
         add_history(line);
-        //space durumunda seg
-        parser(line);
-        free(line);
+        parser(minishell, line);
+        /* if(line)leak var
+            free(line); */
     }
     //wall wextra
 
