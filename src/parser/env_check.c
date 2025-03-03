@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/28 14:11:56 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/03 16:19:08 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,20 @@ void check_env(token_t tokens[], minishell_t *minishell)
 {
     int i;
     i = 0;
+	int j = 0;
     while(i < minishell->count)
     {
         if (ft_strchr(tokens[i].value, '$') != 0 && *(ft_strchr(tokens[i].value, '$') + 1) != '?' && tokens[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
-            proc_env(&tokens[i], minishell);
+		{
+			while (tokens[i].value[j])
+			{
+				if (tokens[i].value[j] == '$')
+				{
+					proc_env(&tokens[i], minishell);
+				}
+				j++;
+			}
+		}
         else if(ft_strchr(tokens[i].value, '=') != 0 )
             proc_eq(&tokens[i], minishell);
         i++;
