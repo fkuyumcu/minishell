@@ -3,15 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_analysis.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/03 13:35:43 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/03 16:06:29 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void process_op(char **input, token_t tokens[], int *count)
+{
+	if (**input == '|')
+	{
+        tokens[(*count)++] = (token_t){PIPE, ft_strndup("|", 1)};
+		(*input)++;
+	}
+    else if (**input == '<' && *(*input + 1) == '<')
+	{
+        tokens[(*count)++] = (token_t){HEREDOC_IN, ft_strndup("<<", 2)}; 
+		(*input) += 2;
+	}
+    else if (**input == '>' && *(*input + 1) == '>')
+	{
+        tokens[(*count)++] = (token_t){HEREDOC_OUT, ft_strndup(">>", 2)};
+		(*input) += 2;
+	}
+    else if (**input == '<')
+	{
+        tokens[(*count)++] = (token_t){REDIRECT_IN,  ft_strndup("<", 1)};
+		(*input)++;
+	}
+    else if (**input == '>')
+	{
+        tokens[(*count)++] = (token_t){REDIRECT_OUT, ft_strndup(">", 1)};
+		(*input)++;
+	}
+}
 
 void process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
@@ -44,15 +72,15 @@ void process_word(char **input, token_t tokens[], int *count, minishell_t *minis
 void process_token(char **input, token_t tokens[], int *count, minishell_t *minishell)
 {
     if (**input == '|')
-        tokens[(*count)++] = (token_t){PIPE, ft_strndup("|", 1)};
+        process_op(input, tokens, count);
     else if (**input == '<' && *(*input + 1) == '<')
-        tokens[(*count)++] = (token_t){HEREDOC_IN, ft_strndup("<<", 2)}; 
+		process_op(input, tokens, count);
     else if (**input == '>' && *(*input + 1) == '>')
-        tokens[(*count)++] = (token_t){HEREDOC_OUT, ft_strndup(">>", 2)};
+		process_op(input, tokens, count);
     else if (**input == '<')
-        tokens[(*count)++] = (token_t){REDIRECT_IN,  ft_strndup("<", 1)};
+		process_op(input, tokens, count);
     else if (**input == '>')
-        tokens[(*count)++] = (token_t){REDIRECT_OUT, ft_strndup(">", 1)};
+		process_op(input, tokens, count);
     else if (**input == '\"')
         double_quote(input, tokens, count, minishell);
     else if (**input == '\'')
@@ -75,14 +103,11 @@ void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
         while (*input == ' ')
             input++;
         
-        if (*input == '\0')
+        if (*input == 0)
             break;
         
         process_token(&input, tokens, &count, minishell);
-        if (ft_strncmp(tokens[count - 1].value, "<<", 3) == 0 
-        || ft_strncmp(tokens[count - 1].value, ">>", 3) == 0 || ft_strncmp(tokens[count - 1].value, "$?", 3) == 0)
-            input++;
-        input++;
+        
     }
     tokens[count] =  (token_t){TOKEN_END, "", 1};
     minishell->count = count;
