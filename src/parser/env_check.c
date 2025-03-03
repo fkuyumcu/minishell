@@ -6,14 +6,14 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/03 16:19:08 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/03 16:55:28 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 
-void proc_eq(token_t *token, minishell_t *minishell)
+void	proc_eq(token_t *token, minishell_t *minishell)
 {
     char *start;
     char *eq;

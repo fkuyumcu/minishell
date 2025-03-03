@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 15:16:35 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/03 17:25:25 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
         fprintf(stderr, "Error: Unclosed single quote\n");//error
         return;
     }
-
     buffer[buf_index] = '\0';
-
     tokens[*count].is_dbl_quote = 0;
     tokens[*count].t_type = WORD;
     tokens[*count].value = strdup(buffer);//strdup
