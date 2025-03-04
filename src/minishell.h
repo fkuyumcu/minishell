@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 15:10:48 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:47:11 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,45 +85,58 @@ typedef struct minishell_s
 	ast_node_t			*ast;
 }						minishell_t;
 
+//UTILITY FUNCTIONS
+
+char					*ft_strdup(const char *s1, minishell_t *minishell);
+char					*ft_strchr(const char *s, int c);
+char					*ft_readline(void);
+char					*ft_strncpy(char *dest, const char *src, size_t n);
+char					*ft_strndup(const char *src, size_t n, minishell_t *minishell);
+char					*ft_strjoin(char *s1, char *s2, minishell_t *minishell);
+size_t					ft_strlen(const char *s);
+size_t					ft_strlen(const char *s);
+int						ft_strncmp(const char *s1, const char *s2, size_t n);
+void					print_banner(void);
+
+//TOKENIZER
+
 void					process_token(char **input, token_t tokens[],
 							int *count, minishell_t *minishell);
 void					lex_analize(char *input, token_t tokens[],
 							minishell_t *minishell);
-void					print_banner(void);
-void					parser(minishell_t minishell, char *buf);
-char					*ft_readline(void);
-char					*ft_strncpy(char *dest, const char *src, size_t n);
-size_t					ft_strlen(const char *s);
-size_t					ft_strlen(const char *s);
-char					*ft_strjoin(char *s1, char *s2, minishell_t *minishell);
-int						ft_strncmp(const char *s1, const char *s2, size_t n);
-char					*ft_strndup(const char *src, size_t n, minishell_t *minishell);
+void					parser(minishell_t *minishell, char *buf);
 int						is_delimiter(char c);
 void					double_quote(char **input, token_t tokens[], int *count,
 							minishell_t *minishell);
 void					single_quote(char **input, token_t tokens[], int *count,
 							minishell_t *minishell);
 void					check_env(token_t tokens[], minishell_t *minishell);
-char					*ft_strdup(const char *s1, minishell_t *minishell);
-char					*ft_strchr(const char *s, int c);
+
+//CREATE AST
 
 void					print_ast(ast_node_t *node, int level);
 ast_node_t				*create_ast_node(char **args, token_type type,
 							minishell_t *minishell);
-int						get_precedence(token_type type);
 ast_node_t				*parse_expression(token_t tokens[], int *pos, int size,
 							int min_prec, minishell_t *minishell);
 ast_node_t				*parse_primary(token_t tokens[], int *pos, int size,
 							minishell_t *minishell);
 ast_node_t				*parse_redirection(token_t tokens[], int *pos, int size,
-							token_type redir_type, minishell_t *minishell);
-
+							token_type redir_type, minishell_t *minishell);							
 char					**collect_args(token_t tokens[], int *pos, int size,
-							minishell_t *minishell);
+											minishell_t *minishell);
+int						get_precedence(token_type type);
+
+//ERRORS AND FREES
 
 void					free_tokens(token_t tokens[], minishell_t ms);
 void					free_tree(ast_node_t *ast);
-
 void					ft_error(minishell_t *minishell, char *s);
+
+//EXECUTE
+
+void execute(minishell_t *minishell);
+
+
 
 #endif

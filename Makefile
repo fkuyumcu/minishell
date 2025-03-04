@@ -12,6 +12,8 @@ SRC = src/main.c \
       src/parser/lexical_analysis.c \
       src/parser/env_check.c \
       src/parser/create_ast.c \
+      src/exec/execute.c \
+      
 
 OBJ = $(SRC:.c=.o)
 

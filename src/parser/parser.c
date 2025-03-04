@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 15:58:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:22:14 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,22 @@ void set_minishell(minishell_t *ms, int allocation, env_t *env_list)
 }
 
 
-void parser(minishell_t minishell, char *buf)
+void parser(minishell_t *minishell, char *buf)
 {
     int allocation;
     env_t *env_list;
-	token_t *tokens = minishell.tokens;
+	token_t *tokens = minishell->tokens;
     allocation = ft_strlen(buf);
-	set_minishell(&minishell, allocation, env_list);
-    lex_analize(buf, tokens, &minishell);
-    check_env(tokens, &minishell);
+	set_minishell(minishell, allocation, env_list);
+    lex_analize(buf, tokens, minishell);
+    check_env(tokens, minishell);
 	manage_tokens(tokens);
 	
 	int pos = 0;
-	minishell.ast = parse_expression(tokens, &pos, count_token(tokens), 0, &minishell);
-   	print_ast(minishell.ast, 0); 
-	free_tree(minishell.ast); 
-    free_tokens(tokens, minishell);
+	minishell->ast = parse_expression(tokens, &pos, count_token(tokens), 0, minishell);
+   	print_ast(minishell->ast, 0); 
+	free_tokens(tokens, *minishell);
+	free_tree(minishell->ast);  
+	
   
 }
