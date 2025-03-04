@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 17:22:14 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:25:17 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void free_tree(ast_node_t *ast)
 	free_tree(ast->right);
 	free(ast);
 }
-
 
 
 int	count_token(token_t tokens[])
@@ -59,8 +58,9 @@ void manage_tokens2(token_t tokens[], int i)
 
 void manage_tokens(token_t tokens[])
 {
-	int i = 0;
-
+	int i;
+	
+	i = 0;
 	while (tokens[i].t_type != TOKEN_END)
 	{
 		while (tokens[i].t_type == WORD &&
@@ -77,9 +77,11 @@ void manage_tokens(token_t tokens[])
 
 void    free_tokens(token_t tokens[], minishell_t ms)
 {
-  int i = 0;
+  int i;
+  
+  i = 0;
   while (tokens[i].t_type != TOKEN_END)
-    free(tokens[i++].value);
+    free (tokens[i++].value);
 }
 
 void set_minishell(minishell_t *ms, int allocation, env_t *env_list)
@@ -98,18 +100,18 @@ void parser(minishell_t *minishell, char *buf)
 {
     int allocation;
     env_t *env_list;
-	token_t *tokens = minishell->tokens;
+	token_t *tokens;
+	int pos;
+	
+	tokens = minishell->tokens;
     allocation = ft_strlen(buf);
 	set_minishell(minishell, allocation, env_list);
     lex_analize(buf, tokens, minishell);
     check_env(tokens, minishell);
 	manage_tokens(tokens);
-	
-	int pos = 0;
+	pos = 0;
 	minishell->ast = parse_expression(tokens, &pos, count_token(tokens), 0, minishell);
    	print_ast(minishell->ast, 0); 
 	free_tokens(tokens, *minishell);
 	free_tree(minishell->ast);  
-	
-  
 }
