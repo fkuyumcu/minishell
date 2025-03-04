@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 15:25:20 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:58:53 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,15 @@ void    free_tokens(token_t tokens[], minishell_t ms)
     free(tokens[i++].value);
 }
 
-void set_minishell(minishell_t ms, int allocation, env_t *env_list)
+void set_minishell(minishell_t *ms, int allocation, env_t *env_list)
 {
 	token_t tokens[allocation * sizeof(token_t)];
-	
-	ms.ast = NULL;
-	ms.tokens = NULL;
-	ms.input_start = NULL;
-	ms.allocation = allocation;
-	ms.env_list = env_list;
-	ms.tokens = tokens;
+	ms->allocation = allocation;
+	ms->ast = NULL;
+	ms->tokens = NULL;
+	ms->input_start = NULL;
+	ms->env_list = env_list;
+	ms->tokens = tokens;
 }
 
 
@@ -101,8 +100,7 @@ void parser(minishell_t minishell, char *buf)
     env_t *env_list;
 	token_t *tokens = minishell.tokens;
     allocation = ft_strlen(buf);
-	
-	set_minishell(minishell, allocation, env_list);
+	set_minishell(&minishell, allocation, env_list);
     lex_analize(buf, tokens, &minishell);
     check_env(tokens, &minishell);
 	manage_tokens(tokens);
