@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/03 17:53:53 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/04 14:58:56 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void double_quote(char **input, token_t tokens[], int *count, minishell_t *minis
         (*input)++;
     else
     {
-        fprintf(stderr, "Error: Unclosed double quote\n");//error
+        printf("Error: Unclosed double quote\n");//error
         return;
     }
     buffer[buf_index] = '\0';
@@ -67,7 +67,7 @@ void single_quote(char **input, token_t tokens[], int *count, minishell_t *minis
         (*input)++;
 	else 
 	{
-        fprintf(stderr, "Error: Unclosed single quote\n");//error
+        printf("Error: Unclosed single quote\n");//error
         return;
     }
     buffer[buf_index] = '\0';

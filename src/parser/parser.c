@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/03 13:57:08 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:25:20 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void manage_tokens2(token_t tokens[], int i)
 		free(tokens[i].value);
 		tokens[i].value = NULL;
 		if (tokens[i + 1].t_type != TOKEN_END)
-			tokens[i].value = ft_strdup(tokens[i+1].value);
+			tokens[i].value = ft_strdup(tokens[i+1].value, tokens->ms);
 		tokens[i].t_type = tokens[i+1].t_type;
 		tokens[i].is_dbl_quote = tokens[i+1].is_dbl_quote;
 		tokens[i].is_env = tokens[i+1].is_env;
@@ -67,7 +67,7 @@ void manage_tokens(token_t tokens[])
 			   (tokens[i + 1].t_type == WORD || tokens[i + 1].t_type == ENV_VAR) &&
 			   tokens[i + 1].space_flag == 0)
 		{
-			tokens[i].value = ft_strjoin(tokens[i].value, tokens[i + 1].value);
+			tokens[i].value = ft_strjoin(tokens[i].value, tokens[i + 1].value, tokens->ms);
 			manage_tokens2(tokens, i + 1);
 		}
 		i++;
@@ -82,33 +82,35 @@ void    free_tokens(token_t tokens[], minishell_t ms)
     free(tokens[i++].value);
 }
 
+void set_minishell(minishell_t ms, int allocation, env_t *env_list)
+{
+	token_t tokens[allocation * sizeof(token_t)];
+	
+	ms.ast = NULL;
+	ms.tokens = NULL;
+	ms.input_start = NULL;
+	ms.allocation = allocation;
+	ms.env_list = env_list;
+	ms.tokens = tokens;
+}
+
+
 void parser(minishell_t minishell, char *buf)
 {
     int allocation;
     env_t *env_list;
+	token_t *tokens = minishell.tokens;
     allocation = ft_strlen(buf);
-
-    minishell.allocation = allocation;
-    minishell.env_list = env_list;
-
-    token_t tokens[allocation * sizeof(token_t)];
+	
+	set_minishell(minishell, allocation, env_list);
     lex_analize(buf, tokens, &minishell);
-	
     check_env(tokens, &minishell);
-	
 	manage_tokens(tokens);
 	
-	/* printf("%s\n",tokens[0].value);
-	printf("%s\n",tokens[1].value);
-	printf("%s\n",tokens[2].value); */
-	//printf("%s\n",tokens[0].value);
-
 	int pos = 0;
-	minishell.ast = parse_expression(tokens, &pos, count_token(tokens), 0);
-
+	minishell.ast = parse_expression(tokens, &pos, count_token(tokens), 0, &minishell);
    	print_ast(minishell.ast, 0); 
 	free_tree(minishell.ast); 
- 
     free_tokens(tokens, minishell);
   
 }

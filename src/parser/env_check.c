@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/03 16:55:28 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/04 15:13:53 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void proc_env(token_t *token, minishell_t *minishell)
         len++;
     if (len == 0)
         return;
-    env_name = ft_strndup(start, len);
+    env_name = ft_strndup(start, len, minishell);
     env_value = find_list(minishell, env_name);
     if (!env_value)
         env_value = getenv(env_name);
@@ -67,7 +67,7 @@ static void proc_env(token_t *token, minishell_t *minishell)
         env_value = "";
     new_value = (char *)malloc(ft_strlen(token->value) - len + ft_strlen(env_value) + 1);
     if (!new_value)
-        return;
+        ft_error(minishell, "Error Allocating Space");
     ft_strncpy(new_value, token->value, dolar_pos - token->value); 
     new_value[dolar_pos - token->value] = '\0';
     strcat(new_value, env_value); //strcat

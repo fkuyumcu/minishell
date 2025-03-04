@@ -7,6 +7,7 @@ SRC = src/main.c \
       src/utils/print_banner.c \
       src/utils/utils.c \
       src/utils/utils2.c \
+      src/utils/error.c \
       src/parser/quotes.c \
       src/parser/lexical_analysis.c \
       src/parser/env_check.c \

@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 15:46:29 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/19 13:41:33 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:02:19 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ int is_delimiter(char c)
     return c == '\0' || isspace(c) || c == '|' || c == '<' || c == '>' || c == '$';
 }
 
-char *ft_strndup(const char *src, size_t n)
+char *ft_strndup(const char *src, size_t n, minishell_t *minishell)
 {
-    char *dest = (char *)malloc(n + 1);//malloc
-    if (!dest) return NULL;
+    char *dest = (char *)malloc(n + 1);
+    if (!dest)
+		ft_error(minishell,"Error Allocating Space");
     ft_strncpy(dest, src, n);
     dest[n] = '\0';
     return dest;

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:22:20 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/02/24 16:20:10 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/04 15:04:14 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, minishell_t *minishell)
 {
 	int		a;
 	int		b;
@@ -23,7 +23,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	c = 0;
 	str = malloc((a + b) * sizeof(char) + 1);
 	if (!str)
-		return (0);
+		ft_error(minishell, "Error Allocating Space");
 	while (c < a)
 	{
 		str[c] = s1[c];
@@ -56,13 +56,13 @@ static void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1, minishell_t *minishell)
 {
 	char	*adress;
 
 	adress = malloc(ft_strlen(s1)+1);
 	if (adress == NULL)
-		return (NULL);
+		ft_error(minishell, "Error Allocating Space");
 	ft_memcpy(adress, s1, ft_strlen(s1) + 1);
 	return (adress);
 }
