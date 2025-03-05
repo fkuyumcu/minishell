@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 17:25:17 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:44:14 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,29 @@ void parser(minishell_t *minishell, char *buf)
 {
     int allocation;
     env_t *env_list;
-	token_t *tokens;
-	int pos;
-	
-	tokens = minishell->tokens;
     allocation = ft_strlen(buf);
-	set_minishell(minishell, allocation, env_list);
+
+    minishell->allocation = allocation;
+    minishell->env_list = env_list;
+
+    token_t tokens[allocation * sizeof(token_t)];
     lex_analize(buf, tokens, minishell);
+	
     check_env(tokens, minishell);
+	
 	manage_tokens(tokens);
-	pos = 0;
+	
+	/* printf("%s\n",tokens[0].value);
+	printf("%s\n",tokens[1].value);
+	printf("%s\n",tokens[2].value); */
+	//printf("%s\n",tokens[0].value);
+
+	int pos = 0;
 	minishell->ast = parse_expression(tokens, &pos, count_token(tokens), 0, minishell);
+
    	print_ast(minishell->ast, 0); 
-	free_tokens(tokens, *minishell);
-	free_tree(minishell->ast);  
+	free_tree(minishell->ast); 
+ 
+    free_tokens(tokens, *minishell);
+  
 }
