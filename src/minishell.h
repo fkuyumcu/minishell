@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 16:47:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:58:04 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void					process_token(char **input, token_t tokens[],
 							int *count, minishell_t *minishell);
 void					lex_analize(char *input, token_t tokens[],
 							minishell_t *minishell);
-void					parser(minishell_t *minishell, char *buf);
+void					parser(minishell_t *minishell, char *buf, int allocation);
 int						is_delimiter(char c);
 void					double_quote(char **input, token_t tokens[], int *count,
 							minishell_t *minishell);

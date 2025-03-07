@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 16:47:07 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:57:42 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int main(void)
         if(*line == '\0')
             continue;
         add_history(line);
-        parser(&minishell, line);
+        parser(&minishell, line, ft_strlen(line));
         //execute(minishell)
 	   free(line);
     }

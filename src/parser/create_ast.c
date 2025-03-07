@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/04 15:23:35 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:08:53 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,119 +42,109 @@ char **ft_realloc(char **args, size_t new_size, minishell_t *minishell)
 
 
 
-char **collect_args(token_t tokens[], int *pos, int size, minishell_t *minishell)
+char	**collect_args(token_t tokens[], int *pos, int size, minishell_t *ms)
 {
-    char **args = NULL;
-    int arg_count = 0;
+	char	**args;
+	int		arg_count;
 
-    while (*pos < size && tokens[*pos].t_type == WORD)
-    {
-        args = ft_realloc(args, 1, minishell);
-        args[arg_count] = ft_strdup(tokens[*pos].value, minishell);
-        (*pos)++;
-        arg_count++;
-    }
-
-    if (args) {
-        args = ft_realloc(args, 1, minishell);//null kısmı eklemek için
-        args[arg_count] = NULL; 
-    }
-
-    return args;
+	arg_count = 0;
+	args = NULL;
+	while (*pos < size && tokens[*pos].t_type == WORD)
+	{
+		args = ft_realloc(args, 1, ms);
+		args[arg_count] = ft_strdup(tokens[*pos].value, ms);
+		(*pos)++;
+		arg_count++;
+	}
+	if (args)
+	{
+		args = ft_realloc(args, 1, ms);//null kısmı eklemek için
+		args[arg_count] = NULL; 
+	}
+	return (args);
 }
 
-ast_node_t *parse_redirection(token_t tokens[], int *pos, int size, token_type redir_type, minishell_t *minishell)
+ast_node_t	*parse_redirection(token_t tokens[], int *pos, int size, token_type redir_type, minishell_t *ms)
 {
-    char **args;
-    ast_node_t *redir_node;
+	char		**args;
+	ast_node_t	*redir_node;
 
-    (*pos)++;
-    if (*pos >= size || tokens[*pos].t_type != WORD) {
-        printf("Hata: Yönlendirme sonrası dosya adı bekleniyordu\n");//err
-        return NULL;
-    }
-
-    args = collect_args(tokens, pos, size, minishell);
-
-    redir_node = create_ast_node(NULL, redir_type, minishell);
-    redir_node->right = create_ast_node(args, WORD, minishell);
-
-    return redir_node;
+	(*pos)++;
+	if (*pos >= size || tokens[*pos].t_type != WORD)
+	{
+		printf("Hata: Yönlendirme sonrası dosya adı bekleniyordu\n");//err
+		return (NULL);
+	}
+	args = collect_args(tokens, pos, size, ms);
+	redir_node = create_ast_node(NULL, redir_type, ms);
+	redir_node->right = create_ast_node(args, WORD, ms);
+	return (redir_node);
 }
 
-ast_node_t *parse_primary(token_t tokens[], int *pos, int size, minishell_t *minishell)
+ast_node_t	*parse_primary(token_t tokens[], int *pos, int size, minishell_t *ms)
 {
+	char	**args;
 
-    char **args;
-
-
-    if (*pos >= size)
-        return (NULL);
-
-    if (tokens[*pos].t_type == REDIRECT_IN || tokens[*pos].t_type == REDIRECT_OUT ||
-        tokens[*pos].t_type == HEREDOC_IN || tokens[*pos].t_type == HEREDOC_OUT) {
-        return (parse_redirection(tokens, pos, size, tokens[*pos].t_type, minishell));
-    }
-
-    if (tokens[*pos].t_type == WORD)
-    {
-        args = collect_args(tokens, pos, size, minishell);
-        return (create_ast_node(args, WORD, minishell));
-    }
-	
-    return (NULL); 
+	if (*pos >= size)
+		return (NULL);
+	if (tokens[*pos].t_type == REDIRECT_IN || tokens[*pos].t_type == REDIRECT_OUT 
+		||	tokens[*pos].t_type == HEREDOC_IN || tokens[*pos].t_type == HEREDOC_OUT)
+		return (parse_redirection(tokens, pos, size, tokens[*pos].t_type, ms));
+	if (tokens[*pos].t_type == WORD)
+	{
+		args = collect_args(tokens, pos, size, ms);
+		return (create_ast_node(args, WORD, ms));
+	}
+	return (NULL);
 }
 
-ast_node_t *parse_expression(token_t tokens[], int *pos, int size, int min_prec, minishell_t *minishell)
+ast_node_t	*parse_expression(token_t tokens[], int *pos, int size, int min_prec, minishell_t *ms)
  {
-    ast_node_t *left;
-    ast_node_t *right;
-    int prec;
-    token_type type;
+    ast_node_t	*left;
+    ast_node_t	*right;
+    int			prec;
+    token_type	type;
+	ast_node_t * new_node;
 
-    left = parse_primary(tokens, pos, size, minishell);
-    while (*pos < size)
-    {
-        type = tokens[*pos].t_type;
-        prec = get_precedence(type);
-        if (prec < min_prec) 
-            break;
-        (*pos)++;
-        right = parse_expression(tokens, pos, size, prec + 1, minishell);
-        if (!right)
-        {
-            printf("Hata: Geçersiz ifade\n");
-            return (NULL);
-        }
-        ast_node_t *new_node = create_ast_node(NULL, type, minishell);
-        new_node->left = left;
-        new_node->right = right;
-        left = new_node;
-    }
-
-    return left;
+	left = parse_primary(tokens, pos, size, ms);
+	while (*pos < size)
+	{
+		type = tokens[*pos].t_type;
+		prec = get_precedence(type);
+		if (prec < min_prec) 
+			break;
+		(*pos)++;
+		right = parse_expression(tokens, pos, size, prec + 1, ms);
+		if (!right)
+		{
+			printf("Hata: Geçersiz ifade\n");
+			return (NULL);
+		}
+		new_node = create_ast_node(NULL, type, ms);
+		new_node->left = left;
+		new_node->right = right;
+		left = new_node;
+	}	
+	return (left);
 }
 
-
-int get_precedence(token_type type) 
+int	get_precedence(token_type type) 
 {
-    //ÖNCELİKLER BURADA TANIMLANMALI
-    if(type == PIPE)
-        return (1);
-    else if(type == REDIRECT_OUT || REDIRECT_IN)
-        return (2);
-    else if(type == HEREDOC_OUT || HEREDOC_IN)
-        return (3);
-    return (0);
-    
+	//ÖNCELİKLER BURADA TANIMLANMALI
+	if (type == PIPE)
+		return (1);
+	else if (type == REDIRECT_OUT || REDIRECT_IN)
+		return (2);
+	else if (type == HEREDOC_OUT || HEREDOC_IN)
+		return (3);
+	return (0);
 }
 
-
-ast_node_t *create_ast_node(char **args, token_type type, minishell_t *minishell) 
+ast_node_t	*create_ast_node(char **args, token_type type, minishell_t *ms)
 {
     ast_node_t *node = (ast_node_t *)malloc(sizeof(ast_node_t));
     if (!node) 
-        ft_error(minishell, "err");
+        ft_error(ms, "err");
     node->token = type;
     node->args = args;
     node->left = NULL;

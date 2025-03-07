@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/05 17:34:59 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/06 13:29:48 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,71 +41,71 @@ void	process_op(char **input, token_t tk[], int *count)
 	}
 }
 
-void	process_word(char **input, token_t tokens[], int *count, minishell_t *minishell)
+void	process_word(char **inp, token_t tokens[], int *count, minishell_t *ms)
 {
-	char	buffer[minishell->allocation];
+	char	buffer[ms->allocation];
 	int		buf_index;
 
 	buf_index = 0;
-    if ( *(*input - 1) == ' ')
-       tokens[*count].space_flag = 1;
-    else
-        tokens[*count].space_flag = 0;
-    while (**input && **input != ' ' && **input != '|' && **input != '<' && **input != '>' && **input != '"' && **input != '\'')
-    {
-        buffer[buf_index++] = **input;
-        (*input)++;
-    }
-    buffer[buf_index] = '\0';
-    if (buf_index > 0) 
-    {
-        tokens[*count].is_word = 1;
-        tokens[*count].is_dbl_quote = 1;
-        tokens[*count].t_type = WORD;
-        tokens[*count].value = strdup(buffer);
-        (*count)++;
-    }
-    if (**input == '|' || **input == '<' || **input == '>' || **input == '"' || **input == '\'')
-        process_token(input, tokens, count, minishell);
+	if (*(*inp - 1) == ' ')
+		tokens[*count].space_flag = 1;
+	else
+		tokens[*count].space_flag = 0;
+	while (**inp && ft_strchr(" |<>\"'", **inp) == 0)
+	{
+		buffer[buf_index++] = **inp;
+		(*inp)++;
+	}
+	buffer[buf_index] = '\0';
+	if (buf_index > 0)
+	{
+		tokens[*count].is_word = 1;
+		tokens[*count].is_dbl_quote = 1;
+		tokens[*count].t_type = WORD;
+		tokens[*count].value = strdup(buffer);
+		(*count)++;
+	}
+	if (ft_strchr("|<>\"'", **inp) != 0 && **inp)
+		process_token(inp, tokens, count, ms);
 }
 
 void	process_token(char **input, token_t tokens[], int *count,
 	minishell_t *ms)
 {
-if (**input == '|')
-	process_op(input, tokens, count);
-else if (**input == '<' && *(*input + 1) == '<')
-	process_op(input, tokens, count);
-else if (**input == '>' && *(*input + 1) == '>')
-	process_op(input, tokens, count);
-else if (**input == '<')
-	process_op(input, tokens, count);
-else if (**input == '>')
-	process_op(input, tokens, count);
-else if (**input == '\"')
-	double_quote(input, tokens, count, ms);
-else if (**input == '\'')
-	single_quote(input, tokens, count, ms);
-else if (**input == '$' && *(*input + 1) == '?')
-	tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2,
-			tokens->ms)};
-else
-	process_word(input, tokens, count, ms);
+	if (**input == '|')
+		process_op(input, tokens, count);
+	else if (**input == '<' && *(*input + 1) == '<')
+		process_op(input, tokens, count);
+	else if (**input == '>' && *(*input + 1) == '>')
+		process_op(input, tokens, count);
+	else if (**input == '<')
+		process_op(input, tokens, count);
+	else if (**input == '>')
+		process_op(input, tokens, count);
+	else if (**input == '\"')
+		double_quote(input, tokens, count, ms);
+	else if (**input == '\'')
+		single_quote(input, tokens, count, ms);
+	else if (**input == '$' && *(*input + 1) == '?')
+		tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2,
+				tokens->ms)};
+	else
+		process_word(input, tokens, count, ms);
 }				
 
-void lex_analize(char *input, token_t *tokens, minishell_t *minishell)
+void	lex_analize(char *input, token_t *tokens, minishell_t *minishell)
 {
-    int count;
+	int	count;
 
 	count = 0;
-    if (input == NULL)
+	if (input == NULL)
 		return ;
 	while (*input != '\0')
 	{
 		while (*input == ' ')
 			input++;
 		if (*input == 0)
-			break;
+			break ;
 		process_token(&input, tokens, &count, minishell);
 	}
 	tokens[count] = (token_t){TOKEN_END, "", 1};
