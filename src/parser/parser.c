@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/06 15:03:12 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/07 14:47:45 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,15 @@ void	set_minishell(minishell_t *ms, int allocation, env_t *env_list,
 
 void	parser(minishell_t *ms, char *buf, int allocation)
 {
-	token_t	tokens[allocation * sizeof(token_t)];
+	token_t	*tokens;
 	env_t	*env_list;
 	int		pos;
 
 	allocation = ft_strlen(buf);
 	ms->allocation = allocation;
+	tokens = malloc(sizeof(token_t) * allocation);
+	if (!tokens)
+		return ;
 	ms->env_list = env_list;
 	lex_analize(buf, tokens, ms);
 	check_env(tokens, ms);
@@ -117,4 +120,5 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	print_ast(ms->ast, 0);
 	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
+	free(tokens);
 }

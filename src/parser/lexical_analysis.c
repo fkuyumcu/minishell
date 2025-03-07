@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/06 13:29:48 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/07 14:44:52 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,23 @@ void	process_op(char **input, token_t tk[], int *count)
 	}
 }
 
+void	wordfill(token_t tk[], int *count, char *buf)
+{
+	tk[*count].is_word = 1;
+	tk[*count].is_dbl_quote = 1;
+	tk[*count].t_type = WORD;
+	tk[*count].value = strdup(buf);
+	(*count)++;
+}
+
 void	process_word(char **inp, token_t tokens[], int *count, minishell_t *ms)
 {
-	char	buffer[ms->allocation];
+	char	*buffer;
 	int		buf_index;
 
+	buffer = malloc(sizeof(char) * (ms->allocation + 1));
+	if (!buffer)
+		return ;
 	buf_index = 0;
 	if (*(*inp - 1) == ' ')
 		tokens[*count].space_flag = 1;
@@ -58,13 +70,8 @@ void	process_word(char **inp, token_t tokens[], int *count, minishell_t *ms)
 	}
 	buffer[buf_index] = '\0';
 	if (buf_index > 0)
-	{
-		tokens[*count].is_word = 1;
-		tokens[*count].is_dbl_quote = 1;
-		tokens[*count].t_type = WORD;
-		tokens[*count].value = strdup(buffer);
-		(*count)++;
-	}
+		wordfill(tokens, count, buffer);
+	free(buffer);
 	if (ft_strchr("|<>\"'", **inp) != 0 && **inp)
 		process_token(inp, tokens, count, ms);
 }

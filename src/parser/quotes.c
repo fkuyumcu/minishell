@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/06 16:35:28 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/07 15:43:22 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,22 @@ void	dnwhile(char quo, char *buffer, char **input, int *buf_index)
 	}
 }
 
+void	quote_supply(char *buffer, int buf_index, int *count, token_t *tk)
+{
+	buffer[buf_index] = '\0';
+	tk[*count].t_type = WORD;
+	tk[*count].value = strdup(buffer);//strdup
+	(*count)++;
+}
+
 void	double_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 {
-	char	buffer[ms->allocation];
+	char	*buffer;
 	int		buf_index;
 
+	buffer = malloc(sizeof(char) * ms->allocation);
+	if (!buffer)
+		return ;
 	buf_index = 0;
 	if (*(*input - 1) == ' ')
 		tk[*count].space_flag = 1;
@@ -41,19 +52,20 @@ void	double_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 		printf("Error: Unclosed double quote\n");//error
 		return ;
 	}
-	buffer[buf_index] = '\0';
 	tk[*count].is_dbl_quote = 1;
-	tk[*count].t_type = WORD;
-	tk[*count].value = strdup(buffer);//strdup
-	(*count)++;
+	quote_supply(buffer, buf_index, count, tk);
+	free(buffer);
 	process_token(input, tk, count, ms);
 }
 
 void	single_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 {
-	char	buffer[ms->allocation];
+	char	*buffer;
 	int		buf_index;
 
+	buffer = malloc(sizeof(char) * ms->allocation);
+	if (!buffer)
+		return ;
 	buf_index = 0;
 	if (*(*input - 1) == ' ')
 		tk[*count].space_flag = 1;
@@ -69,10 +81,8 @@ void	single_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 		printf("Error: Unclosed single quote\n");//error
 		return ;
 	}
-	buffer[buf_index] = '\0';
 	tk[*count].is_dbl_quote = 0;
-	tk[*count].t_type = WORD;
-	tk[*count].value = strdup(buffer);//strdup
-	(*count)++;
+	quote_supply(buffer, buf_index, count, tk);
+	free(buffer);
 	process_token(input, tk, count, ms);
 }

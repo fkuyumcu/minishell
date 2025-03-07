@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/06 17:11:32 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/07 16:37:22 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	len = 0;
 	dolar_pos = ft_strchr(token->value, '$');
 	if (!dolar_pos)
-		return ; 
+		return;
 	start = dolar_pos + 1;
-	while (start[len] && (isalnum(start[len]) || start[len] == '_'))//isalnum
+	while (start[len] && (isalnum(start[len]) || start[len] == '_') )//isalnum
 		len++;
 	if (len == 0)
 		return ;
@@ -65,7 +65,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	new_value = (char *)malloc(ft_strlen(token->value) - len + ft_strlen(env_value) + 1);
 	if (!new_value)
 		ft_error(minishell, "Error Allocating Space");
-	ft_strncpy(new_value, token->value, dolar_pos - token->value); 
+	ft_strncpy(new_value, token->value, dolar_pos - token->value);
 	new_value[dolar_pos - token->value] = '\0';
 	strcat(new_value, env_value); //strcat
 	strcat(new_value, dolar_pos + len + 1); // strcat	
@@ -73,15 +73,15 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	token->value = new_value;	
 	free(env_name);
 }
-    
+
 void	check_env(token_t tk[], minishell_t *minishell)
 {
-    int	i;
+	int	i;
 	int	j;
 
 	j = 0;
 	i = 0;
-	while(i < minishell->count)
+	while (i < minishell->count)
 	{
 		if (ft_strchr(tk[i].value, '$') != 0
 		&& *(ft_strchr(tk[i].value, '$') + 1) != '?' && tk[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
@@ -95,8 +95,8 @@ void	check_env(token_t tk[], minishell_t *minishell)
 				j++;
 			}
 		}
-		else if(ft_strchr(tk[i].value, '=') != 0 )
+		else if (ft_strchr(tk[i].value, '=') != 0)
 			proc_eq(&tk[i], minishell);
 		i++;
-    }   
+	}
 }
