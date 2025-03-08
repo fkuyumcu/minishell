@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/07 16:56:41 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/08 13:53:26 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int size, int min_prec,
 		if (!right)
 		{
 			printf("Hata: Geçersiz ifade\n");
+			free_tree(left);
 			return (NULL);
 		}
 		new_node = create_ast_node(NULL, type, ms);
