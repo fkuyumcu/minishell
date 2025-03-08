@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/07 14:47:45 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/08 14:01:25 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void	set_minishell(minishell_t *ms, int allocation, env_t *env_list,
 	ms->input_start = NULL;
 	ms->env_list = env_list;
 	ms->tokens = tokens;
+	
+	
 }
 
 void	parser(minishell_t *ms, char *buf, int allocation)
@@ -116,7 +118,8 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	printf("%s\n",tokens[2].value); */
 	//printf("%s\n",tokens[0].value);
 	pos = 0;
-	ms->ast = parse_expression(tokens, &pos, count_token(tokens), 0, ms);
+	ms->size = count_token(tokens);
+	ms->ast = parse_expression(tokens, &pos, 0, ms);
 	print_ast(ms->ast, 0);
 	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
