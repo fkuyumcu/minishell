@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/08 12:46:59 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/08 12:26:07 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef struct token_s
 	size_t				is_dbl_quote;
 	size_t				is_env;
 	size_t				is_equal;
-	int prec;
 	size_t				is_word;
     struct minishell_s  *ms;
 	int					index_in_input;
@@ -118,13 +117,13 @@ void					check_env(token_t tokens[], minishell_t *minishell);
 void					print_ast(ast_node_t *node, int level);
 ast_node_t				*create_ast_node(char **args, token_type type,
 							minishell_t *minishell);
-ast_node_t				*parse_expression(token_t tokens[], int *pos,
+ast_node_t				*parse_expression(token_t tokens[], int *pos, int size,
+							int min_prec, minishell_t *minishell);
+ast_node_t				*parse_primary(token_t tokens[], int *pos, int size,
 							minishell_t *minishell);
-ast_node_t				*parse_primary(token_t tokens[], int *pos,
-							minishell_t *minishell);
-ast_node_t				*parse_redirection(token_t tokens[], int *pos,
+ast_node_t				*parse_redirection(token_t tokens[], int *pos, int size,
 							token_type redir_type, minishell_t *minishell);							
-char					**collect_args(token_t tokens[], int *pos,
+char					**collect_args(token_t tokens[], int *pos, int size,
 											minishell_t *minishell);
 int						get_precedence(token_type type);
 
