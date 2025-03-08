@@ -18,7 +18,7 @@ char	**ft_realloc(char **args, size_t new_size, minishell_t *minishell)
 	size_t	old_size;
 	char	**tmp;
 
-	i = 0;
+	i = -1;
 	old_size = 0;
 	if (args)
 	{
@@ -27,14 +27,15 @@ char	**ft_realloc(char **args, size_t new_size, minishell_t *minishell)
 	}
 	tmp = malloc((old_size + new_size + 1) * sizeof(char *));
 	if (!tmp)
-	    ft_error(minishell, "Error Allocating Space");
-	for (i = 0; i < old_size; i++)
-	    tmp[i] = ft_strdup(args[i], minishell);
-	for (i = 0; i < old_size; i++)
-	    free(args[i]);
+		ft_error(minishell, "Error Allocating Space");
+	while (++i < old_size)
+		tmp[i] = ft_strdup(args[i], minishell);
+	i = 0;
+	while (i < old_size)
+		free(args[i++]);
 	free(args);
 	tmp[old_size + new_size] = NULL;
-	return tmp;
+	return (tmp);
 }
 
 char	**collect_args(token_t tokens[], int *pos, minishell_t *ms)
