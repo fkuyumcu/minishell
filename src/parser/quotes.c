@@ -12,6 +12,27 @@
 
 #include "../minishell.h"
 
+char	*minidup(char *str)
+{
+	int		i;
+	char	*ret;
+
+	i = 0;
+	while (str[i])
+		i++;
+	ret = malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{	
+		ret[i] = str[i];
+		i++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
 void	dnwhile(char quo, char *buffer, char **input, int *buf_index)
 {
 	while (**input && **input != quo)
@@ -25,7 +46,7 @@ void	quote_supply(char *buffer, int buf_index, int *count, token_t *tk)
 {
 	buffer[buf_index] = '\0';
 	tk[*count].t_type = WORD;
-	tk[*count].value = strdup(buffer);//strdup
+	tk[*count].value = minidup(buffer);
 	(*count)++;
 }
 
@@ -49,8 +70,8 @@ void	double_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 		(*input)++;
 	else
 	{
-		printf("Error: Unclosed double quote\n");//error
-		return ;
+		printf("Error: Unclosed double quote\n");
+		return (free(buffer));
 	}
 	tk[*count].is_dbl_quote = 1;
 	quote_supply(buffer, buf_index, count, tk);
@@ -78,8 +99,8 @@ void	single_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 		(*input)++;
 	else
 	{
-		printf("Error: Unclosed single quote\n");//error
-		return ;
+		printf("Error: Unclosed single quote\n");
+		return (free(buffer));
 	}
 	tk[*count].is_dbl_quote = 0;
 	quote_supply(buffer, buf_index, count, tk);
