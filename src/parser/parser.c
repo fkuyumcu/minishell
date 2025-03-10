@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/10 15:57:14 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/10 17:01:13 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ void	free_tree(ast_node_t *ast)
 	if (!ast)
 		return ;
 
+	if (ast->args && ast->args[i])
+	{
 		while (ast->args[i])
 			free(ast->args[i++]);
+
+	}
 	if (ast->args)
 		free(ast->args);
 	free_tree(ast->left);
