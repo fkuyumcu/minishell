@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/08 14:01:25 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:57:14 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ void	free_tree(ast_node_t *ast)
 	i = 0;
 	if (!ast)
 		return ;
-	if (ast->args)
-	{
+
 		while (ast->args[i])
 			free(ast->args[i++]);
+	if (ast->args)
 		free(ast->args);
-	}
 	free_tree(ast->left);
 	free_tree(ast->right);
 	free(ast);
@@ -108,7 +107,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	ms->allocation = allocation;
 	tokens = malloc(sizeof(token_t) * allocation);
 	if (!tokens)
-		return ;
+	return ;
 	ms->env_list = env_list;
 	lex_analize(buf, tokens, ms);
 	check_env(tokens, ms);
@@ -117,6 +116,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	printf("%s\n",tokens[1].value);
 	printf("%s\n",tokens[2].value); */
 	//printf("%s\n",tokens[0].value);
+	ms->tokens = tokens;
 	pos = 0;
 	ms->size = count_token(tokens);
 	ms->ast = parse_expression(tokens, &pos, 0, ms);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/08 14:00:02 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:11:40 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ char	**collect_args(token_t tokens[], int *pos, minishell_t *ms)
 
 	arg_count = 0;
 	args = NULL;
+	if (ms->size == 1 && ft_strlen(tokens[0].value) == 1)
+	{
+		args = malloc(sizeof(char *) * 2);
+		args[0] = ft_strdup(tokens[0].value, ms);
+		(*pos)++;
+		args[1] = NULL;
+		return (args);
+	}
 	while (*pos < ms->size && tokens[*pos].t_type == WORD)
 	{
 		args = ft_realloc(args, 1, ms);
@@ -52,11 +60,7 @@ char	**collect_args(token_t tokens[], int *pos, minishell_t *ms)
 		(*pos)++;
 		arg_count++;
 	}
-	if (args)
-	{
-		args = ft_realloc(args, 1, ms);//null kısmı eklemek için
-		args[arg_count] = NULL;
-	}
+
 	return (args);
 }
 
@@ -81,6 +85,7 @@ ast_node_t	*parse_primary(token_t tk[], int *pos, minishell_t *ms)
 {
 	char	**args;
 
+	args = NULL;
 	if (*pos >= ms->size)
 		return (NULL);
 	if (tk[*pos].t_type == REDIRECT_IN || tk[*pos].t_type == REDIRECT_OUT
@@ -100,7 +105,6 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell
 	ast_node_t	*right;
 	token_type	type;
 	ast_node_t	*new_node;
-
 	left = parse_primary(tokens, pos, ms);
 	while (*pos < ms->size)
 	{

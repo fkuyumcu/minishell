@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/06 14:57:42 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/10 16:14:26 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int main(void)
 {
     //print_banner();
     char *line;
+	line = NULL;
     minishell_t minishell;
     while(1)
     {
@@ -62,13 +63,18 @@ int main(void)
         if(line == NULL)
             ft_exit(line);
         if(*line == '\0')
+		{
+			free(line);
             continue;
+		}
+		if(strlen(line) == 1)
+			line = ft_strjoin(line, " ", NULL);
         add_history(line);
         parser(&minishell, line, ft_strlen(line));
         //execute(minishell)
-	   free(line);
+		free(line);
+
     }
-    
     //wall wextra
 
     
