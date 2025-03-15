@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/10 17:01:13 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/15 14:02:37 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,14 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	lex_analize(buf, tokens, ms);
 	check_env(tokens, ms);
 	manage_tokens(tokens);
-	/* printf("%s\n",tokens[0].value);
-	printf("%s\n",tokens[1].value);
-	printf("%s\n",tokens[2].value); */
-	//printf("%s\n",tokens[0].value);
+
 	ms->tokens = tokens;
 	pos = 0;
 	ms->size = count_token(tokens);
 	ms->ast = parse_expression(tokens, &pos, 0, ms);
+
+	execute(ms);
+
 	print_ast(ms->ast, 0);
 	free_tree(ms->ast);
 	free_tokens(tokens, *ms);

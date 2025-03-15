@@ -49,12 +49,13 @@ void ft_exit(char *line)
     exit(1);
 }
 
-int main(void)
+int main(int ac, char **av, char **envp)
 {
     //print_banner();
     char *line;
 	line = NULL;
     minishell_t minishell;
+    minishell.envp = envp;
     while(1)
     {
         sig_handler(1);
@@ -70,7 +71,6 @@ int main(void)
 			line = ft_strjoin(line, " ", NULL);
         add_history(line);
         parser(&minishell, line, ft_strlen(line));
-        //execute(minishell)
 		free(line);
 
     }

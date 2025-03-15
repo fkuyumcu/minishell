@@ -13,14 +13,8 @@
 #include "../minishell.h"
 #include <sys/wait.h>
 #include <fcntl.h>
-void execute_ast(ast_node_t *node);
 
-void execute_word(ast_node_t *node)
-{
-    
-}
-
-void execute_pipe(ast_node_t *node)
+void execute_pipe(ast_node_t *node, minishell_t *ms)
 {
     size_t pid;
     int fd[2];
@@ -31,7 +25,7 @@ void execute_pipe(ast_node_t *node)
         close(fd[0]); 
         dup2(fd[1], STDOUT_FILENO);
         close(fd[1]);
-        execute_ast(node->left);
+        execute_ast(node->left, ms);
         exit(0);
     } 
     else if(pid > 0)
@@ -39,14 +33,14 @@ void execute_pipe(ast_node_t *node)
         close(fd[1]); 
         dup2(fd[0], STDIN_FILENO);
         close(fd[0]);
-        execute_ast(node->right);
+        execute_ast(node->right, ms);
         waitpid(pid, NULL, 0);
     }
     else 
         exit(1);//error
 }
 
-void execute_redir(ast_node_t *node)
+void execute_redir(ast_node_t *node, minishell_t *ms)
 {
     int fd;
     if ( node->token == REDIRECT_IN || node->token == REDIRECT_OUT)
@@ -62,28 +56,44 @@ void execute_redir(ast_node_t *node)
     {
         dup2(fd, STDOUT_FILENO);
         close(fd);
-        execute_ast(node->right);
+        execute_ast(node->right, ms);
     }
     else
     {
         dup2(fd, STDIN_FILENO);
         close(fd);
-        execute_ast(node->left);
+        execute_ast(node->left, ms);
     }
 }
-
-void execute_ast(ast_node_t *node)
+void execute_heredoc(ast_node_t *node)
 {
-	
+
+
+}
+
+
+void	execute(minishell_t *ms)
+{
+
+execute_ast(ms->ast, ms);
+
+
+}
+
+
+void execute_ast(ast_node_t *node, minishell_t *ms)
+{
     if(!node)
         return ;
     if(node->token == PIPE)
-        execute_pipe(node);
+        execute_pipe(node, ms);
     else if(node->token == REDIRECT_IN || node->token == REDIRECT_OUT
-    || node->token == HEREDOC_OUT || node->token == HEREDOC_IN)
-        execute_redir(node);
+    || node->token == HEREDOC_OUT)
+        execute_redir(node, ms);
+    else if(node->token == HEREDOC_IN)
+        execute_heredoc(node);
     else if(node->token == WORD)
-        execute_word(node);
+        execute_word(node, ms);
     else
         exit(1);//error
 }

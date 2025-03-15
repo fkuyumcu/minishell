@@ -7,12 +7,14 @@ SRC = src/main.c \
       src/utils/print_banner.c \
       src/utils/utils.c \
       src/utils/utils2.c \
+      src/utils/utils3.c \
       src/utils/error.c \
       src/parser/quotes.c \
       src/parser/lexical_analysis.c \
       src/parser/env_check.c \
       src/parser/create_ast.c \
       src/exec/execute.c \
+      src/exec/exec_word.c \
       
 
 OBJ = $(SRC:.c=.o)
