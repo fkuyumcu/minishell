@@ -16,8 +16,12 @@
 
 void free_str_array(char **paths, int i)
 {
-	while (paths[++i])
-		free(paths[i]);
+	if (paths[i]
+	{
+		while (paths[++i])
+			free(paths[i]);
+	}
+
 }
 
 char *find(char *cmd, char **envp, minishell_t *minishell)
