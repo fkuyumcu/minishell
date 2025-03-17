@@ -50,8 +50,8 @@ echo $MY_VAR
 - POSIX-compliant system (Linux or macOS)
 
 ## Authors
-- Your Name (@fkuyumcu)
-- 
+-@fkuyumcu
+-@yunuseus
 
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
