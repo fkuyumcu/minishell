@@ -15,6 +15,7 @@ SRC = src/main.c \
       src/parser/create_ast.c \
       src/exec/execute.c \
       src/exec/exec_word.c \
+      src/exec/exec_heredoc.c \
       
 
 OBJ = $(SRC:.c=.o)
