@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/10 16:11:40 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:17:46 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,13 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell
 
 int	get_precedence(token_type type) 
 {
+	printf("type %d\n",type);
 	//ÖNCELİKLER BURADA TANIMLANMALI
 	if (type == PIPE)
 		return (1);
-	else if (type == REDIRECT_OUT || REDIRECT_IN)
-		return (2);
 	else if (type == HEREDOC_OUT || HEREDOC_IN)
+		return (2);
+	else if (type == REDIRECT_OUT || REDIRECT_IN)
 		return (3);
 	return (0);
 }

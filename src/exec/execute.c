@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 14:56:09 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:07:33 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,42 +157,9 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
 
 void execute_heredoc(ast_node_t *node, minishell_t *ms)
 {
-    //int fd[2];
-    //pipe(fd);
     
-    //pid_t pid = fork();
-    //if (pid == 0)
-    //{
-    //    close(fd[0]); // Read kapat
-    //    char *line = NULL;
-    //    size_t len = 0;
-        
-    //    while (1)
-    //    {
-    //        printf("> ");
-    //        getline(&line, &len, stdin);
-    //        if (strcmp(line, node->args[0]) == 0)
-    //            break;
-    //        write(fd[1], line, strlen(line));
-    //    }
-    //    close(fd[1]);
-    //    exit(0);
-    //}
-    //else if (pid > 0)
-    //{
-    //    close(fd[1]);
-    //    dup2(fd[0], STDIN_FILENO);
-    //    close(fd[0]);
-    //    execute_ast(node->left, ms);
-    //    waitpid(pid, NULL, 0);
-    //}
-    //else
-    //{
-    //    perror("fork");
-    //    exit(1);
-    //}
     handle_heredoc(node->right->args[0], node->left->args);
-    }
+}
 
 
 void execute_heredoc_out(ast_node_t *node, minishell_t *ms)

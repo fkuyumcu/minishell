@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/15 14:02:37 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/17 15:15:47 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	ms->size = count_token(tokens);
 	ms->ast = parse_expression(tokens, &pos, 0, ms);
 
-	execute(ms);
+//	execute(ms);
 
 	print_ast(ms->ast, 0);
 	free_tree(ms->ast);
