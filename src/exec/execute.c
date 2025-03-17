@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 15:07:33 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/17 17:04:09 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ void execute_redir_in(ast_node_t *node, minishell_t *ms)
 void execute_redir_out(ast_node_t *node, minishell_t *ms)
 {
     pid_t pid;
+    pid_t pid2;
     int fd;
+    int fd2;
     if (!node || !node->right || !node->right->args[0] || !node->left)
         return;
 
@@ -123,7 +125,18 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
         printf("error");//error
         return ;
     }
-
+    
+    pid2 = fork();
+    if(pid2 == 0)
+    {
+        dup2(fd, STDOUT_FILENO);
+        execute_ast(node->left, ms);
+        free_tree(node);
+        exit(0);//leak
+        return ;
+        
+    }
+    waitpid(pid2, NULL, 0);
     pid = fork();
     if (pid == -1)
     {
@@ -141,16 +154,12 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
             exit(1);
         }
         close(fd);
-        execute_word(node->left, ms);
-        free_tree(node);
-        exit(0);//leak
-        return ;
+        
+        exit(0);
     }
-    else
-    {
+    
         close(fd);
         waitpid(pid, NULL, 0);
-    }
 }
 
 

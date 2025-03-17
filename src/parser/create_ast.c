@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 15:17:46 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/17 16:55:18 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,16 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell
 	ast_node_t	*right;
 	token_type	type;
 	ast_node_t	*new_node;
+	int prec;
 	left = parse_primary(tokens, pos, ms);
 	while (*pos < ms->size)
 	{
 		type = tokens[*pos].t_type;
-		tokens[*pos].prec = get_precedence(type);
-		if (tokens[*pos].prec < min_prec) 
+		prec = get_precedence(type);
+		if (prec < min_prec) 
 			break;
 		(*pos)++;
-		right = parse_expression(tokens, pos, tokens[*pos].prec + 1, ms);
+		right = parse_expression(tokens, pos, prec + 1, ms);
 		if (!right)
 		{
 			printf("Hata: Geçersiz ifade\n");
@@ -130,14 +131,13 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell
 
 int	get_precedence(token_type type) 
 {
-	printf("type %d\n",type);
 	//ÖNCELİKLER BURADA TANIMLANMALI
 	if (type == PIPE)
 		return (1);
 	else if (type == HEREDOC_OUT || HEREDOC_IN)
-		return (2);
-	else if (type == REDIRECT_OUT || REDIRECT_IN)
 		return (3);
+	else if (type == REDIRECT_OUT || REDIRECT_IN)
+		return (2);
 	return (0);
 }
 
