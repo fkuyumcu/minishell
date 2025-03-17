@@ -72,23 +72,42 @@ void execute_redir_in(ast_node_t *node, minishell_t *ms)
 {
     pid_t pid;
     int fd;
-    
+
     if (!node || !node->right || !node->right->args[0] || !node->left)
         return;
-    fd = open(node->left->args[0], O_RDONLY);
-    if(fd = -1)
+
+    fd = open(node->right->args[0], O_RDONLY);
+    if (fd == -1)
     {
-        printf("cannot find file");
-        return ;//error
+        printf("Cannot Find File\n");
+        return;
     }
     pid = fork();
     if (pid == -1)
     {
-        printf("error");
+        printf("Fork Error\n");
         close(fd);
-        return ;
+        return;
     }
-    
+
+    if (pid == 0)
+    {
+        if (dup2(fd, STDIN_FILENO) == -1)
+        {
+            printf("Dup2 Error");
+            close(fd);
+            exit(1);
+        }
+        close(fd);  
+        execute_word(node->left, ms);
+        free_tree(node);  
+        exit(0);
+    }
+    else
+    {
+        close(fd);
+        waitpid(pid, NULL, 0);
+    }
 }
 
 void execute_redir_out(ast_node_t *node, minishell_t *ms)
