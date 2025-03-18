@@ -13,78 +13,58 @@
 #include "../minishell.h"
 #include <fcntl.h>
 
-void handle_heredoc(char *delimiter, char **command)
+void	handle_heredoc(char *delimiter, char **command, char **envp, minishell_t *minishell)
 {
-    int pipefd[2];
-    if (pipe(pipefd) == -1)
-    {
-        perror("pipe error");
-        exit(1);
-    }
+	int		pipefd[2];
+	pid_t	pid;
+	char	*line;
+	char	*cmd_path;
+	size_t	len;
 
-    pid_t pid = fork();
-    if (pid == -1)
-    {
-        perror("fork error");
-        exit(1);
-    }
-
-    if (pid == 0)
-    {
-        close(pipefd[1]); // Yazma ucunu kapat (sadece okuma için)
-        dup2(pipefd[0], STDIN_FILENO); // stdin'i pipe'dan oku
-        close(pipefd[0]); // stdin yönlendirildiği için artık kapatabiliriz
-
-        execvp(command[0], command); // Komutu çalıştır
-        perror("execvp error"); // execvp başarısız olursa hata ver
-        exit(1);
-    }
-    else
-    {
-        close(pipefd[0]); // Okuma ucunu kapat (sadece yazma için)
-
-        char *line;
-        char *all_input = NULL;
-        size_t total_length = 0;
-
-        while (1)
-        {
-            line = readline("> ");
-            if (!line)
-                break;
-
-            line[strcspn(line, "\n")] = '\0'; // '\n' karakterini kaldır
-
-            if (strcmp(line, delimiter) == 0)
-            {
-                free(line);
-                break; // Delimiter geldi, çık
-            }
-
-            size_t line_length = strlen(line);
-            all_input = realloc(all_input, total_length + line_length + 2); // Belleği genişlet
-            if (!all_input)
-            {
-                perror("Memory allocation error");
-                exit(1);
-            }
-
-            strcpy(all_input + total_length, line);
-            total_length += line_length;
-            all_input[total_length] = '\n'; // Satır sonuna newline ekle
-            total_length++;
-
-            free(line);
-        }
-
-        // Tüm heredoc girdisini tek seferde pipe’a yaz
-        if (all_input)
-        {
-            write(pipefd[1], all_input, total_length);
-            free(all_input);
-        }
-
-        close(pipefd[1]); // Pipe’ı kapat (child process'in okuması için)
-        wait(NULL); // Çocuk sürecin bitmesini bekle
-    }
+	if (pipe(pipefd) == -1)
+	{
+		ft_putstr_fd("pipe error\n", 2);
+		exit(1);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		ft_putstr_fd("fork error\n", 2);
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+		cmd_path = find(command[0], envp, minishell);
+		if (!cmd_path)
+		{
+			ft_putstr_fd("command not found\n", 2);
+			exit(127);
+		}
+		execve(cmd_path, command, envp);
+		ft_putstr_fd("execve error\n", 2);
+		exit(1);
+	}
+	close(pipefd[0]);
+	line = NULL;
+	len = 0;
+	while (1)
+	{
+		ft_putstr_fd("> ", 1);
+		if (getline(&line, &len, stdin) == -1)
+			break ;
+		line[strcspn(line, "\n")] = '\0'; //strcspn kullanıldı
+		if (strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(pipefd[1], line, strlen(line));
+		write(pipefd[1], "\n", 1); // Yeni satır eklemeyi unutma
+	}
+	free(line);
+	close(pipefd[1]);
+	wait(NULL);
 }
