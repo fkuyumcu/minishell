@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 17:04:09 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/19 15:01:46 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
             close(fd);
             exit(1);
         }
-        close(fd);
         execute_ast(node->left, ms); // Bu çağrı execute_heredoc'u da içerebilir
+        close(fd);
         free_tree(node);
         exit(0);
     }

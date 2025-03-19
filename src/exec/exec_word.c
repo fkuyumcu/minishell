@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_word.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 13:28:38 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:52:51 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,14 @@ char *find(char *cmd, char **envp, minishell_t *minishell)
         if (!part_path)
             break;
         path = ft_strjoin(part_path, cmd ,minishell);
-        //free(part_path);
         if (!path)
             break;
 		if (access(path, F_OK) != 0)
 			free(path);
         else if (access(path, F_OK) == 0)
         {
-			free(paths);
 			free_str_array(paths, i);
+			free(paths);
             return path;
         }
         i++;
