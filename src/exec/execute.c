@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/19 15:01:46 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/19 15:50:06 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,14 +157,14 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
 void execute_heredoc(ast_node_t *node, minishell_t *ms)
 {
     
-    handle_heredoc(node->right->args[0], node->left->args, ms->envp,ms);
+    handle_heredoc(node->right->args[0], node->left, ms->envp,ms);
 }
 
 
 void execute_heredoc_out(ast_node_t *node, minishell_t *ms)
 {
 
-	handle_heredoc(node->right->args[0], node->left->args,  ms->envp,ms);
+
 }
 
 

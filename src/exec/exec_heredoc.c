@@ -6,21 +6,25 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:57:33 by yalp              #+#    #+#             */
-/*   Updated: 2025/03/19 14:44:00 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/19 15:49:27 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <fcntl.h>
 
-void	handle_heredoc(char *delimiter, char **command, char **envp, minishell_t *minishell)
+void	handle_heredoc(char *delimiter, ast_node_t *node, char **envp, minishell_t *minishell)
 {
 	int		pipefd[2];
 	pid_t	pid;
 	char	*line;
 	char	*cmd_path;
 	size_t	len;
-
+	char **command; 
+	if (node)
+		command = node->args;
+	else
+		command = NULL;
 	if (pipe(pipefd) == -1)
 	{
 		ft_putstr_fd("pipe error\n", 2);
