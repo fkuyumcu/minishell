@@ -58,13 +58,13 @@ void	handle_heredoc(char *delimiter, char **command, char **envp, minishell_t *m
 		line[strcspn(line, "\n")] = '\0'; //strcspn kullanıldı
 		if (strcmp(line, delimiter) == 0)
 		{
-			free(line);
+			//free(line);
 			break ;
 		}
 		write(pipefd[1], line, strlen(line));
 		write(pipefd[1], "\n", 1); // Yeni satır eklemeyi unutma
 	}
-	free(line);
+	//free(line);
 	close(pipefd[1]);
 	wait(NULL);
 }
