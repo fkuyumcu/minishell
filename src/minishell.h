@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/19 15:49:47 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/20 14:34:58 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,9 @@ void	ft_putstr_fd(char *s, int fd);
 int	count_tokens(char const *s, char c);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-void	handle_heredoc(char *delimiter, ast_node_t *node, char **envp, minishell_t *ms);
 char *find(char *cmd, char **envp, minishell_t *minishell);
-
-
-
+void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out);
+void	handle_heredoc(char *delimiter, ast_node_t *node, minishell_t *minishell, char *out);
 
 
 #endif

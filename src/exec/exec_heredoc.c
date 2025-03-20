@@ -6,14 +6,14 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:57:33 by yalp              #+#    #+#             */
-/*   Updated: 2025/03/19 15:49:27 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/20 14:34:48 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <fcntl.h>
 
-void	handle_heredoc(char *delimiter, ast_node_t *node, char **envp, minishell_t *minishell)
+void	handle_heredoc(char *delimiter, ast_node_t *node, minishell_t *minishell, char *out)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -41,13 +41,13 @@ void	handle_heredoc(char *delimiter, ast_node_t *node, char **envp, minishell_t 
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		cmd_path = find(command[0], envp, minishell);
+		cmd_path = find(command[0], minishell->envp, minishell);
 		if (!cmd_path)
 		{
 			ft_putstr_fd("command not found\n", 2);
 			exit(127);
 		}
-		execve(cmd_path, command, envp);
+		execve(cmd_path, command, minishell->envp);
 		free(cmd_path);
 		ft_putstr_fd("execve error\n", 2);
 		exit(1);
@@ -75,17 +75,20 @@ void	handle_heredoc(char *delimiter, ast_node_t *node, char **envp, minishell_t 
 			perror("Memory allocation error");
 			exit(1);
 		}
-
 		strcpy(all_input + total_length, line);
 		total_length += line_length;
 		all_input[total_length] = '\n'; // Satır sonuna newline ekle
 		total_length++;
-
-
 	}
 	if (all_input)
         {
-            write(pipefd[1], all_input, total_length);
+			if (!out)
+            	write(pipefd[1], all_input, total_length);
+			else
+			{
+				int fdd =open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				write(fdd, all_input, total_length);
+			}
             free(all_input);
         }
 	free(line);

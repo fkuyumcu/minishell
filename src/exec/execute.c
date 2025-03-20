@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/19 15:50:06 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/20 14:29:59 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,11 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
 
     if (!node || !node->right || !node->right->args[0] || !node->left)
         return;
-
-    fd = open(node->right->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
         perror("open");
         return;
     }
-
     pid = fork();
     if (pid == -1)
     {
@@ -132,21 +129,29 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
         close(fd);
         return;
     }
-
     if (pid == 0)  // Child process
     {
-        if (dup2(fd, STDOUT_FILENO) == -1)
+        if (node->left->token == HEREDOC_IN)
         {
-            perror("dup2");
-            close(fd);
-            exit(1);
+            execute_heredoc(node->left, ms, node->right->args[0]);
+            free_tree(node);
+            exit(0);
         }
-        execute_ast(node->left, ms); // Bu çağrı execute_heredoc'u da içerebilir
-        close(fd);
-        free_tree(node);
-        exit(0);
+        else
+        {
+            fd = open(node->right->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (dup2(fd, STDOUT_FILENO) == -1)
+            {
+                perror("dup2");
+                close(fd);
+                exit(1);
+            }
+            execute_ast(node->left, ms); // Bu çağrı execute_heredoc'u da içerebilir
+            close(fd);
+            free_tree(node);
+            exit(0);    
+        }
     }
-    
     close(fd);
     waitpid(pid, NULL, 0);
 }
@@ -154,10 +159,10 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
 
 
 
-void execute_heredoc(ast_node_t *node, minishell_t *ms)
+void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out)
 {
     
-    handle_heredoc(node->right->args[0], node->left, ms->envp,ms);
+    handle_heredoc(node->right->args[0], node->left, ms, out);
 }
 
 
@@ -188,7 +193,7 @@ void execute_ast(ast_node_t *node, minishell_t *ms)
     else if(node->token == REDIRECT_OUT)
     execute_redir_out(node, ms);
     else if(node->token == HEREDOC_IN)
-        execute_heredoc(node,ms);
+        execute_heredoc(node,ms, NULL);
     else if(node->token == HEREDOC_OUT)
         execute_heredoc_out(node, ms);
     else if(node->token == WORD)

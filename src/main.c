@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/10 16:59:09 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/20 15:07:23 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void    sig_handler(int c)
 void ft_exit(char *line)
 {
     free (line);
-    write(1, "exit", 4);
+    write(1, "exit\n", 5);
     exit(1);
 }
 
