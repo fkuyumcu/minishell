@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/20 14:29:59 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/21 14:21:16 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,9 +161,32 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
 
 void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out)
 {
-    
-    handle_heredoc(node->right->args[0], node->left, ms, out);
+    char *delimiter;
+    char **command;
+
+    if (!node || !node->right || !node->right->args || !node->right->args[0])
+    {
+        perror("Heredoc syntax error");
+        return;
+    }
+
+    // Delimiter'ı belirle
+    delimiter = node->right->args[0];
+
+    // Komutu belirle: node->left veya node->right'ı kontrol et
+    if (node->left && node->left->args)
+        command = node->left->args; // cat << eof durumu
+    else if (node->right && node->right->args)
+        command = node->right->args + 1; // << eof cat durumu (ilk argümanı atla)
+    else
+    {
+        perror("Invalid heredoc syntax");
+        return;
+    }
+
+    handle_heredoc(delimiter, node, ms, out);
 }
+
 
 
 void execute_heredoc_out(ast_node_t *node, minishell_t *ms)
