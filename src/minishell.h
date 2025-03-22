@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/21 14:12:49 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/22 16:14:33 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char *find(char *cmd, char **envp, minishell_t *minishell);
 void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out);
 void	handle_heredoc(char *delimiter, ast_node_t *node, minishell_t *minishell, char *out);
+int find_heredoc(ast_node_t *ast, minishell_t *ms);
 
 
 #endif

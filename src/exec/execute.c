@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/21 14:21:16 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/03/22 16:23:27 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,21 @@
 void execute_pipe(ast_node_t *node, minishell_t *ms)
 {
     int fd[2];
-    pid_t pid1;
-    pid_t pid2;
+    pid_t pid1, pid2;
+    int left_heredoc = (node->left->token == HEREDOC_IN);
+    int right_heredoc = (node->right->token == HEREDOC_IN);
 
     if (pipe(fd) == -1)
     {
-        perror("pipe");//perror yazıldı
+        perror("pipe");
         return;
     }
+
+    // Öncelikli olarak heredoc içeren tarafları çalıştır
+    if (left_heredoc)
+        execute_ast(node->left, ms);
+    if (right_heredoc)
+        execute_ast(node->right, ms);
 
     pid1 = fork();
     if (pid1 == -1)
@@ -33,13 +40,15 @@ void execute_pipe(ast_node_t *node, minishell_t *ms)
         return;
     }
 
-    if (pid1 == 0)
+    if (pid1 == 0) // İlk çocuk işlem (sol taraf)
     {
-        close(fd[0]);
+        close(fd[0]); 
         dup2(fd[1], STDOUT_FILENO); 
         close(fd[1]); 
 
-        execute_ast(node->left, ms);
+        if (!left_heredoc) // Eğer heredoc değilse çalıştır
+            execute_ast(node->left, ms);
+
         exit(0);
     }
 
@@ -50,22 +59,30 @@ void execute_pipe(ast_node_t *node, minishell_t *ms)
         return;
     }
 
-    if (pid2 == 0) 
+    if (pid2 == 0) // İkinci çocuk işlem (sağ taraf)
     {
         close(fd[1]); 
         dup2(fd[0], STDIN_FILENO);
         close(fd[0]); 
 
-        execute_ast(node->right, ms);
+        if (!right_heredoc) // Eğer heredoc değilse çalıştır
+            execute_ast(node->right, ms);
+
         exit(0);
     }
 
     close(fd[0]);
     close(fd[1]);
 
-    waitpid(pid1, NULL, 0);
-    waitpid(pid2, NULL, 0);
+    // Eğer sol taraf heredoc değilse, çalışmasını bekle
+    if (!left_heredoc)
+        waitpid(pid1, NULL, 0);
+
+    // Eğer sağ taraf heredoc değilse, çalışmasını bekle
+    if (!right_heredoc)
+        waitpid(pid2, NULL, 0);
 }
+
 
 
 void execute_redir_in(ast_node_t *node, minishell_t *ms)
@@ -209,6 +226,7 @@ void execute_ast(ast_node_t *node, minishell_t *ms)
 {
     if(!node)
         return ;
+   // find_heredoc(node, ms);
     if(node->token == PIPE)
         execute_pipe(node, ms);
     else if(node->token == REDIRECT_IN)
