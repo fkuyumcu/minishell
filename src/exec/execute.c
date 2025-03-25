@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/22 16:23:27 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/25 16:49:08 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,17 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
     pid_t pid;
     int fd;
 
-    if (!node || !node->right || !node->right->args[0] || !node->left)
-        return;
+     if (!node || !node->right || !node->args[0] || !node->left)
+        return; 
+    
+    fd = open(node->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    
     if (fd == -1)
     {
         perror("open");
         return;
     }
+
     pid = fork();
     if (pid == -1)
     {
@@ -146,28 +150,13 @@ void execute_redir_out(ast_node_t *node, minishell_t *ms)
         close(fd);
         return;
     }
-    if (pid == 0)  // Child process
+
+    if (pid == 0)
     {
-        if (node->left->token == HEREDOC_IN)
-        {
-            execute_heredoc(node->left, ms, node->right->args[0]);
-            free_tree(node);
-            exit(0);
-        }
-        else
-        {
-            fd = open(node->right->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (dup2(fd, STDOUT_FILENO) == -1)
-            {
-                perror("dup2");
-                close(fd);
-                exit(1);
-            }
-            execute_ast(node->left, ms); // Bu çağrı execute_heredoc'u da içerebilir
-            close(fd);
-            free_tree(node);
-            exit(0);    
-        }
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+        execute_ast(node->left, ms);
+        exit(0);
     }
     close(fd);
     waitpid(pid, NULL, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/22 15:55:08 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/25 15:24:17 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	execute(ms);
 
 //	print_ast(ms->ast, 0);
+	
 	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
 	free(tokens);

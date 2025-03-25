@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   create_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/17 16:55:18 by yalp             ###   ########.fr       */
+/*   Updated: 2025/03/25 15:23:21 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	**collect_redirection_args(token_t tokens[], int *pos, minishell_t *ms)
+{
+	char	**args;
+	int		arg_count;
+
+	arg_count = 0;
+	args = NULL;
+
+	if (*pos < ms->size && tokens[*pos].t_type == WORD)
+	{
+		args = malloc(sizeof(char *) * 2);
+		args[0] = ft_strdup(tokens[*pos].value, ms);
+		args[1] = NULL;
+		(*pos)++;
+	}
+
+	return (args);
+}
+
 
 char	**ft_realloc(char **args, size_t new_size, minishell_t *minishell)
 {
@@ -64,22 +84,7 @@ char	**collect_args(token_t tokens[], int *pos, minishell_t *ms)
 	return (args);
 }
 
-ast_node_t	*parse_redirection(token_t tokens[], int *pos, token_type redir_type, minishell_t *ms)
-{
-	char		**args;
-	ast_node_t	*redir_node;
 
-	(*pos)++;
-	if (*pos >= ms->size || tokens[*pos].t_type != WORD)
-	{
-		printf("Hata: Yönlendirme sonrası dosya adı bekleniyordu\n");//err
-		return (NULL);
-	}
-	args = collect_args(tokens, pos, ms);
-	redir_node = create_ast_node(NULL, redir_type, ms);
-	redir_node->right = create_ast_node(args, WORD, ms);
-	return (redir_node);
-}
 
 ast_node_t	*parse_primary(token_t tk[], int *pos, minishell_t *ms)
 {
@@ -88,9 +93,6 @@ ast_node_t	*parse_primary(token_t tk[], int *pos, minishell_t *ms)
 	args = NULL;
 	if (*pos >= ms->size)
 		return (NULL);
-	if (tk[*pos].t_type == REDIRECT_IN || tk[*pos].t_type == REDIRECT_OUT
-		|| tk[*pos].t_type == HEREDOC_IN || tk[*pos].t_type == HEREDOC_OUT)
-		return (parse_redirection(tk, pos, tk[*pos].t_type, ms));
 	if (tk[*pos].t_type == WORD)
 	{
 		args = collect_args(tk, pos, ms);
@@ -100,12 +102,13 @@ ast_node_t	*parse_primary(token_t tk[], int *pos, minishell_t *ms)
 }
 
 ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell_t *ms)
- {
+{
 	ast_node_t	*left;
 	ast_node_t	*right;
 	token_type	type;
 	ast_node_t	*new_node;
 	int prec;
+
 	left = parse_primary(tokens, pos, ms);
 	while (*pos < ms->size)
 	{
@@ -113,31 +116,43 @@ ast_node_t	*parse_expression(token_t tokens[], int *pos, int min_prec, minishell
 		prec = get_precedence(type);
 		if (prec < min_prec) 
 			break;
+
 		(*pos)++;
-		right = parse_expression(tokens, pos, prec + 1, ms);
-		if (!right)
+
+		if (type == REDIRECT_OUT || type == REDIRECT_IN || type == HEREDOC_OUT || type == HEREDOC_IN)
 		{
-			printf("Hata: Geçersiz ifade\n");
-			free_tree(left);
-			return (NULL);
+			char **args = collect_redirection_args(tokens, pos, ms);
+			new_node = create_ast_node(args, type, ms);
 		}
-		new_node = create_ast_node(NULL, type, ms);
+		else
+		{
+			right = parse_expression(tokens, pos, prec + 1, ms);
+			if (!right)
+			{
+				printf("Hata: Geçersiz ifade\n");
+				free_tree(left);
+				return (NULL);
+			}
+			new_node = create_ast_node(NULL, type, ms);
+			new_node->right = right;
+		}
+
 		new_node->left = left;
-		new_node->right = right;
 		left = new_node;
 	}	
 	return (left);
 }
+
 
 int	get_precedence(token_type type) 
 {
 	//ÖNCELİKLER BURADA TANIMLANMALI
 	if (type == PIPE)
 		return (1);
-	else if (type == HEREDOC_OUT || HEREDOC_IN)
-		return (3);
 	else if (type == REDIRECT_OUT || REDIRECT_IN)
 		return (2);
+	else if (type == HEREDOC_OUT || HEREDOC_IN)
+		return (3);
 	return (0);
 }
 
