@@ -120,13 +120,14 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	ms->tokens = tokens;
 	pos = 0;
 	ms->size = count_token(tokens);
-	ms->ast = parse_expression(tokens, &pos, 0, ms);
+//	ms->ast = parse_expression(tokens, &pos, 0, ms);
+	ms->line = create_line(ms);
 
-	execute(ms);
-
-//	print_ast(ms->ast, 0);
+//	execute(ms);
 	
-	free_tree(ms->ast);
+//	print_ast(ms->ast, 0);
+	free_line(ms->line);
+//	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
 	free(tokens);
 }
