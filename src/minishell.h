@@ -52,6 +52,13 @@ typedef enum
 	TOKEN_END
 }						token_type;
 
+typedef struct line_s
+{
+	char			*value;
+    token_type		type;    
+    struct	line_s	*next;   
+} 					line_t;
+
 typedef struct ast_node_s
 {
 	char				**args;
@@ -94,6 +101,8 @@ typedef struct minishell_s
 	size_t				count;
 	char				*input_start;
 	ast_node_t			*ast;
+	line_t				*line;
+	line_t				**mini_lines;
 }						minishell_t;
 
 //UTILITY FUNCTIONS
