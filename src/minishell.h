@@ -138,6 +138,10 @@ char					**collect_args(token_t tokens[], int *pos,
 											minishell_t *minishell);
 int						get_precedence(token_type type);
 
+//LINE
+void					print_ast(ast_node_t *node, int level);
+line_t	*create_line(minishell_t *ms);
+void free_line(line_t *node);
 //ERRORS AND FREES
 
 void					free_tokens(token_t tokens[], minishell_t ms);
