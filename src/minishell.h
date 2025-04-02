@@ -147,10 +147,11 @@ char					**collect_args(token_t tokens[], int *pos,
 											minishell_t *minishell);
 int						get_precedence(token_type type);
 
-//LINE
+// LINE
 void					print_ast(ast_node_t *node, int level);
 line_t	*create_line(minishell_t *ms);
 void free_line(line_t *node);
+line_t **split_for_pipe(line_t *line, minishell_t *ms);
 //ERRORS AND FREES
 
 void					free_tokens(token_t tokens[], minishell_t ms);
