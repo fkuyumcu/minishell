@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-line_t *create_mini_lines()
-
 int count_pipe(minishell_t *ms)
 {
 	int ret;
@@ -30,6 +28,33 @@ int count_pipe(minishell_t *ms)
 	ms->line = head;
 	return (ret);
 }
+line_t **split_for_pipe(line_t *line, minishell_t *ms)
+{
+    line_t **ret =;
+    int i;
+	line_t *tmp;
+
+	ret = malloc(sizeof(line_t *) * ( count_pipe(ms) + 2));
+	if (!ret)
+		return (NULL;)
+	i = 0;
+    while (line)
+    {
+        ret[i++] = line;
+        while (line && line->t_type != T_PIPE)
+            line = line->next;
+        if (line)
+        {
+            line_t *tmp = line;
+            line = line->next;
+            tmp->next = NULL;
+			free(tmp);
+        }
+    }
+    ret[i] = NULL;
+    return ret;
+}
+
 
 
 void free_line(line_t *node)
