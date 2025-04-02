@@ -30,18 +30,18 @@ int count_pipe(minishell_t *ms)
 }
 line_t **split_for_pipe(line_t *line, minishell_t *ms)
 {
-    line_t **ret =;
+    line_t **ret;
     int i;
 	line_t *tmp;
 
 	ret = malloc(sizeof(line_t *) * ( count_pipe(ms) + 2));
 	if (!ret)
-		return (NULL;)
+		return (NULL);
 	i = 0;
     while (line)
     {
         ret[i++] = line;
-        while (line && line->t_type != T_PIPE)
+        while (line && line->type != PIPE)
             line = line->next;
         if (line)
         {
