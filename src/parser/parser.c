@@ -122,11 +122,14 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	ms->size = count_token(tokens);
 //	ms->ast = parse_expression(tokens, &pos, 0, ms);
 	ms->line = create_line(ms);
+	ms->mini_lines = split_for_pipe(ms->line, ms);
 
 //	execute(ms);
 	
 //	print_ast(ms->ast, 0);
-	free_line(ms->line);
+	pos = 0;
+	while (ms->mini_lines[pos] != NULL)
+		free_line(ms->mini_lines[pos++]);
 //	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
 	free(tokens);
