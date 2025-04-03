@@ -12,6 +12,17 @@
 
 #include "../minishell.h"
 
+line_t *cpy_node(line_t *line)
+{
+	line_t *ret;
+
+	ret = malloc(sizeof(line_t));
+	ret->value = strdup(line->value);
+	ret->type = line->type;
+	ret->next = NULL;
+	return (ret);
+}
+
 int count_pipe(minishell_t *ms)
 {
 	int ret;
@@ -28,34 +39,38 @@ int count_pipe(minishell_t *ms)
 	ms->line = head;
 	return (ret);
 }
+
 line_t **split_for_pipe(line_t *line, minishell_t *ms)
 {
     line_t **ret;
     int i;
-	line_t *tmp;
+    line_t *tmp;
+    line_t *head;
 
-	ret = malloc(sizeof(line_t *) * ( count_pipe(ms) + 2));
-	if (!ret)
-		return (NULL);
-	i = 0;
+    ret = malloc(sizeof(line_t *) * (count_pipe(ms) + 1));
+    if (!ret)
+        return (NULL);
+    tmp = NULL;
+    head = NULL; 
+    i = 0;
     while (line)
     {
-        ret[i++] = line;
+        tmp = cpy_node(line);
+        head = tmp; 
+        line = line->next;
         while (line && line->type != PIPE)
-            line = line->next;
-        if (line)
         {
-            line_t *tmp = line;
+            tmp->next = cpy_node(line);
+            tmp = tmp->next;
             line = line->next;
-            tmp->next = NULL;
-			free(tmp);
         }
+        ret[i++] = head;
+        if (line)
+            line = line->next;
     }
     ret[i] = NULL;
-    return ret;
+    return (ret);
 }
-
-
 
 void free_line(line_t *node)
 {
