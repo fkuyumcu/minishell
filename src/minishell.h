@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/25 16:41:27 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:17:35 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct minishell_s
 	ast_node_t			*ast;
 	line_t				*line;
 	line_t				**mini_lines;
+	int					pipes;
 }						minishell_t;
 
 //UTILITY FUNCTIONS

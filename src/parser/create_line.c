@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:58:03 by yalp              #+#    #+#             */
-/*   Updated: 2025/03/26 16:42:26 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/07 16:32:47 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,30 @@ line_t *cpy_node(line_t *line)
 	ret->type = line->type;
 	ret->next = NULL;
 	return (ret);
+}
+line_t	*ft_lstlast(line_t *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst ->next != NULL)
+	{
+		lst = lst -> next;
+	}
+	return (lst);
+}
+void	ft_lstadd_back(line_t **lst, line_t *new)
+{
+	line_t	*tmp;
+
+	if (!new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	tmp = ft_lstlast(*lst);
+	tmp -> next = new;
 }
 
 int count_pipe(minishell_t *ms)
@@ -60,11 +84,10 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
         line = line->next;
         while (line && line->type != PIPE)
         {
-            tmp->next = cpy_node(line);
-            tmp = tmp->next;
+			ft_lstadd_back(&tmp, cpy_node(line));
             line = line->next;
         }
-        ret[i++] = head;
+        ret[i++] = tmp;
         if (line)
             line = line->next;
     }
@@ -77,35 +100,15 @@ void free_line(line_t *node)
 	if (node->next != NULL)
 		free_line(node->next);
 	if (node->value)
+	{
 		free(node->value);
+		node->value = NULL;
+	}
 	free(node);
+	node = NULL;
 }
 
-line_t	*ft_lstlast(line_t *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst ->next != NULL)
-	{
-		lst = lst -> next;
-	}
-	return (lst);
-}
 
-void	ft_lstadd_back(line_t **lst, line_t *new)
-{
-	line_t	*tmp;
-
-	if (!new)
-		return ;
-	if (!*lst)
-	{
-		*lst = new;
-		return ;
-	}
-	tmp = ft_lstlast(*lst);
-	tmp -> next = new;
-}
 
 line_t *create_line_node(char *value, token_type type, minishell_t *ms)
 {
