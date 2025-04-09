@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:58:03 by yalp              #+#    #+#             */
-/*   Updated: 2025/04/07 16:32:47 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/09 16:16:05 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ void	ft_lstadd_back(line_t **lst, line_t *new)
 int count_pipe(minishell_t *ms)
 {
 	int ret;
-	line_t *head;
+	line_t *tmp;
 
 	ret = 0;
-	head = ms->line;
-	while (ms->line->next != NULL)
+	tmp = ms->line;
+	while (tmp != NULL)
 	{
-		if (ms->line->type == PIPE)
+		if (tmp->type == PIPE)
 			ret++;
-		ms->line = ms->line->next;
+		tmp = tmp->next;
 	}
-	ms->line = head;
+
 	return (ret);
 }
 
@@ -71,7 +71,7 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
     line_t *tmp;
     line_t *head;
 
-    ret = malloc(sizeof(line_t *) * (count_pipe(ms) + 1));
+    ret = malloc(sizeof(line_t *) * (count_pipe(ms) + 2));
     if (!ret)
         return (NULL);
     tmp = NULL;
@@ -80,7 +80,6 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
     while (line)
     {
         tmp = cpy_node(line);
-        head = tmp; 
         line = line->next;
         while (line && line->type != PIPE)
         {
@@ -88,6 +87,7 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
             line = line->next;
         }
         ret[i++] = tmp;
+		tmp = NULL;
         if (line)
             line = line->next;
     }
@@ -97,15 +97,14 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
 
 void free_line(line_t *node)
 {
-	if (node->next != NULL)
-		free_line(node->next);
-	if (node->value)
+	if (node)
 	{
-		free(node->value);
-		node->value = NULL;
+		if (node->next != NULL)
+			free_line(node->next);
+		if (node->value != NULL)
+			free(node->value);
+		free(node);
 	}
-	free(node);
-	node = NULL;
 }
 
 
