@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 17:47:45 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:23:58 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 /* 	printf("%d",ms->mini_lines[0]->priority);
 	printf("%d",ms->mini_lines[1]->priority);
 	printf("%d",ms->mini_lines[2]->priority); */
-
+	//execute_pipeline(ms);
 
 	pos = 0;
 	while (ms->mini_lines[pos] != NULL)

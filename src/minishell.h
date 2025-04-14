@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 16:35:59 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:14:11 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ void execute_heredoc_out(ast_node_t *node, minishell_t *ms);
 
 
 void priority(minishell_t *ms);
+void execute_pipeline(minishell_t *ms);
 
 
 #endif

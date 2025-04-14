@@ -6,12 +6,12 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 17:45:38 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:23:07 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+#include <fcntl.h>
 
 void priority(minishell_t *ms)
 {   
