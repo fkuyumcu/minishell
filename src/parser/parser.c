@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/09 16:14:16 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/14 17:47:45 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,16 +123,18 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 //	ms->ast = parse_expression(tokens, &pos, 0, ms);
 	ms->line = create_line(ms);
 	ms->mini_lines = split_for_pipe(ms->line, ms);
+	line_t *cur = *ms->mini_lines;
+	priority(ms);
+/* 	printf("%d",ms->mini_lines[0]->priority);
+	printf("%d",ms->mini_lines[1]->priority);
+	printf("%d",ms->mini_lines[2]->priority); */
 
-//	execute(ms);
-	
-//	print_ast(ms->ast, 0);
+
 	pos = 0;
 	while (ms->mini_lines[pos] != NULL)
 		free_line(ms->mini_lines[pos++]);
 	free(ms->mini_lines);
 	free_line(ms->line);
-//	free_tree(ms->ast);
 	free_tokens(tokens, *ms);
 	free(tokens);
 }

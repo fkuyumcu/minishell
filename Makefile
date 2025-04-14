@@ -18,6 +18,7 @@ SRC = src/main.c \
       src/exec/exec_heredoc.c \
       src/exec/find_heredoc.c \
       src/parser/create_line.c \
+      src/parser/priority.c \
       
 
 OBJ = $(SRC:.c=.o)
