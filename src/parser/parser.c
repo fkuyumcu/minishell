@@ -128,7 +128,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 /* 	printf("%d",ms->mini_lines[0]->priority);
 	printf("%d",ms->mini_lines[1]->priority);
 	printf("%d",ms->mini_lines[2]->priority); */
-	//execute_pipeline(ms);
+	execute_pipeline(ms);
 
 	pos = 0;
 	while (ms->mini_lines[pos] != NULL)

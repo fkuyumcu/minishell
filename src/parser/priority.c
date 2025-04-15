@@ -49,3 +49,5 @@ void priority(minishell_t *ms)
         i++;
     }
 }
+
+
