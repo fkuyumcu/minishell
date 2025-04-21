@@ -6,12 +6,15 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 19:11:59 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:34:59 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <fcntl.h>
+#include <stdbool.h>
+
+
 
 void priority(minishell_t *ms)
 {   
@@ -45,7 +48,9 @@ void priority(minishell_t *ms)
             current = current->next;
         }
         if (ms->mini_lines[i] != NULL)
+        {
             ms->mini_lines[i]->priority = max_priority;
+        }
         i++;
     }
 }

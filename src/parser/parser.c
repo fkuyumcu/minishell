@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 19:12:34 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:59:54 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,11 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	ms->tokens = tokens;
 	pos = 0;
 	ms->size = count_token(tokens);
-//	ms->ast = parse_expression(tokens, &pos, 0, ms);
 	ms->line = create_line(ms);
 	ms->mini_lines = split_for_pipe(ms->line, ms);
 	line_t *cur = *ms->mini_lines;
 	priority(ms);
-/* 	printf("%d",ms->mini_lines[0]->priority);
-	printf("%d",ms->mini_lines[1]->priority);
-	printf("%d",ms->mini_lines[2]->priority); */
-	//execute_pipeline(ms);
+	execute_pipeline(ms);
 
 	pos = 0;
 	while (ms->mini_lines[pos] != NULL)
