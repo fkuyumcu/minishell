@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/25 16:49:08 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:38:06 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out)
         return;
     }
 
-    handle_heredoc(delimiter, node, ms, out);
+   // handle_heredoc(delimiter, node, ms, out);
 }
 
 

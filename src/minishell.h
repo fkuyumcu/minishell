@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/14 18:14:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:40:43 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,9 +174,9 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char *find(char *cmd, char **envp, minishell_t *minishell);
 void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out);
-void	handle_heredoc(char *delimiter, ast_node_t *node, minishell_t *minishell, char *out);
+//void	handle_heredoc(line_t *line, int *heredoc_pipe, int *use_heredoc);
 int find_heredoc(ast_node_t *ast, minishell_t *ms);
-
+void	apply_redirections(line_t *cmd, int heredoc_fd);
 
 void execute_redir_in(ast_node_t *node, minishell_t *ms);
 void execute_redir_out(ast_node_t *node, minishell_t *ms);
