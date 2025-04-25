@@ -19,11 +19,11 @@ void apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2])
     while (1)
     {
         write(STDOUT_FILENO, "> ", 2);
-        read = getline(&line, &len, stdin);
+        read = getline(&line, &len, 0);
         
         if (read == -1)
         {
-            if (feof(stdin))
+            if (feof(0))
             {
                 fprintf(stderr, "warning: here-document delimited by end-of-file\n");
                 break;
