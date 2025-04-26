@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/26 14:57:18 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:23:03 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	apply_redirections(line_t *cmd, int heredoc_fd)
     while (cur)
     {
         if ((cur->type == REDIRECT_IN || cur->type == REDIRECT_OUT
-                || cur->type == HEREDOC_OUT) && cur->next)
+                || cur->type == HEREDOC_OUT) && cur->next)//miniline'ın içinde her bir komutun içinde dolaş, son komut olmadığı sürece yönlendirmeleri yap
         {
             if (cur->type == REDIRECT_IN)
                 redir_in(cur);
@@ -160,8 +160,8 @@ void	apply_redirections(line_t *cmd, int heredoc_fd)
     }
     if (heredoc_fd != -1)
     {
-        dup2(heredoc_fd, STDIN_FILENO);
-        close(heredoc_fd);
+        dup2(heredoc_fd, STDIN_FILENO);//heredocun girişi için stdin ile yerini değiştir
+        close(heredoc_fd);//okuma ucunu kapat
     }
 }
 
@@ -172,7 +172,7 @@ static int	handle_heredocs(line_t *line)
     int last_pipe[2] = {-1, -1};
     int prev_read = -1;
 
-    while (tmp)
+    while (tmp)//bütün heredoclar içinde dolaşıyori heredoc bulduğu anda yeni pipe açıyor
     {
         if (tmp->type == HEREDOC_IN)
         {
@@ -187,7 +187,7 @@ static int	handle_heredocs(line_t *line)
             if (prev_read != -1)
                 close(prev_read); 
 
-            prev_read = pipefd[0]; 
+            prev_read = pipefd[0];//yalnızca son heredocun yazma ucunu saklar
 
         }
         tmp = tmp->next;
@@ -202,30 +202,34 @@ void	execute_pipeline(minishell_t *ms)
     pid_t	*pids;
     int		pipefd[2];
     int		prev_fd = -1;
+    int     heredoc_fd;
 
+    
     while (ms->mini_lines[cmd_count])
         cmd_count++;
-    pids = malloc(sizeof(pid_t) * cmd_count);
-    while (i < cmd_count)
+        
+    pids = malloc(sizeof(pid_t) * cmd_count);//pids dizisinde miniline sayısı kadar pid için yer a.
+    while (i < cmd_count)//her bir miniline için while döngüsünün içinde dolaş
     {
-        int heredoc_fd = handle_heredocs(ms->mini_lines[i]);
+        heredoc_fd = handle_heredocs(ms->mini_lines[i]);//her döngüde handle_heredoc fonksiyonundan gelen dönüş değerini heredoun yazma ucu olarak tut
         if (i < cmd_count - 1)
-            pipe(pipefd);
-        pids[i] = fork();
+            pipe(pipefd);//miniline sonda değilse pipe aç
+            
+        pids[i] = fork();//her bir miniline için process oluştur
         if (pids[i] == 0)
         {
-            if (i > 0)
+            if (i > 0)//eğer ilk miniline değilse, bir önceki miniline'ın yazma ucuyla stdin'i değiştir
             {
                 dup2(prev_fd, STDIN_FILENO);
-                close(prev_fd);
+                close(prev_fd);//bir önceki miniline'ın yazma ucunu kapat
             }
-            if (i < cmd_count - 1)
+            if (i < cmd_count - 1)//son miniline'da değilsek pipe'ın yazma ucuna std çıktıyı yönlendir 
             {
-                close(pipefd[0]);
-                dup2(pipefd[1], STDOUT_FILENO);
-                close(pipefd[1]);
+                close(pipefd[0]);//pipe'ın okuma kafasını kapat
+                dup2(pipefd[1], STDOUT_FILENO);//pipe'ın diğer ucuyla stdout'u değiştir
+                close(pipefd[1]);//yazma ucunu kapat
             }
-            apply_redirections(ms->mini_lines[i], heredoc_fd);
+            apply_redirections(ms->mini_lines[i], heredoc_fd);//yönlendirmeleri uygula
             child_exec(ms->mini_lines[i], ms, -1);
         }
         if (i > 0)
