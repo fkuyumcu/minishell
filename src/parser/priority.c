@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/26 14:56:15 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/26 14:57:18 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ static void	redir_out(line_t *cur, int append)
         fd = open(cur->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
+        perror(append ? "open >>" : "open >");
         exit(EXIT_FAILURE);
     }
     dup2(fd, STDOUT_FILENO);
@@ -194,38 +195,20 @@ static int	handle_heredocs(line_t *line)
     return prev_read;
 }
 
-// Her komut için heredoc fd'lerini saklayacağımız bir dizi
-typedef struct s_heredoc_map {
-    int fd;
-} heredoc_map_t;
-
-// Pipeline'daki tüm heredoc'ları baştan işle
-static heredoc_map_t *collect_all_heredocs(line_t **mini_lines, int cmd_count) {
-    heredoc_map_t *heredocs = malloc(sizeof(heredoc_map_t) * cmd_count);
-    for (int i = 0; i < cmd_count; i++) {
-        heredocs[i].fd = handle_heredocs(mini_lines[i]);
-    }
-    return heredocs;
-}
-
-void execute_pipeline(minishell_t *ms)
+void	execute_pipeline(minishell_t *ms)
 {
-    int cmd_count = 0;
-    int i = 0;
-    pid_t *pids;
-    int pipefd[2];
-    int prev_fd = -1;
+    int		cmd_count = 0;
+    int		i = 0;
+    pid_t	*pids;
+    int		pipefd[2];
+    int		prev_fd = -1;
 
     while (ms->mini_lines[cmd_count])
         cmd_count++;
-
-    // Pipeline başlamadan önce tüm heredoc'ları sırayla işle
-    heredoc_map_t *heredocs = collect_all_heredocs(ms->mini_lines, cmd_count);
-
     pids = malloc(sizeof(pid_t) * cmd_count);
     while (i < cmd_count)
     {
-        int heredoc_fd = heredocs[i].fd;
+        int heredoc_fd = handle_heredocs(ms->mini_lines[i]);
         if (i < cmd_count - 1)
             pipe(pipefd);
         pids[i] = fork();
@@ -260,7 +243,6 @@ void execute_pipeline(minishell_t *ms)
     while (i < cmd_count)
         waitpid(pids[i++], NULL, 0);
     free(pids);
-    free(heredocs);
 }
 
 void	priority(minishell_t *ms)
