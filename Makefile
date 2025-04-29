@@ -8,6 +8,7 @@ SRC = src/main.c \
       src/utils/utils.c \
       src/utils/utils2.c \
       src/utils/utils3.c \
+      src/utils/utils4.c \
       src/utils/error.c \
       src/parser/quotes.c \
       src/parser/lexical_analysis.c \

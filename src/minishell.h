@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:53:28 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:02:00 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ size_t					ft_strlen(const char *s);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
 void					print_banner(void);
 char					*ft_strnstr(const char *haystack, const char *needle, size_t len);
+size_t					ft_strlcat(char *dst, const char *src, size_t n);
+
+
 
 //TOKENIZER
 
@@ -144,7 +147,7 @@ void					free_args(char **args, int ac);
 //EXECUTE
 
 char	*get_exec_path(char **args, minishell_t *ms);
-void	fill_args(char **args, int *ac, line_t *node);
+void	fill_args(char **args, int *ac, line_t *node, minishell_t *ms);
 char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *s, int fd);
 int		count_tokens(char const *s, char c);
@@ -152,11 +155,11 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*find(char *cmd, char **envp, minishell_t *minishell);
 void	child_exec(line_t *cur, minishell_t *ms, int heredoc_fd);
-void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2]);
+void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms);
 void	redir_in(line_t *cur);
 void	redir_out(line_t *cur, int append);
-void	apply_redirections(line_t *cmd, int heredoc_fd);
-int		handle_heredocs(line_t *line);
+void	apply_redirections(line_t *cmd, int heredoc_fd, minishell_t *ms);
+int		handle_heredocs(line_t *line, minishell_t *ms);
 void	priority(minishell_t *ms);
 void	execute_pipeline(minishell_t *ms);
 

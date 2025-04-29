@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:39:53 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:42:20 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 void	execute_pipeline(minishell_t *ms)
 {
     int		cmd_count;
-    int		i = 0;
     pid_t	*pids;
+    int     i;
     int		pipefd[2];
     int		prev_fd;
     int     heredoc_fd;
-
     
+    
+    i = 0;
     cmd_count = 0;
     prev_fd = -1;
     
@@ -31,7 +32,7 @@ void	execute_pipeline(minishell_t *ms)
     pids = malloc(sizeof(pid_t) * cmd_count);//pids dizisinde miniline sayısı kadar pid için yer a.
     while (i < cmd_count)//her bir miniline için while döngüsünün içinde dolaş
     {
-        heredoc_fd = handle_heredocs(ms->mini_lines[i]);//her döngüde handle_heredoc fonksiyonundan gelen dönüş değerini heredoun yazma ucu olarak tut
+        heredoc_fd = handle_heredocs(ms->mini_lines[i], ms);//her döngüde handle_heredoc fonksiyonundan gelen dönüş değerini heredoun yazma ucu olarak tut
         if (i < cmd_count - 1)
             pipe(pipefd);//miniline sonda değilse pipe aç
             
@@ -49,8 +50,8 @@ void	execute_pipeline(minishell_t *ms)
                 dup2(pipefd[1], STDOUT_FILENO);//pipe'ın diğer ucuyla stdout'u değiştir
                 close(pipefd[1]);//yazma ucunu kapat
             }
-            apply_redirections(ms->mini_lines[i], heredoc_fd);//yönlendirmeleri uygula
-            child_exec(ms->mini_lines[i], ms, -1);
+            apply_redirections(ms->mini_lines[i], heredoc_fd, ms);//yönlendirmeleri uygula
+            child_exec(ms->mini_lines[i], ms, -1); 
         }
         if (i > 0)
             close(prev_fd);

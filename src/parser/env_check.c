@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:18:06 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:00:10 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*find_list(minishell_t *minishell, char *env_name)//find list fonksi
 	env_t	*list;
 
 	list = minishell->env_list;
-	/* while(list)
+	/* while(list)BUNA BAK	
 	{
 	    if (strcmp(list->key,env_name) == 0)
 	        return (list->value);
@@ -46,6 +46,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	char	*dolar_pos;
 	char	*new_value;
 	int		len;
+	size_t	total_size;
 
 	len = 0;
 	dolar_pos = ft_strchr(token->value, '$');
@@ -67,11 +68,13 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 		ft_error(minishell, "Error Allocating Space");
 	ft_strncpy(new_value, token->value, dolar_pos - token->value);
 	new_value[dolar_pos - token->value] = '\0';
-	strcat(new_value, env_value); //strcat
-	strcat(new_value, dolar_pos + len + 1); // strcat	
+	total_size = ft_strlen(token->value) - len + ft_strlen(env_value) + 1;
+    ft_strlcat(new_value, env_value, total_size);
+    ft_strlcat(new_value, dolar_pos + len + 1, total_size);
 	free(token->value);
 	token->value = new_value;	
 	free(env_name);
+	
 }
 
 void	check_env(token_t tk[], minishell_t *minishell)

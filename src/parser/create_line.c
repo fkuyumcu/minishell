@@ -6,18 +6,18 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:58:03 by yalp              #+#    #+#             */
-/*   Updated: 2025/04/29 12:20:21 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:03:18 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-line_t *cpy_node(line_t *line)
+line_t *cpy_node(line_t *line,minishell_t *ms)
 {
 	line_t *ret;
 
 	ret = malloc(sizeof(line_t));
-	ret->value = strdup(line->value);//strdup
+	ret->value = ft_strdup(line->value, ms);
 	ret->type = line->type;
 	ret->next = NULL;
 	return (ret);
@@ -79,11 +79,11 @@ line_t **split_for_pipe(line_t *line, minishell_t *ms)
     i = 0;
     while (line)
     {
-        tmp = cpy_node(line);
+        tmp = cpy_node(line,ms);
         line = line->next;
         while (line && line->type != PIPE)
         {
-			ft_lstadd_back(&tmp, cpy_node(line));
+			ft_lstadd_back(&tmp, cpy_node(line, ms));
             line = line->next;
         }
         ret[i++] = tmp;

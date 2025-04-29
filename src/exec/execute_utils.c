@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:31:14 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:53:55 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:52:31 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char *find(char *cmd, char **envp, minishell_t *minishell)
 }
 
 
-void	fill_args(char **args, int *ac, line_t *node)
+void	fill_args(char **args, int *ac, line_t *node, minishell_t *ms)
 {
     while (node)
     {
@@ -65,7 +65,7 @@ void	fill_args(char **args, int *ac, line_t *node)
             continue;
         }
         if (node->type == WORD)
-            args[(*ac)++] = strdup(node->value);
+            args[(*ac)++] = ft_strdup(node->value, ms);
         node = node->next;
     }
     args[*ac] = NULL;
@@ -77,7 +77,7 @@ char	*get_exec_path(char **args, minishell_t *ms)
 
     exec_path = NULL;
     if (args[0] && access(args[0], X_OK) == 0)
-        exec_path = strdup(args[0]);
+        exec_path = ft_strdup(args[0], ms);
     else if (args[0])
         exec_path = find(args[0], ms->envp, ms);
     return (exec_path);

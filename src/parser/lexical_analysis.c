@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:16:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:05:45 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	process_op(char **input, token_t tk[], int *count)
 	}
 }
 
-void	wordfill(token_t tk[], int *count, char *buf)
+void	wordfill(token_t tk[], int *count, char *buf, minishell_t *ms)
 {
 	tk[*count].is_word = 1;
 	tk[*count].is_dbl_quote = 1;
 	tk[*count].t_type = WORD;
-	tk[*count].value = strdup(buf);//strdup
+	tk[*count].value = ft_strdup(buf, ms);
 	(*count)++;
 }
 
@@ -70,7 +70,7 @@ void	process_word(char **inp, token_t tokens[], int *count, minishell_t *ms)
 	}
 	buffer[buf_index] = '\0';
 	if (buf_index > 0)
-		wordfill(tokens, count, buffer);
+		wordfill(tokens, count, buffer, ms);
 	free(buffer);
 	if (ft_strchr("|<>\"'", **inp) != 0 && **inp)
 		process_token(inp, tokens, count, ms);

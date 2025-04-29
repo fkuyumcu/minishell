@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:35:38 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:47:31 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:55:00 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,31 @@
 
 
 
-void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2])
+void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms)
 {
     char	*delimiter;
-    char	*line = NULL;
-    size_t	len = 0;
-    ssize_t	read;
+    char	*line;
 
     if (!heredoc_node || !heredoc_node->next || !heredoc_node->next->value)
     {
-        fprintf(stderr, "Heredoc error: Invalid delimiter\n");
+        printf("Invalid Delimeter!");
         exit(EXIT_FAILURE);
     }
     delimiter = heredoc_node->next->value;
     while (1)
     {
-        write(STDOUT_FILENO, "> ", 2);
-        read = getline(&line, &len, stdin);
-        if (read == -1)
+        line = readline("> ");
+        if (!line)
             break;
-        line[strcspn(line, "\n")] = '\0';//strcsmp
-        if (strcmp(line, delimiter) == 0)//strcmp
+        if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+        {
+            free(line);
             break;
+        }
         write(pipefd[1], line, ft_strlen(line));
         write(pipefd[1], "\n", 1);
+        free(line);
     }
-    free(line);
     close(pipefd[1]);
 }
 
@@ -48,7 +47,7 @@ void	redir_in(line_t *cur)
     int	fd = open(cur->next->value, O_RDONLY);
     if (fd == -1)
     {
-        perror("open <");
+        printf("error <");
         exit(EXIT_FAILURE);
     }
     dup2(fd, STDIN_FILENO);
@@ -64,14 +63,14 @@ void	redir_out(line_t *cur, int append)
         fd = open(cur->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
     {
-        //perror(append ? "open >>" : "open >");
+        printf("file descriptor error");
         exit(EXIT_FAILURE);
     }
     dup2(fd, STDOUT_FILENO);
     close(fd);
 }
 
-void	apply_redirections(line_t *cmd, int heredoc_fd)
+void	apply_redirections(line_t *cmd, int heredoc_fd, minishell_t *ms)
 {
     line_t	*cur = cmd;
     while (cur)
@@ -95,7 +94,7 @@ void	apply_redirections(line_t *cmd, int heredoc_fd)
 }
 
 
-int	handle_heredocs(line_t *line)
+int	handle_heredocs(line_t *line, minishell_t *ms)
 {
     line_t *tmp = line;
     int last_pipe[2] = {-1, -1};
@@ -108,10 +107,10 @@ int	handle_heredocs(line_t *line)
             int pipefd[2];
             if (pipe(pipefd) == -1)
             {
-                perror("pipe heredoc");
+                printf("pipe error");
                 exit(EXIT_FAILURE);
             }
-            apply_heredoc_pipe(tmp, pipefd);
+            apply_heredoc_pipe(tmp, pipefd, ms);
 
             if (prev_read != -1)
                 close(prev_read); 
