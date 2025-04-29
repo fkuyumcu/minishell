@@ -12,10 +12,12 @@ SRC = src/main.c \
       src/parser/quotes.c \
       src/parser/lexical_analysis.c \
       src/parser/env_check.c \
-      src/parser/create_ast.c \
-      src/exec/exec_word.c \
       src/parser/create_line.c \
       src/parser/priority.c \
+      src/exec/apply_procs.c\
+      src/exec/execute_free.c\
+      src/exec/execute_utils.c\
+      src/exec/pipes_redirects.c\
       
 
 OBJ = $(SRC:.c=.o)

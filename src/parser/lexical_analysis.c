@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_analysis.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/07 14:44:52 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/29 12:16:11 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	wordfill(token_t tk[], int *count, char *buf)
 	tk[*count].is_word = 1;
 	tk[*count].is_dbl_quote = 1;
 	tk[*count].t_type = WORD;
-	tk[*count].value = strdup(buf);
+	tk[*count].value = strdup(buf);//strdup
 	(*count)++;
 }
 

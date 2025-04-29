@@ -6,32 +6,12 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/26 15:33:30 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:49:35 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	free_tree(ast_node_t *ast)
-{
-	int	i;
-
-	i = 0;
-	if (!ast)
-		return ;
-
-	if (ast->args && ast->args[i])
-	{
-		while (ast->args[i])
-			free(ast->args[i++]);
-
-	}
-	if (ast->args)
-		free(ast->args);
-	free_tree(ast->left);
-	free_tree(ast->right);
-	free(ast);
-}
 
 int	count_token(token_t tokens[])
 {
@@ -92,7 +72,6 @@ void	set_minishell(minishell_t *ms, int allocation, env_t *env_list,
 		token_t tokens[])
 {
 	ms->allocation = allocation;
-	ms->ast = NULL;
 	ms->tokens = NULL;
 	ms->input_start = NULL;
 	ms->env_list = env_list;

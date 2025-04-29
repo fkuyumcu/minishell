@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/23 17:40:43 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:53:28 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <fcntl.h>
+#include <stdbool.h>
 
 
 
@@ -60,13 +62,6 @@ typedef struct line_s
 	int				priority;
 } 					line_t;
 
-typedef struct ast_node_s
-{
-	char				**args;
-	struct ast_node_s	*left;
-	struct ast_node_s	*right;
-	token_type			token;
-}						ast_node_t;
 
 typedef struct s_env
 {
@@ -101,7 +96,6 @@ typedef struct minishell_s
 	int					count_token;
 	size_t				count;
 	char				*input_start;
-	ast_node_t			*ast;
 	line_t				*line;
 	line_t				**mini_lines;
 	int					pipes;
@@ -119,6 +113,7 @@ size_t					ft_strlen(const char *s);
 size_t					ft_strlen(const char *s);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
 void					print_banner(void);
+char					*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 //TOKENIZER
 
@@ -134,58 +129,36 @@ void					single_quote(char **input, token_t tokens[], int *count,
 							minishell_t *minishell);
 void					check_env(token_t tokens[], minishell_t *minishell);
 
-//CREATE AST
-
-void					print_ast(ast_node_t *node, int level);
-ast_node_t				*create_ast_node(char **args, token_type type,
-							minishell_t *minishell);
-ast_node_t				*parse_expression(token_t tokens[], int *pos,
-							int min_prec, minishell_t *minishell);
-ast_node_t				*parse_primary(token_t tokens[], int *pos,
-							minishell_t *minishell);
-ast_node_t				*parse_redirection(token_t tokens[], int *pos,
-							token_type redir_type, minishell_t *minishell);							
-char					**collect_args(token_t tokens[], int *pos, 
-											minishell_t *minishell);
-int						get_precedence(token_type type);
 
 // LINE
-void					print_ast(ast_node_t *node, int level);
-line_t	*create_line(minishell_t *ms);
-void free_line(line_t *node);
-line_t **split_for_pipe(line_t *line, minishell_t *ms);
-//ERRORS AND FREES
+line_t					*create_line(minishell_t *ms);
+void 					free_line(line_t *node);
+line_t					**split_for_pipe(line_t *line, minishell_t *ms);
 
+//ERRORS AND FREES
 void					free_tokens(token_t tokens[], minishell_t ms);
-void					free_tree(ast_node_t *ast);
 void					ft_error(minishell_t *minishell, char *s);
+void					free_str_array(char **paths, int i);
+void					free_args(char **args, int ac);
 
 //EXECUTE
 
-void	execute(minishell_t *minishell);
-char	*find_executable(char *cmd);
-void	execute_word(ast_node_t *node, minishell_t *ms);
-void	execute_ast(ast_node_t *node, minishell_t *ms);
+char	*get_exec_path(char **args, minishell_t *ms);
+void	fill_args(char **args, int *ac, line_t *node);
 char	**ft_split(char const *s, char c);
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 void	ft_putstr_fd(char *s, int fd);
-int	count_tokens(char const *s, char c);
+int		count_tokens(char const *s, char c);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-char *find(char *cmd, char **envp, minishell_t *minishell);
-void execute_heredoc(ast_node_t *node, minishell_t *ms, char *out);
-//void	handle_heredoc(line_t *line, int *heredoc_pipe, int *use_heredoc);
-int find_heredoc(ast_node_t *ast, minishell_t *ms);
+char	*find(char *cmd, char **envp, minishell_t *minishell);
+void	child_exec(line_t *cur, minishell_t *ms, int heredoc_fd);
+void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2]);
+void	redir_in(line_t *cur);
+void	redir_out(line_t *cur, int append);
 void	apply_redirections(line_t *cmd, int heredoc_fd);
-
-void execute_redir_in(ast_node_t *node, minishell_t *ms);
-void execute_redir_out(ast_node_t *node, minishell_t *ms);
-void execute_redir_append(ast_node_t *node, minishell_t *ms);
-void execute_heredoc_out(ast_node_t *node, minishell_t *ms);
-
-
-void priority(minishell_t *ms);
-void execute_pipeline(minishell_t *ms);
+int		handle_heredocs(line_t *line);
+void	priority(minishell_t *ms);
+void	execute_pipeline(minishell_t *ms);
 
 
 #endif

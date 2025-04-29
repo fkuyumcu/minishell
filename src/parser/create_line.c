@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_line.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:58:03 by yalp              #+#    #+#             */
-/*   Updated: 2025/04/09 16:16:05 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/29 12:20:21 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ line_t *cpy_node(line_t *line)
 	line_t *ret;
 
 	ret = malloc(sizeof(line_t));
-	ret->value = strdup(line->value);
+	ret->value = strdup(line->value);//strdup
 	ret->type = line->type;
 	ret->next = NULL;
 	return (ret);

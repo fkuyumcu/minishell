@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_word.c                                        :+:      :+:    :+:   */
+/*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 16:18:07 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/19 14:52:51 by yalp             ###   ########.fr       */
+/*   Created: 2025/04/29 12:31:14 by fkuyumcu          #+#    #+#             */
+/*   Updated: 2025/04/29 12:53:55 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <sys/wait.h>
-#include <fcntl.h>
-
-void free_str_array(char **paths, int i)
-{
-	if (paths[i])
-	{
-		while (paths[++i])
-			free(paths[i]);
-	}
-
-}
 
 char *find(char *cmd, char **envp, minishell_t *minishell)
 {
@@ -64,48 +52,33 @@ char *find(char *cmd, char **envp, minishell_t *minishell)
 }
 
 
-void	executed(char *argv, char **envp, minishell_t *ms)
+void	fill_args(char **args, int *ac, line_t *node)
 {
-	char	**command;
-	char	*path;
-
-	command = ft_split(argv, ' ');
-	path = find(command[0], envp, ms);
-	if (path == 0)
-	{
-        printf("Error");
-	}
-	if (execve(path, command, envp) == -1)
-		printf("Error");
+    while (node)
+    {
+        if (node->type == REDIRECT_IN || node->type == REDIRECT_OUT
+            || node->type == HEREDOC_IN || node->type == HEREDOC_OUT)
+        {
+            node = node->next;
+            if (node)
+                node = node->next;
+            continue;
+        }
+        if (node->type == WORD)
+            args[(*ac)++] = strdup(node->value);
+        node = node->next;
+    }
+    args[*ac] = NULL;
 }
 
-
-void execute_word(ast_node_t *node, minishell_t *ms)
+char	*get_exec_path(char **args, minishell_t *ms)
 {
-        char *cmd = node->args[0];
-        char *exec_path = NULL;
-        int status;
-        pid_t pid;
-        if (access(cmd, X_OK) == 0)
-            exec_path = cmd;
-            
-        else
-            exec_path = find(cmd, ms->envp, ms);
-            
-        if (!exec_path)
-            printf("Error: Command not found: %s\n", cmd);//error
+    char	*exec_path;
 
-        pid = fork();
-        if (pid == -1)
-           printf("error");//err
-        else if (pid == 0)   
-        {
-            execve(exec_path, node->args, ms->envp);
-            free(exec_path);
-        }
-        else
-        {
-			free(exec_path);
-            waitpid(pid, &status, 0);
-        }
+    exec_path = NULL;
+    if (args[0] && access(args[0], X_OK) == 0)
+        exec_path = strdup(args[0]);
+    else if (args[0])
+        exec_path = find(args[0], ms->envp, ms);
+    return (exec_path);
 }
