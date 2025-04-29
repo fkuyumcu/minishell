@@ -6,11 +6,69 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:35:38 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 17:59:31 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/29 18:58:02 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	check_redirect(line_t *cur)
+{
+    line_t *head;
+    int    has_redirect;
+
+    head = cur;
+    has_redirect = 0;
+    while (cur->next != NULL)
+    {
+        // Heredoc input'u varsa kontrol et
+        if (cur->type == HEREDOC_IN)
+        {
+            // Eğer sonrasında redirect varsa yazmayı engelle
+            line_t *temp = cur;
+            while (temp->next)
+            {
+                if (temp->type == REDIRECT_OUT || temp->type == HEREDOC_OUT)
+                {
+                    if (!temp->next || temp->next->type != WORD)
+                    {
+                        cur = head;
+                        return (0);
+                    }
+                }
+                temp = temp->next;
+            }
+        }
+        // Normal redirect kontrolü
+        if (cur->type == HEREDOC_OUT || cur->type == REDIRECT_OUT)
+        {
+            has_redirect = 1;
+            if (!cur->next || cur->next->type != WORD)
+            {
+                cur = head;
+                return (0);
+            }
+        }
+        cur = cur->next;
+    }
+    cur = head;
+    return (1);
+}
+
+int	check_redirect_after_heredoc(line_t *heredoc_node)
+{
+    line_t *cur = heredoc_node->next;
+    while (cur)
+    {
+        if ((cur->type == REDIRECT_OUT || cur->type == HEREDOC_OUT))
+        {
+            if (!cur->next || cur->next->type != WORD)
+                return (0); // redirect var ve dosya adı yok
+        }
+        cur = cur->next;
+    }
+    return (1); // sorun yok
+}
 
 void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms)
 {
@@ -19,9 +77,13 @@ void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms)
 
     if (!heredoc_node || !heredoc_node->next || !heredoc_node->next->value)
     {
-        printf("Invalid Delimeter!");
-        exit(EXIT_FAILURE);
+        printf("Invalid Delimeter!\n");
+        return;
     }
+
+    // heredoc'tan sonra redirect olup olmadığını ve dosya adını kontrol et
+    int can_write = check_redirect_after_heredoc(heredoc_node);
+
     delimiter = heredoc_node->next->value;
     while (1)
     {
@@ -33,8 +95,11 @@ void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms)
             free(line);
             break;
         }
-        write(pipefd[1], line, ft_strlen(line));
-        write(pipefd[1], "\n", 1);
+        if (can_write == 1)
+        {
+            write(pipefd[1], line, ft_strlen(line));
+            write(pipefd[1], "\n", 1);
+        }
         free(line);
     }
     close(pipefd[1]);
