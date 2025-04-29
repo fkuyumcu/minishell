@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:43:16 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/07 15:43:22 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/29 18:10:16 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	double_quote(char **input, token_t tk[], int *count, minishell_t *ms)
 	else
 	{
 		printf("Error: Unclosed double quote\n");
+		ms->error = 1;
 		return (free(buffer));
 	}
 	tk[*count].is_dbl_quote = 1;

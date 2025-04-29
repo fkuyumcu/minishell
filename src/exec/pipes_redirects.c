@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_redirects.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:35:38 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 15:55:00 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:59:31 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-
 
 void	apply_heredoc_pipe(line_t *heredoc_node, int pipefd[2], minishell_t *ms)
 {

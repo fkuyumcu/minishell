@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 12:49:35 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:28:30 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	set_minishell(minishell_t *ms, int allocation, env_t *env_list,
 void	parser(minishell_t *ms, char *buf, int allocation)
 {
 	token_t	*tokens;
-	env_t	*env_list;
+	env_t	*env_list = NULL;
 	int		pos;
 
 	allocation = ft_strlen(buf);
@@ -93,24 +93,29 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	return ;
 	ms->env_list = env_list;
 	lex_analize(buf, tokens, ms);
-	check_env(tokens, ms);
-	manage_tokens(tokens);
+	if (ms->error != 1)
+	{
+		check_env(tokens, ms);
+		manage_tokens(tokens);
 
-	ms->tokens = tokens;
-	pos = 0;
-	ms->size = count_token(tokens);
-	ms->line = create_line(ms);
-	ms->mini_lines = split_for_pipe(ms->line, ms);
-	line_t *cur = *ms->mini_lines;
+		ms->tokens = tokens;
+		pos = 0;
+		ms->size = count_token(tokens);
+		ms->line = create_line(ms);
+		ms->mini_lines = split_for_pipe(ms->line, ms);
+		line_t *cur = *ms->mini_lines;
+		priority(ms);
+		execute_pipeline(ms);
 	
-	priority(ms);
-	execute_pipeline(ms);
-	
-	pos = 0;
-	while (ms->mini_lines[pos] != NULL)
-		free_line(ms->mini_lines[pos++]);
-	free(ms->mini_lines);
-	free_line(ms->line);
+		pos = 0;
+		while (ms->mini_lines[pos] != NULL)
+			free_line(ms->mini_lines[pos++]);
+		free(ms->mini_lines);
+		free_line(ms->line);
+	}
 	free_tokens(tokens, *ms);
 	free(tokens);
+	
+	
+	
 }
