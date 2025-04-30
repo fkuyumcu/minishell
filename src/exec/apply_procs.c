@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:32:51 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 15:51:24 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:08:49 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int count_args(line_t *cur)
     }
     return count;
 }
+
+
+
 void	child_exec(line_t *cur, minishell_t *ms, int heredoc_fd)
 {
     int count;

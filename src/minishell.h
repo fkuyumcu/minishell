@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 18:10:09 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/30 16:01:10 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct token_s
 	size_t				is_dbl_quote;
 	size_t				is_env;
 	size_t				is_equal;
-	int prec;
+	int					prec;
 	size_t				is_word;
     struct minishell_s  *ms;
 	int					index_in_input;
@@ -92,7 +92,7 @@ typedef struct minishell_s
 	int					allocation;
 	int					flag;
 	int size;
-	char **envp;
+	char				**envp;
 	int					count_token;
 	size_t				count;
 	char				*input_start;
@@ -163,6 +163,18 @@ void	apply_redirections(line_t *cmd, int heredoc_fd, minishell_t *ms);
 int		handle_heredocs(line_t *line, minishell_t *ms);
 void	priority(minishell_t *ms);
 void	execute_pipeline(minishell_t *ms);
+
+
+//BUILTINS
+void	cd(line_t *ml);
+void	echo(line_t *ml, minishell_t *ms);
+void	export(line_t *ml, minishell_t *ms);
+void	pwd();
+void	env();
+void	ft_exit_2();
+void	unset(void);
+bool	is_builtin(line_t *ml);//bool
+void	try_builtins(line_t *ml, minishell_t *ms);
 
 
 #endif

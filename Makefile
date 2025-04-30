@@ -19,7 +19,14 @@ SRC = src/main.c \
       src/exec/execute_free.c\
       src/exec/execute_utils.c\
       src/exec/pipes_redirects.c\
-      
+      builtin/cd.c\
+      builtin/echo.c\
+      builtin/export.c\
+      builtin/pwd.c\
+      builtin/unset.c\
+      builtin/env.c\
+      builtin/builtin_utils.c\
+
 
 OBJ = $(SRC:.c=.o)
 
