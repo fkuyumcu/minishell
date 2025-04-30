@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:01:10 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:11:47 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ typedef struct minishell_s
 }						minishell_t;
 
 //UTILITY FUNCTIONS
-
+extern int global_code;
+char					*ft_itoa(int n);
 char					*ft_strdup(const char *s1, minishell_t *minishell);
 char					*ft_strchr(const char *s, int c);
 char					*ft_readline(void);

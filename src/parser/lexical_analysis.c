@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_analysis.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:45:25 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 16:05:45 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:09:23 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ void	process_token(char **input, token_t tokens[], int *count,
 		double_quote(input, tokens, count, ms);
 	else if (**input == '\'')
 		single_quote(input, tokens, count, ms);
-	else if (**input == '$' && *(*input + 1) == '?')
-		tokens[(*count)++] = (token_t){ENV_QUEST, ft_strndup("$?", 2,
-				tokens->ms)};
+
 	else
 		process_word(input, tokens, count, ms);
 }				

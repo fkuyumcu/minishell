@@ -6,13 +6,13 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/03/20 15:07:23 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/30 16:10:05 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
+int global_code;
 
 char *ft_readline(void)
 {
@@ -33,6 +33,7 @@ void sigint_handler(int sig)
     printf("\n");
     rl_on_new_line();
     rl_replace_line("", 0);
+    global_code = 130;
     rl_redisplay();
 }
 
@@ -46,11 +47,12 @@ void ft_exit(char *line)
 {
     free (line);
     write(1, "exit\n", 5);
-    exit(1);
+    exit(0);
 }
 
 int main(int ac, char **av, char **envp)
 {
+    global_code = 0;
     //print_banner();
     char *line;
 	line = NULL;

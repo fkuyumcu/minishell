@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 16:00:10 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:09:10 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,21 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	if (!dolar_pos)
 		return;
 	start = dolar_pos + 1;
-	while (start[len] && (isalnum(start[len]) || start[len] == '_') )//isalnum
+	while (start[len] && (isalnum(start[len]) || start[len] == '_' || start[len] == '?') )//isalnum
 		len++;
 	if (len == 0)
 		return ;
 	env_name = ft_strndup(start, len, minishell);
+	if (strcmp(env_name, "?") == 0)
+	{
+		free(token->value);
+		token->value = ft_itoa(global_code % 256);
+		return ;
+	}
+	else
+	{
+		env_value = find_list(minishell, env_name);
+	}
 	env_value = find_list(minishell, env_name);//find list kısmına bak
 	if (!env_value)
 		env_value = getenv(env_name);
@@ -82,12 +92,11 @@ void	check_env(token_t tk[], minishell_t *minishell)
 	int	i;
 	int	j;
 
-	j = 0;
 	i = 0;
 	while (i < minishell->count)
 	{
-		if (ft_strchr(tk[i].value, '$') != 0
-		&& *(ft_strchr(tk[i].value, '$') + 1) != '?' && tk[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
+		j = 0;
+		if (ft_strchr(tk[i].value, '$') != 0 && tk[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
 		{
 			while (tk[i].value[j])
 			{

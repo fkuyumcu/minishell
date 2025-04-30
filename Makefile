@@ -26,7 +26,7 @@ SRC = src/main.c \
       builtin/unset.c\
       builtin/env.c\
       builtin/builtin_utils.c\
-
+      src/parser/itoa_deneme.c\
 
 OBJ = $(SRC:.c=.o)
 
