@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/29 18:28:30 by yalp             ###   ########.fr       */
+/*   Updated: 2025/04/30 16:44:09 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 		line_t *cur = *ms->mini_lines;
 		priority(ms);
 		execute_pipeline(ms);
-	
+		
 		pos = 0;
 		while (ms->mini_lines[pos] != NULL)
 			free_line(ms->mini_lines[pos++]);

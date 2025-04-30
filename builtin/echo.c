@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:10:21 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:02:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:14:15 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static char *get_env_value(const char *var_name, minishell_t *ms)
     }
     return NULL;
 }
-
 
 static char *expand_variables(const char *str, minishell_t *ms)//dolar işaretini handle etmeye bak
 {
@@ -95,6 +94,7 @@ static char *expand_variables(const char *str, minishell_t *ms)//dolar işaretin
     result[j] = '\0';
     return result;
 }
+
 
 void	echo(line_t *ml, minishell_t *ms)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_procs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:32:51 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 15:08:49 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:07:31 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	child_exec(line_t *cur, minishell_t *ms, int heredoc_fd)
     {
         printf("Command not found: %s\n", args[0]);
         free_args(args, ac);
-        exit(1);
+        exit(127);
     }
     execve(exec_path, args, ms->envp);
     printf("execve");

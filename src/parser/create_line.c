@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   create_line.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:58:03 by yalp              #+#    #+#             */
-/*   Updated: 2025/04/29 16:03:18 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:21:10 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-line_t *cpy_node(line_t *line,minishell_t *ms)
+line_t	*cpy_node(line_t *line, minishell_t *ms)
 {
-	line_t *ret;
+	line_t	*ret;
 
 	ret = malloc(sizeof(line_t));
 	ret->value = ft_strdup(line->value, ms);
@@ -26,9 +26,9 @@ line_t	*ft_lstlast(line_t *lst)
 {
 	if (!lst)
 		return (NULL);
-	while (lst ->next != NULL)
+	while (lst->next != NULL)
 	{
-		lst = lst -> next;
+		lst = lst->next;
 	}
 	return (lst);
 }
@@ -44,13 +44,13 @@ void	ft_lstadd_back(line_t **lst, line_t *new)
 		return ;
 	}
 	tmp = ft_lstlast(*lst);
-	tmp -> next = new;
+	tmp->next = new;
 }
 
-int count_pipe(minishell_t *ms)
+int	count_pipe(minishell_t *ms)
 {
-	int ret;
-	line_t *tmp;
+	int		ret;
+	line_t	*tmp;
 
 	ret = 0;
 	tmp = ms->line;
@@ -60,42 +60,41 @@ int count_pipe(minishell_t *ms)
 			ret++;
 		tmp = tmp->next;
 	}
-
 	return (ret);
 }
 
-line_t **split_for_pipe(line_t *line, minishell_t *ms)
+line_t	**split_for_pipe(line_t *line, minishell_t *ms)
 {
-    line_t **ret;
-    int i;
-    line_t *tmp;
-    line_t *head;
+	line_t	**ret;
+	int		i;
+	line_t	*tmp;
+	line_t	*head;
 
-    ret = malloc(sizeof(line_t *) * (count_pipe(ms) + 2));
-    if (!ret)
-        return (NULL);
-    tmp = NULL;
-    head = NULL; 
-    i = 0;
-    while (line)
-    {
-        tmp = cpy_node(line,ms);
-        line = line->next;
-        while (line && line->type != PIPE)
-        {
+	ret = malloc(sizeof(line_t *) * (count_pipe(ms) + 2));
+	if (!ret)
+		return (NULL);
+	tmp = NULL;
+	head = NULL;
+	i = 0;
+	while (line)
+	{
+		tmp = cpy_node(line, ms);
+		line = line->next;
+		while (line && line->type != PIPE)
+		{
 			ft_lstadd_back(&tmp, cpy_node(line, ms));
-            line = line->next;
-        }
-        ret[i++] = tmp;
+			line = line->next;
+		}
+		ret[i++] = tmp;
 		tmp = NULL;
-        if (line)
-            line = line->next;
-    }
-    ret[i] = NULL;
-    return (ret);
+		if (line)
+			line = line->next;
+	}
+	ret[i] = NULL;
+	return (ret);
 }
 
-void free_line(line_t *node)
+void	free_line(line_t *node)
 {
 	if (node)
 	{
@@ -107,11 +106,11 @@ void free_line(line_t *node)
 	}
 }
 
-
-
-line_t *create_line_node(char *value, token_type type, minishell_t *ms)
+line_t	*create_line_node(char *value, token_type type, minishell_t *ms)
 {
-	line_t *node = malloc(sizeof(line_t));
+	line_t	*node;
+
+	node = malloc(sizeof(line_t));
 	if (!node)
 		return (NULL);
 	node->value = ft_strdup(value, ms);
@@ -122,11 +121,13 @@ line_t *create_line_node(char *value, token_type type, minishell_t *ms)
 
 line_t	*create_line(minishell_t *ms)
 {
-	int	i;
+	int		i;
+	line_t	*node;
+	line_t	*tmp;
 
 	i = 1;
-	line_t *node = NULL;
-	line_t *tmp = NULL;
+	node = NULL;
+	tmp = NULL;
 	node = create_line_node(ms->tokens[0].value, ms->tokens[0].t_type, ms);
 	while (ms->tokens[i].t_type != TOKEN_END)
 	{

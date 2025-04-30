@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   priority.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 15:45:58 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:11:52 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <sys/wait.h> // waitpid ve makrolar için
+
+extern int global_code; // global değişkenin tanımlı olduğundan emin ol
 
 void	execute_pipeline(minishell_t *ms)
 {
@@ -73,9 +76,23 @@ void	execute_pipeline(minishell_t *ms)
 		i++;
 	}
 	i = 0;
-	while (i < cmd_count)
-		waitpid(pids[i++], NULL, 0);
-	free(pids);
+	int status;
+    while (i < cmd_count)
+    {
+        status = 0;
+        waitpid(pids[i], &status, 0);
+        if (i == cmd_count - 1) // son process'in kodunu al
+        {
+            if (WIFEXITED(status))
+                global_code = WEXITSTATUS(status);
+            else if (WIFSIGNALED(status))
+                global_code = 128 + WTERMSIG(status);
+            else
+                global_code = 1;
+        }
+        i++;
+    }
+    free(pids);
 }
 
 void	priority(minishell_t *ms)
