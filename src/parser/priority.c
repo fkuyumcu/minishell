@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   priority.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 17:11:52 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 15:06:21 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,35 +32,55 @@ void	execute_pipeline(minishell_t *ms)
 	pids = malloc(sizeof(pid_t) * cmd_count);
     
 	while (i < cmd_count)                    
-		// her bir miniline için while döngüsünün içinde dolaş
 	{
 		heredoc_fd = handle_heredocs(ms->mini_lines[i], ms);
-			// her döngüde handle_heredoc fonksiyonundan gelen dönüş değerini heredoun yazma ucu olarak tut
 		if (i < cmd_count - 1)
-			pipe(pipefd); // miniline sonda değilse pipe aç
+			pipe(pipefd);
+
+		//BUILTINLERIN ÖNCELİKLERİ
 		if (is_builtin(ms->mini_lines[i]) == 1)
+		{
+			int original_stdout = dup(STDOUT_FILENO);
+			int original_stdin = dup(STDIN_FILENO);
+			
+			if (i > 0)
+			{
+				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
+			}
+			if (i < cmd_count - 1)
+			{
+				close(pipefd[0]);
+				dup2(pipefd[1], STDOUT_FILENO);
+				close(pipefd[1]);
+			}
+			
+			apply_redirections(ms->mini_lines[i], heredoc_fd, ms);
+			
 			try_builtins(ms->mini_lines[i], ms);
+			
+			dup2(original_stdout, STDOUT_FILENO);
+			dup2(original_stdin, STDIN_FILENO);
+			close(original_stdout);
+			close(original_stdin);
+		}
 		else if (is_builtin(ms->mini_lines[i]) == 0)
 		{
-			pids[i] = fork(); // her bir miniline için process oluştur
+			pids[i] = fork();
 			if (pids[i] == 0)
 			{
-				if (i > 0) // eğer ilk miniline değilse,miniline'ın yazma ucunu değiştir
+				if (i > 0)
 				{
 					dup2(prev_fd, STDIN_FILENO);
-					close(prev_fd); // bir önceki miniline'ın yazma ucunu kapat
+					close(prev_fd);
 				}
 				if (i < cmd_count - 1)
-					// son miniline'da değilsek pipe'ın yazma ucuna std çıktıyı yönlendir
 				{
-					close(pipefd[0]);              
-						// pipe'ın okuma kafasını kapat
+					close(pipefd[0]);
 					dup2(pipefd[1], STDOUT_FILENO);
-						// pipe'ın diğer ucuyla stdout'u değiştir
-					close(pipefd[1]);               // yazma ucunu kapat
+					close(pipefd[1]);
 				}
 				apply_redirections(ms->mini_lines[i], heredoc_fd, ms);
-					// yönlendirmeleri uygula
 				child_exec(ms->mini_lines[i], ms, -1);
 			}
 		}
@@ -81,7 +101,7 @@ void	execute_pipeline(minishell_t *ms)
     {
         status = 0;
         waitpid(pids[i], &status, 0);
-        if (i == cmd_count - 1) // son process'in kodunu al
+        if (i == cmd_count - 1)
         {
             if (WIFEXITED(status))
                 global_code = WEXITSTATUS(status);

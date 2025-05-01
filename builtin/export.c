@@ -6,132 +6,233 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:55:30 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 15:59:02 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:30:41 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 static int	is_valid_identifier(char *str)
 {
-    int	i = 0;
+	int	i;
 
-    if (!str || !(str[0]) || (!(str[0] >= 'A' && str[0] <= 'Z') &&
-        !(str[0] >= 'a' && str[0] <= 'z') && str[0] != '_'))
-        return (0);
-    while (str[i] && str[i] != '=')
-    {
-        if (!(str[i] >= 'A' && str[i] <= 'Z') &&
-            !(str[i] >= 'a' && str[i] <= 'z') &&
-            !(str[i] >= '0' && str[i] <= '9') && str[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	if (!str || !str[0] || (!(str[0] >= 'A' && str[0] <= 'Z') &&
+		!(str[0] >= 'a' && str[0] <= 'z') && str[0] != '_'))
+		return (0);
+	while (str[i] && str[i] != '=')
+	{
+		if (!(str[i] >= 'A' && str[i] <= 'Z') &&
+			!(str[i] >= 'a' && str[i] <= 'z') &&
+			!(str[i] >= '0' && str[i] <= '9') && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-static void update_envp(char *arg, minishell_t *ms)
+static char	*get_envvar_name(char *arg)
 {
-    int     i;
-    size_t  key_len;
+	char	*name;
+	int		i;
 
-    key_len = 0;
-    while (arg[key_len] && arg[key_len] != '=')
-        key_len++;
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	name = malloc(sizeof(char) * (i + 1));
+	if (!name)
+		return (NULL);
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+	{
+		name[i] = arg[i];
+		i++;
+	}
+	name[i] = '\0';
+	return (name);
+}
+
+static int	find_env_index(minishell_t *ms, char *key)
+{
+	int	i;
+	int	key_len;
+
+	i = 0;
+	key_len = ft_strlen(key);
+	while (ms->envp[i])
+	{
+		if (ft_strncmp(ms->envp[i], key, key_len) == 0 && 
+			(ms->envp[i][key_len] == '=' || ms->envp[i][key_len] == '\0'))
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+static char	**alloc_new_env(minishell_t *ms, int size)
+{
+	char	**new_env;
+	int		i;
+
+	new_env = malloc(sizeof(char *) * (size + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		new_env[i] = NULL;
+		i++;
+	}
+	new_env[size] = NULL;
+	return (new_env);
+}
+
+static void	copy_env_vars(char **dest, char **src, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size && src[i])
+	{
+		dest[i] = strdup(src[i]);
+		i++;
+	}
+}
+
+static void	free_env_array(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		//free(env[i]);BAK  
+		i++;
+	}
+	//free(env);
+}
+
+static void	update_envp(char *arg, minishell_t *ms)
+{
+	char	*key;
+	char	**new_env;
+	int		env_index;
+	int		i;
+
+	key = get_envvar_name(arg);
+	if (!key)
+		return ;
+	env_index = find_env_index(ms, key);
+	i = 0;
+	while (ms->envp[i])
+		i++;
+	if (env_index >= 0)
+	{
+		free(ms->envp[env_index]);
+		ms->envp[env_index] = strdup(arg);
+	}
+	else
+	{
+		new_env = alloc_new_env(ms, i + 1);
+		if (!new_env)
+			return ;
+		copy_env_vars(new_env, ms->envp, i);
+		new_env[i] = strdup(arg);
+		//free_env_array(ms->envp);
+		ms->envp = new_env;
+	}
+	free(key);
+}
+
+static void	swap_env_vars(char **env, int a, int b)
+{
+	char	*temp;
+
+	temp = env[a];
+	env[a] = env[b];
+	env[b] = temp;
+}
+
+static void	sort_env_vars(char **sorted_env, int size)
+{
+    int	i;
+    int	j;
+    int	swapped;
+
     i = 0;
-    while (ms->envp[i])
+    while (i < size - 1)
     {
-        if (!strncmp(ms->envp[i], arg, key_len) && 
-            (ms->envp[i][key_len] == '=' || ms->envp[i][key_len] == '\0'))
+        swapped = 0;
+        j = 0;
+        while (j < size - i - 1)
         {
-            free(ms->envp[i]);  // Eski değeri serbest bırak
-            ms->envp[i] = strdup(arg);
-            return;
-        }
-        i++;
-    }
-    // Yeni değişken ekle
-    char **new_envp = malloc(sizeof(char *) * (i + 2));
-    if (!new_envp)
-        return;
-    for (int j = 0; j < i; j++)
-        new_envp[j] = ms->envp[j];
-    new_envp[i] = strdup(arg);
-    new_envp[i + 1] = NULL;
-    free(ms->envp);  // Eski envp'yi serbest bırak
-    ms->envp = new_envp;
-}
-
-// Mevcut ortam değişkenlerini alfabetik sıraya göre listele
-static void display_sorted_env(minishell_t *ms)
-{
-    int i = 0, j, len;
-    char **sorted_env;
-    char *temp;
-
-    // Ortam değişkeni sayısını bul
-    while (ms->envp[i])
-        i++;
-    
-    // Ortam değişkenlerini kopyala
-    sorted_env = malloc(sizeof(char *) * (i + 1));
-    if (!sorted_env)
-        return;
-    
-    for (j = 0; j < i; j++)
-        sorted_env[j] = strdup(ms->envp[j]);
-    sorted_env[i] = NULL;
-    
-    // Kabarcık sıralaması ile sırala
-    for (j = 0; j < i - 1; j++)
-    {
-        for (int k = 0; k < i - j - 1; k++)
-        {
-            if (strcmp(sorted_env[k], sorted_env[k + 1]) > 0)
+            if (((strcmp(sorted_env[j], sorted_env[j + 1])) > 0))//strcmp
             {
-                temp = sorted_env[k];
-                sorted_env[k] = sorted_env[k + 1];
-                sorted_env[k + 1] = temp;
+                swap_env_vars(sorted_env, j, j + 1);
+                swapped = 1;
             }
+            j++;
         }
+        if (!swapped)
+            break ;
+        i++;
     }
-    
-    // Sıralanmış değişkenleri yazdır
-    for (j = 0; j < i; j++)
-        printf("declare -x %s\n", sorted_env[j]);
-    
-    // Belleği temizle
-    for (j = 0; j < i; j++)
-        free(sorted_env[j]);
-    free(sorted_env);
 }
 
-void export(line_t *ml, minishell_t *ms)
+static void	display_sorted_env_part1(minishell_t *ms, char ***sorted_env)
 {
-    line_t *current = ml->next;
-    
-    // Argüman yoksa mevcut ortam değişkenlerini listele
-    if (!current)
-    {
-        display_sorted_env(ms);
-        return;
-    }
-    
-    // Argümanları işle
-    while (current)
-    {
-        if (!is_valid_identifier(current->value))
-        {
-            printf("minishell: export: `%s': not a valid identifier\n", current->value);
-        }
-        else
-        {
-            // '=' içersin veya içermesin her geçerli tanımlayıcıyı ekle
-            update_envp(current->value, ms);
-        }
-        current = current->next;
-    }
+	int	i;
+
+	i = 0;
+	while (ms->envp[i])
+		i++;
+	*sorted_env = alloc_new_env(ms, i);
+	if (!(*sorted_env))
+		return ;
+	copy_env_vars(*sorted_env, ms->envp, i);
+	sort_env_vars(*sorted_env, i);
+}
+
+static void	display_sorted_env_part2(char **sorted_env)
+{
+	int	i;
+
+	i = 0;
+	while (sorted_env[i])
+	{
+		printf("declare -x %s\n", sorted_env[i]);
+		i++;
+	}
+	//free_env_array(sorted_env);
+}
+
+static void	display_sorted_env(minishell_t *ms)
+{
+	char	**sorted_env;
+
+	display_sorted_env_part1(ms, &sorted_env);
+	if (!sorted_env)
+		return ;
+	display_sorted_env_part2(sorted_env);
+}
+
+void	export(line_t *ml, minishell_t *ms)
+{
+	line_t	*current;
+
+	current = ml->next;
+	if (!current)
+	{
+		display_sorted_env(ms);
+		return ;
+	}
+	while (current)
+	{
+		if (!is_valid_identifier(current->value))
+			printf("minishell: export: `%s': not a valid identifier\n",
+				current->value);
+		else
+			update_envp(current->value, ms);
+		current = current->next;
+	}
 }

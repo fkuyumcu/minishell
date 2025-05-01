@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:16:06 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/01 14:26:31 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 14:06:08 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src/minishell.h"
 #include <stdio.h>
-
-
 
 void	env(minishell_t *ms)
 {
@@ -25,4 +23,9 @@ void	env(minishell_t *ms)
         printf("%s\n", ms->envp[i]);
         i++;
     }
+}
+
+void ft_exit_2()
+{
+    
 }

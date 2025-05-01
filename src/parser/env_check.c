@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:09:10 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 14:32:46 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,28 @@ void	proc_eq(token_t *token, minishell_t *minishell)
 
 }
 
-static char	*find_list(minishell_t *minishell, char *env_name)//find list fonksiyonuna bak
+static char	*find_list(minishell_t *minishell, char *env_name)
 {
-	env_t	*list;
+    int		i;
+    int		key_len;
+    char	*value_start;
 
-	list = minishell->env_list;
-	/* while(list)BUNA BAK	
-	{
-	    if (strcmp(list->key,env_name) == 0)
-	        return (list->value);
-	    list = list->next;        
-	} */
-	return (NULL);
+    key_len = ft_strlen(env_name);
+    i = 0;
+    while (minishell->envp[i])
+    {
+        if (ft_strncmp(minishell->envp[i], env_name, key_len) == 0 && 
+            (minishell->envp[i][key_len] == '=' || minishell->envp[i][key_len] == '\0'))
+        {
+            value_start = ft_strchr(minishell->envp[i], '=');
+            if (value_start)
+                return (value_start + 1);
+            else
+                return ("");
+        }
+        i++;
+    }
+    return (NULL);
 }
 
 static void	proc_env(token_t *token, minishell_t *minishell)
@@ -53,7 +63,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	if (!dolar_pos)
 		return;
 	start = dolar_pos + 1;
-	while (start[len] && (isalnum(start[len]) || start[len] == '_' || start[len] == '?') )//isalnum
+	while (start[len] && (isalnum(start[len]) || start[len] == '_' || start[len] == '?') )
 		len++;
 	if (len == 0)
 		return ;
@@ -68,7 +78,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	{
 		env_value = find_list(minishell, env_name);
 	}
-	env_value = find_list(minishell, env_name);//find list kısmına bak
+	env_value = find_list(minishell, env_name);
 	if (!env_value)
 		env_value = getenv(env_name);
 	if (!env_value)
@@ -96,7 +106,7 @@ void	check_env(token_t tk[], minishell_t *minishell)
 	while (i < minishell->count)
 	{
 		j = 0;
-		if (ft_strchr(tk[i].value, '$') != 0 && tk[i].is_dbl_quote == 1) // $? işareti casei tekrar gözden geçirilmeli
+		if (ft_strchr(tk[i].value, '$') != 0 && tk[i].is_dbl_quote == 1)
 		{
 			while (tk[i].value[j])
 			{
