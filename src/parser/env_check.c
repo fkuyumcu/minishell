@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/01 14:32:46 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:46:15 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void change_dollar_ask(token_t *token, char *new_value)
+{
+    char *dollar_pos;
+    char *new_str;
+    size_t prefix_len, new_value_len, suffix_len, total_len;
+
+    dollar_pos = strstr(token->value, "$?");
+    if (!dollar_pos)
+        return;
+
+    prefix_len = dollar_pos - token->value;
+    new_value_len = ft_strlen(new_value);
+    suffix_len = ft_strlen(dollar_pos + 2);
+    total_len = prefix_len + new_value_len + suffix_len + 1;
+
+    new_str = malloc(total_len);
+    if (!new_str)
+        return;
+
+    ft_strncpy(new_str, token->value, prefix_len);
+    new_str[prefix_len] = '\0';
+    ft_strlcat(new_str, new_value, total_len);
+    ft_strlcat(new_str, dollar_pos + 2, total_len);
+
+    free(token->value);
+    token->value = new_str;
+}
+
 
 void	proc_eq(token_t *token, minishell_t *minishell)
 {
@@ -70,8 +99,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	env_name = ft_strndup(start, len, minishell);
 	if (strcmp(env_name, "?") == 0)
 	{
-		free(token->value);
-		token->value = ft_itoa(global_code % 256);
+		change_dollar_ask(token, ft_itoa(global_code));
 		return ;
 	}
 	else
