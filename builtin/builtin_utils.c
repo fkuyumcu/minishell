@@ -6,13 +6,13 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 15:05:44 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/01 15:12:48 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:11:34 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src/minishell.h"
 
-void free_filtered_list(line_t *head)
+void free_filtered(line_t *head)
 {
     line_t *temp;
     
@@ -25,64 +25,72 @@ void free_filtered_list(line_t *head)
     }
 }
 
-line_t *filter_redirects(line_t *ml)
+static bool is_redirect_type(int type)
 {
-    line_t *head = ml;
-    line_t *temp = NULL;
-    line_t *new_head = NULL;
-    line_t *current = NULL;
-    line_t *previous_token = NULL;
-    
+    return (type == REDIRECT_IN || type == REDIRECT_OUT
+        || type == HEREDOC_IN || type == HEREDOC_OUT);
+}
 
-    temp = malloc(sizeof(line_t));
+static line_t *copy_line(line_t *src, minishell_t *ms)
+{
+    line_t *new;
+
+    new = malloc(sizeof(line_t));
+    if (!new)
+        return (NULL);
+    new->value = ft_strdup(src->value, ms);
+    new->type = src->type;
+    new->next = NULL;
+    new->priority = src->priority;
+    return (new);
+}
+
+static bool should_add_arg(line_t *ml, line_t *prev)
+{
+    if (!is_redirect_type(ml->type)
+        && !(prev && is_redirect_type(prev->type)))
+        return (true);
+    return (false);
+}
+
+static void filter_args_loop(line_t **ml, line_t **prev,
+        line_t **current, minishell_t *ms)
+{
+    line_t *temp;
+
+    while (*ml)
+    {
+        if (should_add_arg(*ml, *prev))
+        {
+            temp = copy_line(*ml, ms);
+            if (!temp)
+                return ;
+            (*current)->next = temp;
+            *current = temp;
+        }
+        *prev = *ml;
+        *ml = (*ml)->next;
+    }
+}
+
+line_t *filter_args(line_t *ml, minishell_t *ms)
+{
+    line_t *new_head;
+    line_t *current;
+    line_t *temp;
+    line_t *prev;
+
+    if (!ml)
+        return (NULL);
+    temp = copy_line(ml, ms);
     if (!temp)
-        return NULL;
-    temp->value = strdup(ml->value);
-    temp->type = ml->type;
-    temp->next = NULL;
-    temp->priority = ml->priority;
-    
+        return (NULL);
     new_head = temp;
     current = temp;
-    
-    // Argümanları ekleyelim, yönlendirmeleri ve dosya adlarını atlayalım
-    previous_token = ml; // İlk token'ı sakla
+    prev = ml;
     ml = ml->next;
-    
-    while (ml)
-    {
-        if (ml->type != REDIRECT_IN && ml->type != REDIRECT_OUT && 
-            ml->type != HEREDOC_IN && ml->type != HEREDOC_OUT)
-        {
-            // Bir önceki token yönlendirme mi kontrol et
-            if (previous_token && (previous_token->type == REDIRECT_IN || 
-                previous_token->type == REDIRECT_OUT || 
-                previous_token->type == HEREDOC_IN || 
-                previous_token->type == HEREDOC_OUT))
-            {
-                // Bu token yönlendirmenin hedefi, atlayalım
-            }
-            else
-            {
-                // Normal argüman, ekleyelim
-                temp = malloc(sizeof(line_t));
-                if (!temp)
-                    return new_head; // Hata durumunda en azından buraya kadar olan listeyi döndür
-                
-                temp->value = strdup(ml->value);
-                temp->type = ml->type;
-                temp->next = NULL;
-                temp->priority = ml->priority;
-                
-                current->next = temp;
-                current = temp;  // current pointer'ı güncelle
-            }
-        }
-        previous_token = ml;  // Mevcut token'ı bir sonraki iterasyon için sakla
-        ml = ml->next;
-    }
-    
-    return new_head;
+    filter_args_loop(&ml, &prev, &current, ms);
+    return (new_head);
 }
 
 bool is_builtin(line_t *ml)
@@ -104,7 +112,7 @@ bool is_builtin(line_t *ml)
 void try_builtins(line_t *ml, minishell_t *ms)
 {
     char *cmd;
-    line_t *filtered = filter_redirects(ml); // Yönlendirmeleri filtrele
+    line_t *filtered = filter_args(ml, ms);
     cmd = filtered->value;
     if(!ft_strncmp(cmd, "echo", 4))
         echo(filtered, ms);
@@ -121,5 +129,5 @@ void try_builtins(line_t *ml, minishell_t *ms)
     else if(!ft_strncmp(cmd, "exit", 6))
         ft_exit_2(filtered);
 
-    free_filtered_list(filtered); // Bellek sızıntısı olmasın diye
+    free_filtered(filtered);
 }

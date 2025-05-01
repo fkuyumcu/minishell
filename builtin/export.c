@@ -6,32 +6,30 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:55:30 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/01 14:30:41 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:16:04 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src/minishell.h"
+#include <ctype.h>
 
 static int	is_valid_identifier(char *str)
 {
-	int	i;
+    int	i;
 
-	i = 0;
-	if (!str || !str[0] || (!(str[0] >= 'A' && str[0] <= 'Z') &&
-		!(str[0] >= 'a' && str[0] <= 'z') && str[0] != '_'))
-		return (0);
-	while (str[i] && str[i] != '=')
-	{
-		if (!(str[i] >= 'A' && str[i] <= 'Z') &&
-			!(str[i] >= 'a' && str[i] <= 'z') &&
-			!(str[i] >= '0' && str[i] <= '9') && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
+    if (!str || !str[0] || (!ft_isalpha(str[0]) && str[0] != '_'))
+        return (0);
+    i = 1;
+    while (str[i] && str[i] != '=')
+    {
+        if (!ft_isalnum(str[i]) && str[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
 }
 
-static char	*get_envvar_name(char *arg)
+static char	*get_env(char *arg)
 {
 	char	*name;
 	int		i;
@@ -119,7 +117,7 @@ static void	update_envp(char *arg, minishell_t *ms)
 	int		env_index;
 	int		i;
 
-	key = get_envvar_name(arg);
+	key = get_env(arg);
 	if (!key)
 		return ;
 	env_index = find_env_index(ms, key);

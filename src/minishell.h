@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:49:17 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 16:24:15 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,12 @@ void					print_banner(void);
 char					*ft_strnstr(const char *haystack, const char *needle,
 							size_t len);
 size_t					ft_strlcat(char *dst, const char *src, size_t n);
+int	ft_isalnum(int c);
+int	ft_isalpha(int c);
+int	ft_isdigit(int c);
+
+
+
 
 // TOKENIZER
 

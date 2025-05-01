@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:21:00 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/01 15:46:15 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 16:37:49 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void	proc_env(token_t *token, minishell_t *minishell)
 	if (!dolar_pos)
 		return;
 	start = dolar_pos + 1;
-	while (start[len] && (isalnum(start[len]) || start[len] == '_' || start[len] == '?') )
+	while (start[len] && (isalnum(start[len]) || start[len] == '_' || start[len] == '?') )//isalnum
 		len++;
 	if (len == 0)
 		return ;
