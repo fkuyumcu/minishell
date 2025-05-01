@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:44:09 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 16:40:06 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 	token_t	*tokens;
 	env_t	*env_list = NULL;
 	int		pos;
+	line_t *cur;
 
 	allocation = ft_strlen(buf);
 	ms->allocation = allocation;
@@ -103,7 +104,7 @@ void	parser(minishell_t *ms, char *buf, int allocation)
 		ms->size = count_token(tokens);
 		ms->line = create_line(ms);
 		ms->mini_lines = split_for_pipe(ms->line, ms);
-		line_t *cur = *ms->mini_lines;
+		cur = *ms->mini_lines;
 		priority(ms);
 		execute_pipeline(ms);
 		
