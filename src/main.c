@@ -6,7 +6,7 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/04/30 16:10:05 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/01 14:46:26 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@ int global_code;
 char *ft_readline(void)
 {
     char *buf;
-    
-    buf = NULL;
-     
+
+    buf = NULL;     
     buf = readline("pistonshell$>");
     if(buf)
         return (buf);
-    
     return (NULL);
 }
 
@@ -74,9 +72,6 @@ int main(int ac, char **av, char **envp)
         add_history(line);
         parser(&minishell, line, ft_strlen(line));
 		free(line);
-
     }
     //wall wextra
-
-    
 }
