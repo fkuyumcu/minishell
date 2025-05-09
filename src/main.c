@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 09:39:55 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:00:14 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static char	*get_processed_input(t_minishell *minishell)
 	temp = convert_tabs_to_spaces(line, minishell);
 	free(line);
 	line = temp;
+	minishell->temp = temp;
 	if (ft_strlen(line) == 1)
 	{
 		temp = ft_strjoin(line, " ", minishell);
@@ -39,7 +40,6 @@ static char	*get_processed_input(t_minishell *minishell)
 		line = temp;
 		minishell->temp = temp;
 	}
-	free(temp);
 	return (line);
 }
 

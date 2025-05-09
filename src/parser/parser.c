@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:32:13 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 08:47:07 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:57:57 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	parser(t_minishell *ms, char *buf)
 {
 	t_token	*tokens;
 
-	ms->temp = NULL;
 	ms->error = 0;
 	if (!parser_init(ms, buf, &tokens))
 		return ;
