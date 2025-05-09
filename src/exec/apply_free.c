@@ -59,7 +59,14 @@ void	free_pids(t_minishell *ms)
 void	check_and_free(t_minishell *ms, t_line *cur, int update_args)
 {
 	if (ms && update_args)
-		free_args_exec(ms->exec_args, ms->exec_ac, ms->exec_path);
+	{
+		if (ms->exec_args)
+		{
+			free_args_exec(ms->exec_args, ms->exec_ac, ms->exec_path);
+			ms->exec_args = NULL;
+			ms->exec_path = NULL;
+		}
+	}
 	if (ms)
 	{
 		if (ms->temp)
