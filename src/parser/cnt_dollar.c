@@ -6,25 +6,27 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:08:16 by yalp              #+#    #+#             */
-/*   Updated: 2025/05/09 10:40:04 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:02:14 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-	size_t	count_dollar_ask(char *str)
+size_t	count_dollar_ask(char *str)
 {
-		size_t count = 0;
-		char *tmp = str;
-		while ((tmp = ft_strnstr(tmp, "$?", ft_strlen(tmp))))
-		{
-			count++;
-			tmp += 2;
-		}
-		return count;
-	}
+	size_t	count;
+	char	*tmp;
 
+	count = 0;
+	tmp = str;
+	tmp = ft_strnstr(tmp, "$?", ft_strlen(tmp));
+	while (tmp)
+	{
+		count++;
+		tmp += 2;
+	}
+	return (count);
+}
 
 char	*find_list(t_minishell *minishell, char *env_name)
 {

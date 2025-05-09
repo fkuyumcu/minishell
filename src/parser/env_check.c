@@ -12,8 +12,7 @@
 
 #include "../minishell.h"
 
-char	*get_env_name(const char *dolar_pos, t_minishell *minishell,
-		int *len)
+char	*get_env_name(const char *dolar_pos, t_minishell *minishell, int *len)
 {
 	int			i;
 	const char	*start = dolar_pos + 1;
@@ -31,7 +30,7 @@ static void	proc_env(t_token *token, t_minishell *ms)
 {
 	char	*dolar_pos;
 	int		len;
- 	char	*exit_code;
+	char	*exit_code;
 
 	len = 0;
 	dolar_pos = ft_strchr(token->value, '$');

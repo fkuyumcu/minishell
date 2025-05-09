@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 12:30:44 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 11:42:11 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:02:00 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_args(char **args, int ac)
 
 	i = 0;
 	if (!args)
-		return;
+		return ;
 	while (i < ac)
 		free(args[i++]);
 	free(args);
