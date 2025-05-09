@@ -58,6 +58,8 @@ static char	*exec_args(char **args, t_minishell *ms, t_line *cur)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
+		free_args(args, ms->exec_ac);
+		ms->exec_args = NULL;
 		check_and_free(ms, cur, 1);
 		g_code = 127;
 		exit(127);

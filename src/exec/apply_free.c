@@ -34,7 +34,10 @@ void	free_args_exec(char **args, int ac, char *exec_path)
 	if (args)
 		free_args(args, ac);
 	if (exec_path)
+	{
 		free(exec_path);
+		exec_path = NULL;
+	}
 }
 
 void	free_main_line(t_minishell *ms, t_line *cur)
