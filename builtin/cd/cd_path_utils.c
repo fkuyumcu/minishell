@@ -12,14 +12,13 @@
 
 #include "../../src/minishell.h"
 
-char	*get_current_directory(void)
+char	*get_current_directory(t_minishell *ms)
 {
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	ms->current_dir = NULL;
+	ms->current_dir = getcwd(NULL, 0);
+	if (!ms->current_dir)
 		perror("minishell: cd");
-	return (cwd);
+	return (ms->current_dir);
 }
 
 void	update_pwd_and_oldpwd(t_minishell *ms, char *old_pwd, char *new_pwd)

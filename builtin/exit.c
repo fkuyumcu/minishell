@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 02:27:24 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 10:00:01 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:16:37 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	bi_exit(t_line *ml, t_minishell *ms)
 
 	write(1, "exit\n", 5);
 	status = get_exit_status(ml);
-	g_code = status;
+	g_code(status);
 	check_and_free(ms, ml, 0);
-	exit(g_code);
+	exit(g_code(-1));
 }

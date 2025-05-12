@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:55:30 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/08 12:00:00 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:23:54 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	export_loop(t_line *current, t_minishell *ms)
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd(current->value, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
-			g_code = 1;
+			g_code(1);
 			return ;
 		}
 		klen = ft_strlen(current->value);

@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 09:48:55 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:28:37 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_code(int a)
+{
+	static int	b;
+
+	if (a != -1)
+		b = a;
+	return (b);
+}
 
 char	*ft_readline(void)
 {
@@ -29,7 +38,7 @@ void	sigint_handler(int a)
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	g_code = 130;
+	g_code(130);
 	rl_redisplay();
 }
 

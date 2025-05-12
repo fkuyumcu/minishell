@@ -6,13 +6,11 @@
 /*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:55:27 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/07 17:05:22 by yalp             ###   ########.fr       */
+/*   Updated: 2025/05/09 14:20:29 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern int	g_code;
 
 static void	manage_pipe(int i, int cmd_count, int *pipefd, int *prev_fd)
 {

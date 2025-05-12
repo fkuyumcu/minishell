@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:02:13 by yalp              #+#    #+#             */
-/*   Updated: 2025/05/09 09:01:57 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:19:13 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	bi_child(t_minishell *ms, int i, int *pipefd, int prev_fd)
 	apply_redirections(ms->mini_lines[i], heredoc_fd);
 	try_builtins(ms->mini_lines[i], ms);
 	check_and_free(ms, ms->mini_lines[i], 0);
-	exit(g_code);
+	exit(g_code(-1));
 }
 
 void	bi_parent(t_minishell *ms, int i, int heredoc_fd)

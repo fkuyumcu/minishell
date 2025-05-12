@@ -6,7 +6,7 @@
 /*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:08:16 by yalp              #+#    #+#             */
-/*   Updated: 2025/05/09 12:02:14 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:25:02 by fkuyumcu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ size_t	count_dollar_ask(char *str)
 
 	count = 0;
 	tmp = str;
-	tmp = ft_strnstr(tmp, "$?", ft_strlen(tmp));
 	while (tmp)
 	{
-		count++;
-		tmp += 2;
+		tmp = ft_strnstr(tmp, "$?", ft_strlen(tmp));
+		if (tmp)
+		{
+			count++;
+			tmp += 2;
+		}
 	}
 	return (count);
 }

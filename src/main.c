@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:05 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 10:00:14 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:50:16 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			g_code;
 
 static char	*get_processed_input(t_minishell *minishell)
 {
@@ -62,7 +60,11 @@ int	main(int ac, char **av, char **envp)
 {
 	t_minishell	minishell;
 
-	g_code = 0;
+	if (ac != 1)
+	{
+		ft_putstr_fd("Usage: ./minishell\n", 2);
+		return (1);
+	}
 	minishell.ac = ac;
 	minishell.av = av;
 	minishell.temp = NULL;

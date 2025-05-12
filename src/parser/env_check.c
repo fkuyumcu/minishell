@@ -38,7 +38,7 @@ static void	proc_env(t_token *token, t_minishell *ms)
 		replace_env_value(token, ms, dolar_pos, len);
 	if (ft_strnstr(token->value, "$?", ft_strlen(token->value)))
 	{
-		exit_code = ft_itoa(g_code % 256);
+		exit_code = ft_itoa(g_code(-1) % 256);
 		change_dollar_ask(token, exit_code);
 		free(exit_code);
 	}

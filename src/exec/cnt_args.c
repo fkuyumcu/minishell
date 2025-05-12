@@ -62,7 +62,7 @@ void	ft_puterror(t_line *cur, t_minishell *ms, char *str)
 		ft_putstr_fd(tmp, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		check_and_free(ms, cur, 0);
-		g_code = 127;
+		g_code(127);
 		exit(127);
 	}
 	else if (access(tmp, X_OK) != 0)
@@ -71,7 +71,7 @@ void	ft_puterror(t_line *cur, t_minishell *ms, char *str)
 		ft_putstr_fd(tmp, 2);
 		ft_putstr_fd(": Permission denied\n", 2);
 		check_and_free(ms, cur, 0);
-		g_code = 126;
+		g_code(126);
 		exit(126);
 	}
 }

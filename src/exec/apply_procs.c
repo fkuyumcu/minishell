@@ -61,7 +61,7 @@ static char	*exec_args(char **args, t_minishell *ms, t_line *cur)
 		free_args(args, ms->exec_ac);
 		ms->exec_args = NULL;
 		check_and_free(ms, cur, 1);
-		g_code = 127;
+		g_code(127);
 		exit(127);
 	}
 	return (exec_path);
@@ -78,7 +78,7 @@ static void	handle_exec_path(t_line *cur, t_minishell *ms)
 			ft_putstr_fd(cur->value, 2);
 			ft_putstr_fd(": Is a directory\n", 2);
 			check_and_free(ms, cur, 0);
-			g_code = 126;
+			g_code(126);
 			exit(126);
 		}
 		ms->exec_path = ft_strdup(cur->value, ms);

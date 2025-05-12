@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkuyumcu <fkuyumcu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yalp <yalp@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:59:10 by fkuyumcu          #+#    #+#             */
-/*   Updated: 2025/05/09 08:49:12 by fkuyumcu         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:50:53 by yalp             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_minishell
 	char				**exec_args;
 	int					exec_ac;
 	char				*exec_path;
+	char				*current_dir;
 }						t_minishell;
 
 // SIGNALS
@@ -129,7 +130,7 @@ void					free_envp_ms(t_minishell *ms);
 
 // UTILS
 
-extern int				g_code;
+int						g_code(int a);
 char					*convert_tabs_to_spaces(char *input, t_minishell *ms);
 int						is_only_whitespace(char *str);
 void					clean_env(t_minishell *ms);
@@ -306,7 +307,7 @@ char					*create_env_string(t_minishell *ms, char *name,
 							char *value);
 void					update_env_var(t_minishell *ms, char *name,
 							char *value);
-char					*get_current_directory(void);
+char					*get_current_directory(t_minishell *ms);
 void					update_pwd_and_oldpwd(t_minishell *ms, char *old_pwd,
 							char *new_pwd);
 int						cd_to_home(t_minishell *ms);

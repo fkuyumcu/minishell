@@ -24,7 +24,7 @@ void	wait_all(pid_t *pids, int cmd_count)
 		{
 			waitpid(pids[i], &status, 0);
 			if (WIFEXITED(status))
-				g_code = WEXITSTATUS(status);
+				g_code(WEXITSTATUS(status));
 		}
 		i++;
 	}

@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS =  -g  -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 SRC = src/main.c \
       src/main_utils.c \
       src/signals.c \
