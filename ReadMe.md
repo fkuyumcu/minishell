@@ -32,7 +32,7 @@ This project is part of the 42 curriculum and aims to replicate core functionali
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/yourusername/minishell.git
+git clone https://github.com/fkuyumcu/minishell.git
 cd minishell
 make
 ./minishell
@@ -64,8 +64,6 @@ minishell$ echo "output" > file.txt
 ```
 minishell/
 ├── src/            # Source files
-├── includes/       # Header files
-├── libft/          # Custom libc functions (42's libft)
 ├── Makefile
 └── README.md
 ```
