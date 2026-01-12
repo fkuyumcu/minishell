@@ -5,7 +5,7 @@ This project is part of the 42 curriculum and aims to replicate core functionali
 
 ## 🧠 Project Overview
 
-**minishell** is a simplified shell that interprets and executes user commands. It supports pipelines, redirections, built-in commands, and basic signal handling — mimicking the behavior of a real shell while maintaining a clean and modular codebase.
+**minishell** is a simplified shell that interprets and executes user commands. It supports pipelines, redirections, built-in commands, and basic signal handling  mimicking the behavior of a real shell while maintaining a clean and modular codebase.
 
 ## ✨ Features
 
