@@ -56,16 +56,18 @@ char	**ft_split(char const *s, char c)
 	char		**str_arr;
 	int			i;
 	int			j;
+	int			token_count;
 
 	if (!s)
 		return (0);
+	token_count = count_tokens(s, c);
 	str_arr = NULL;
-	str_arr = malloc(sizeof(char *) * (count_tokens(s, c) + 1));
+	str_arr = malloc(sizeof(char *) * (token_count + 1));
 	if (!str_arr)
 		return (0);
 	i = -1;
 	j = 0;
-	while (++i < count_tokens(s, c))
+	while (++i < token_count)
 	{
 		while (*s == c)
 			s++;

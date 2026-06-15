@@ -2,6 +2,19 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+CPPFLAGS =
+LDFLAGS =
+LDLIBS = -lreadline
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+	READLINE_PREFIX ?= $(shell brew --prefix readline 2>/dev/null)
+	ifeq ($(READLINE_PREFIX),)
+$(error GNU readline is required on macOS. Install it with: brew install readline)
+	endif
+	CPPFLAGS += -I$(READLINE_PREFIX)/include
+	LDFLAGS += -L$(READLINE_PREFIX)/lib
+endif
 SRC = src/main.c \
       src/main_utils.c \
       src/signals.c \
@@ -55,10 +68,10 @@ SRC = src/main.c \
 OBJ = $(SRC:.c=.o)
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@$(CC) $(OBJ) $(CFLAGS) -o $(NAME) -lreadline
+	@$(CC) $(OBJ) $(CFLAGS) $(LDFLAGS) -o $(NAME) $(LDLIBS)
 
 all: $(NAME)
 

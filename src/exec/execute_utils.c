@@ -17,7 +17,7 @@ static char	**split_path(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
 		return (NULL);
@@ -36,7 +36,7 @@ static char	*try_path(char *dir, char *cmd, t_minishell *ms)
 	free(part_path);
 	if (!full_path)
 		return (NULL);
-	if (access(full_path, F_OK) == 0)
+	if (access(full_path, X_OK) == 0)
 		return (full_path);
 	free(full_path);
 	return (NULL);
